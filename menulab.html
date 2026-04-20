@@ -3,118 +3,265 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MenuLab — Constructor de menú digital gratuito</title>
+<title>MenuLab — Tu menú digital</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --red:#E53030;--red2:#B82424;
-  --bg:#0A0A0A;--bg2:#111111;--bg3:#1A1A1A;--bg4:#222222;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --text:#F0F0F0;--muted:#888;--muted2:#555;
-}
+:root{--red:#E53030;--red2:#B82424;--bg:#0A0A0A;--bg2:#111;--bg3:#1A1A1A;--bg4:#222;--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);--text:#F0F0F0;--muted:#888;--muted2:#555;--green:#22c55e;--amber:#f59e0b}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;min-height:100vh;-webkit-font-smoothing:antialiased}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(16px,4vw,60px);height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.9);backdrop-filter:blur(16px)}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(16px,4vw,60px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,10,10,.92);backdrop-filter:blur(16px)}
 .nav-brand{display:flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;text-decoration:none;color:var(--text)}
 .nav-dot{width:24px;height:24px;background:var(--red);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px}
-.back{color:var(--muted);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-user{font-size:13px;color:var(--muted)}
+.nav-user strong{color:var(--text)}
+.btn-logout{background:none;border:1px solid var(--border2);color:var(--muted);padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-logout:hover{color:var(--text);border-color:rgba(255,255,255,.3)}
+.back{color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s}
 .back:hover{color:var(--text)}
-.main{padding:80px clamp(16px,4vw,60px) 60px;max-width:1200px;margin:0 auto}
-.header{padding:40px 0 32px}
-.label{font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:10px}
-h1{font-family:'Manrope',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.02em;margin-bottom:12px}
-.subtitle{color:var(--muted);font-size:16px;max-width:500px}
-.layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px}
-@media(max-width:900px){.layout{grid-template-columns:1fr}}
-.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px}
-.panel-title{font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-.panel-title .icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+
+/* LOGIN SCREEN */
+#login-screen{display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.login-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:420px}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center}
+.login-logo-dot{width:36px;height:36px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.login-logo-text{font-family:'Manrope',sans-serif;font-weight:800;font-size:20px}
+.login-logo-sub{color:var(--red)}
+.login-tabs{display:flex;background:var(--bg3);border-radius:10px;padding:4px;margin-bottom:28px;gap:4px}
+.login-tab{flex:1;padding:8px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.login-tab.active{background:var(--bg2);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .field{margin-bottom:16px}
-.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
-.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border .2s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red)}
-.field textarea{resize:vertical;min-height:60px}
-.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.cat-tab{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s}
+.field label{display:block;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.field input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s}
+.field input:focus{border-color:var(--red)}
+.btn-main{width:100%;padding:13px;background:var(--red);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;transition:background .2s;margin-top:4px}
+.btn-main:hover{background:var(--red2)}
+.login-note{font-size:12px;color:var(--muted);text-align:center;margin-top:16px;line-height:1.5}
+.login-error{background:rgba(229,48,48,.1);border:1px solid rgba(229,48,48,.3);color:#f87171;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none}
+
+/* APP SCREEN */
+#app-screen{display:none;padding-top:60px;min-height:100vh}
+.app-header{padding:32px clamp(16px,4vw,60px) 0}
+.app-header-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px}
+.app-title-group .label{font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:6px}
+.app-title-group h1{font-family:'Manrope',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-.02em}
+.save-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--green);background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);padding:5px 12px;border-radius:100px;margin-top:8px}
+.save-dot{width:6px;height:6px;background:var(--green);border-radius:50%}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* LAYOUT */
+.app-layout{display:grid;grid-template-columns:1fr 380px;gap:20px;padding:20px clamp(16px,4vw,60px) 60px;align-items:start}
+@media(max-width:960px){.app-layout{grid-template-columns:1fr}}
+
+/* PANELS */
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:16px}
+.panel:last-child{margin-bottom:0}
+.panel-head{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.panel-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.panel-title{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700}
+
+/* FORM ELEMENTS */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.field-row .field{margin:0}
+.f{margin-bottom:14px}
+.f label{display:block;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.f input,.f select,.f textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border .2s}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--red)}
+.f textarea{resize:vertical;min-height:56px}
+.color-row{display:flex;align-items:center;gap:10px}
+.color-swatch{width:36px;height:36px;border-radius:8px;border:2px solid var(--border2);cursor:pointer;flex-shrink:0;position:relative;overflow:hidden}
+.color-swatch input[type=color]{opacity:0;position:absolute;inset:0;cursor:pointer;width:100%;height:100%}
+.color-presets{display:flex;gap:6px;flex-wrap:wrap}
+.color-preset{width:24px;height:24px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:border .15s;flex-shrink:0}
+.color-preset:hover,.color-preset.active{border-color:#fff}
+
+/* CATEGORY TABS */
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.cat-tab{padding:5px 14px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;font-family:'DM Sans',sans-serif}
 .cat-tab.active,.cat-tab:hover{background:var(--red);color:#fff;border-color:var(--red)}
-.add-form{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
-.add-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.add-form-grid .full{grid-column:1/-1}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif}
-.btn-primary{background:var(--red);color:#fff}
-.btn-primary:hover{background:var(--red2)}
-.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border2)}
-.btn-secondary:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
-.btn-sm{padding:6px 12px;font-size:12px}
-.items-list{display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto}
-.item-card{background:var(--bg4);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px}
-.item-emoji{font-size:20px;flex-shrink:0}
+
+/* ADD FORM */
+.add-form{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px}
+.add-form-grid{display:grid;grid-template-columns:70px 1fr 90px;gap:8px;align-items:end;margin-bottom:10px}
+.add-form-grid .f{margin:0}
+
+/* ITEMS LIST */
+.items-wrap{max-height:320px;overflow-y:auto}
+.item-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg4);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;cursor:grab}
+.item-row:active{cursor:grabbing}
+.drag-handle{color:var(--muted2);font-size:16px;flex-shrink:0;cursor:grab}
+.item-emoji{font-size:18px;flex-shrink:0;width:28px;text-align:center}
 .item-info{flex:1;min-width:0}
-.item-name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-desc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-price{font-family:'Manrope',sans-serif;font-weight:700;color:var(--red);font-size:14px;flex-shrink:0}
-.item-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;transition:color .2s}
-.item-del:hover{color:#f87171}
-.preview-panel{position:sticky;top:80px}
-.menu-preview{background:#fff;color:#111;border-radius:12px;overflow:hidden;box-shadow:0 0 40px rgba(0,0,0,.3)}
-.menu-header-bg{padding:28px 24px 20px;text-align:center}
-.menu-resto-name{font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;color:#111;letter-spacing:-0.01em}
-.menu-tagline{font-size:12px;color:#666;margin-top:4px}
-.menu-divider{height:1px;background:#eee;margin:0 24px}
-.menu-cat{padding:16px 24px 0}
-.menu-cat-title{font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#999;margin-bottom:10px}
-.menu-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f5f5f5}
+.item-name{font-weight:600;font-size:12px;white-space:nowraw;overflow:hidden;text-overflow:ellipsis}
+.item-cat{font-size:10px;color:var(--muted);margin-top:1px}
+.item-desc{font-size:11px;color:var(--muted2);white-space:nowraw;overflow:hidden;text-overflow:ellipsis}
+.item-price{font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;flex-shrink:0}
+.item-actions{display:flex;gap:4px;flex-shrink:0}
+.item-btn{background:none;border:none;cursor:pointer;font-size:14px;padding:3px 5px;border-radius:4px;color:var(--muted2);transition:color .2s}
+.item-btn:hover{color:var(--text)}
+.item-btn.del:hover{color:#f87171}
+.empty-list{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px}
+.empty-icon{font-size:28px;margin-bottom:8px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red2)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}.btn-outline:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-full{width:100%}
+.btn-green{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2)}.btn-green:hover{background:rgba(34,197,94,.2)}
+
+/* PREVIEW */
+.preview-sticky{position:sticky;top:80px}
+.menu-preview{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 40px rgba(0,0,0,.4);margin-bottom:16px}
+.menu-hero{padding:24px 20px 18px;text-align:center}
+.menu-resto-name{font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.01em}
+.menu-tagline{font-size:11px;margin-top:3px;opacity:.75}
+.menu-divider{height:1px;background:#eee;margin:0 20px}
+.menu-section{padding:12px 20px 4px}
+.menu-section-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#aaa;margin-bottom:8px}
+.menu-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5}
 .menu-item:last-child{border-bottom:none}
 .menu-item-left{flex:1}
-.menu-item-name{font-size:13px;font-weight:600;color:#111}
-.menu-item-desc{font-size:11px;color:#888;margin-top:2px;line-height:1.4}
-.menu-item-price{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;flex-shrink:0}
-.menu-footer{padding:16px 24px;text-align:center;border-top:1px solid #eee;background:#fafafa}
-.menu-footer p{font-size:10px;color:#aaa}
-.qr-section{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:16px;text-align:center}
-.qr-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.menu-item-name{font-size:12px;font-weight:600;color:#111}
+.menu-item-desc{font-size:10px;color:#999;margin-top:1px;line-height:1.3}
+.menu-item-price{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;flex-shrink:0}
+.menu-footer-bar{padding:10px 20px;background:#fafafa;border-top:1px solid #eee;text-align:center;font-size:9px;color:#ccc}
+
+/* QR */
+.qr-panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
+.qr-title{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;margin-bottom:4px}
 .qr-sub{font-size:11px;color:var(--muted);margin-bottom:16px}
-#qr-container{display:flex;justify-content:center;margin-bottom:12px}
-#qr-container canvas,#qr-container img{border-radius:8px;background:#fff;padding:8px}
+#qr-box{display:flex;justify-content:center;margin-bottom:14px;min-height:160px;align-items:center}
+#qr-box canvas,#qr-box img{border-radius:8px;background:#fff;padding:8px;display:block}
+.qr-url{font-size:10px;color:var(--muted2);font-family:monospace;word-break:break-all;margin-bottom:12px;padding:6px 10px;background:var(--bg3);border-radius:6px;cursor:pointer;transition:background .2s}
+.qr-url:hover{background:var(--bg4)}
 .qr-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
-.empty-state .emoji{font-size:32px;margin-bottom:8px}
-.empty-state p{font-size:13px}
-.tag-free{display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2);padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600;margin-bottom:16px}
+
+/* NOTIFICATIONS */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 18px;font-size:13px;font-weight:500;display:none;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.4);animation:toastIn .2s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast.show{display:flex;align-items:center;gap:8px}
+.toast.success{border-color:rgba(34,197,94,.3);color:#4ade80}
+.toast.error{border-color:rgba(229,48,48,.3);color:#f87171}
+
+/* SAVED BADGE */
+.saved-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--green)}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .add-form-grid{grid-template-columns:1fr 1fr}
+  .add-form-grid .emoji-field{grid-column:1/-1}
+}
 </style>
 </head>
 <body>
-<nav>
-  <a class="nav-brand" href="/">
-    <div class="nav-dot">⚛</div>
-    Atomic <span style="color:var(--red);margin-left:3px">Lab</span>
-  </a>
-  <a class="back" href="/">← Volver al Lab</a>
-</nav>
 
-<div class="main">
-  <div class="header">
-    <div class="label">MenuLab</div>
-    <h1>Tu menú digital,<br>listo en minutos</h1>
-    <p class="subtitle">Creá tu menú, generá el QR y compartilo con tus clientes. Gratis, sin registro.</p>
-    <div style="margin-top:12px"><span class="tag-free">✓ 100% Gratis</span></div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-dot">🍽️</div>
+      <div class="login-logo-text">Menu<span class="login-logo-sub">Lab</span></div>
+    </div>
+
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="login-tab" onclick="switchTab('register')">Crear cuenta</button>
+    </div>
+
+    <div id="login-error" class="login-error"></div>
+
+    <div id="login-form">
+      <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="tu@restaurante.com" autocomplete="email"></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="btn-main" onclick="doLogin()">Entrar →</button>
+      <p class="login-note">Tus datos se guardan en este dispositivo.<br>Tu menú siempre disponible.</p>
+    </div>
+
+    <div id="register-form" style="display:none">
+      <div class="field"><label>Nombre del restaurante</label><input type="text" id="r-name" placeholder="Ej: La Parrilla de Juan"></div>
+      <div class="field"><label>Email</label><input type="email" id="r-email" placeholder="tu@restaurante.com" autocomplete="email"></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres" autocomplete="new-password"></div>
+      <button class="btn-main" onclick="doRegister()">Crear cuenta →</button>
+      <p class="login-note">Gratis. Sin tarjeta de crédito. Sin sorpresas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="app-screen">
+  <nav>
+    <a class="nav-brand" href="/atomic-lab/">
+      <div class="nav-dot">⚛</div>
+      Atomic <span style="color:var(--red);margin-left:3px">Lab</span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-user">Hola, <strong id="nav-username">—</strong></span>
+      <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <div class="app-header">
+    <div class="app-header-top">
+      <div class="app-title-group">
+        <div class="label">MenuLab</div>
+        <h1>Tu menú digital</h1>
+        <div class="save-status"><span class="save-dot"></span> Guardado automáticamente</div>
+      </div>
+      <div class="header-actions">
+        <a id="preview-link" href="#" target="_blank" class="btn btn-outline btn-sm">👁 Ver menú público</a>
+        <button onclick="shareMenu()" class="btn btn-outline btn-sm">🔗 Compartir link</button>
+      </div>
+    </div>
   </div>
 
-  <div class="layout">
+  <div class="app-layout">
+    <!-- EDITOR COLUMN -->
     <div>
-      <div class="panel" style="margin-bottom:16px">
-        <div class="panel-title"><div class="icon" style="background:rgba(229,48,48,0.12)">🏪</div> Tu restaurante</div>
-        <div class="field"><label>Nombre del restaurante</label><input type="text" id="resto-name" placeholder="Ej: La Parrilla de Juan" oninput="updatePreview()"></div>
-        <div class="field"><label>Slogan o descripción corta</label><input type="text" id="resto-tagline" placeholder="Ej: Desde 1985, sabor auténtico" oninput="updatePreview()"></div>
-        <div class="field"><label>Color de acento</label><input type="color" id="resto-color" value="#E53030" oninput="updatePreview()" style="height:40px;cursor:pointer"></div>
+      <!-- Restaurant info -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-icon" style="background:rgba(229,48,48,.12)">🏪</div>
+          <span class="panel-title">Información del restaurante</span>
+        </div>
+        <div class="field-row">
+          <div class="f" style="grid-column:1/-1"><label>Nombre del restaurante</label><input type="text" id="resto-name" placeholder="Ej: La Parrilla de Juan" oninput="autoSave()"></div>
+        </div>
+        <div class="f"><label>Descripción / slogan</label><input type="text" id="resto-tagline" placeholder="Ej: Parrilla argentina desde 1985" oninput="autoSave()"></div>
+        <div class="f">
+          <label>Color de acento</label>
+          <div class="color-row">
+            <div class="color-swatch" id="color-swatch">
+              <input type="color" id="resto-color" value="#E53030" oninput="onColorChange()">
+            </div>
+            <div class="color-presets">
+              <div class="color-preset active" style="background:#E53030" onclick="setColor('#E53030')"></div>
+              <div class="color-preset" style="background:#3b82f6" onclick="setColor('#3b82f6')"></div>
+              <div class="color-preset" style="background:#22c55e" onclick="setColor('#22c55e')"></div>
+              <div class="color-preset" style="background:#f59e0b" onclick="setColor('#f59e0b')"></div>
+              <div class="color-preset" style="background:#a855f7" onclick="setColor('#a855f7')"></div>
+              <div class="color-preset" style="background:#ec4899" onclick="setColor('#ec4899')"></div>
+              <div class="color-preset" style="background:#111111" onclick="setColor('#111111')"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
+      <!-- Add items -->
       <div class="panel">
-        <div class="panel-title"><div class="icon" style="background:rgba(59,130,246,0.12)">🍽️</div> Agregar platos</div>
-        
-        <div class="cats" id="cats-tabs">
+        <div class="panel-head">
+          <div class="panel-icon" style="background:rgba(59,130,246,.12)">➕</div>
+          <span class="panel-title">Agregar platos</span>
+        </div>
+
+        <div class="cat-tabs" id="cat-tabs">
           <button class="cat-tab active" onclick="selectCat(this,'Entradas')">Entradas</button>
           <button class="cat-tab" onclick="selectCat(this,'Principales')">Principales</button>
           <button class="cat-tab" onclick="selectCat(this,'Postres')">Postres</button>
@@ -124,45 +271,47 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:8
 
         <div class="add-form">
           <div class="add-form-grid">
-            <div class="field" style="margin:0"><label>Emoji</label><input type="text" id="item-emoji" placeholder="🥩" maxlength="2" style="text-align:center;font-size:18px"></div>
-            <div class="field" style="margin:0"><label>Precio ($)</label><input type="text" id="item-price" placeholder="0.00"></div>
-            <div class="field full" style="margin:0"><label>Nombre del plato</label><input type="text" id="item-name" placeholder="Ej: Bife de chorizo 400g"></div>
-            <div class="field full" style="margin:0"><label>Descripción (opcional)</label><input type="text" id="item-desc" placeholder="Ej: Con papas fritas y ensalada"></div>
+            <div class="f emoji-field"><label>Emoji</label><input type="text" id="new-emoji" placeholder="🍽️" maxlength="2" style="text-align:center;font-size:17px"></div>
+            <div class="f"><label>Nombre del plato *</label><input type="text" id="new-name" placeholder="Ej: Bife de chorizo" onkeydown="if(event.key==='Enter')addItem()"></div>
+            <div class="f"><label>Precio *</label><input type="text" id="new-price" placeholder="$0" onkeydown="if(event.key==='Enter')addItem()"></div>
           </div>
-          <div style="margin-top:12px">
-            <button class="btn btn-primary" onclick="addItem()">+ Agregar plato</button>
-          </div>
+          <div class="f" style="margin-bottom:10px"><label>Descripción (opcional)</label><input type="text" id="new-desc" placeholder="Ej: Con papas fritas y ensalada mixta" onkeydown="if(event.key==='Enter')addItem()"></div>
+          <button class="btn btn-red btn-sm" onclick="addItem()">+ Agregar plato</button>
         </div>
 
-        <div class="items-list" id="items-list">
-          <div class="empty-state"><div class="emoji">🍽️</div><p>Agregá tu primer plato</p></div>
+        <div class="items-wrap" id="items-wrap">
+          <div class="empty-list"><div class="empty-icon">🍽️</div>Agregá tu primer plato arriba</div>
         </div>
       </div>
     </div>
 
-    <div class="preview-panel">
-      <div class="panel-title" style="margin-bottom:12px"><div class="icon" style="background:rgba(168,85,247,0.12)">👁️</div> Vista previa</div>
-      
-      <div class="menu-preview" id="menu-preview">
-        <div class="menu-header-bg" id="menu-header" style="background:linear-gradient(135deg,#E53030,#B82424)">
-          <div class="menu-resto-name" id="prev-name" style="color:#fff">Mi Restaurante</div>
-          <div class="menu-tagline" id="prev-tagline" style="color:rgba(255,255,255,0.8)">Menú digital</div>
-        </div>
-        <div id="menu-content" style="padding:0 0 8px">
-          <div class="empty-state" style="color:#999;padding:40px 20px"><div class="emoji">🍽️</div><p style="color:#999">Agregá platos para ver la preview</p></div>
-        </div>
-        <div class="menu-footer">
-          <p>Menú digital generado con <strong>MenuLab</strong> · Atomic Kitchens</p>
-        </div>
+    <!-- PREVIEW COLUMN -->
+    <div class="preview-sticky">
+      <div class="panel-head" style="margin-bottom:12px">
+        <div class="panel-icon" style="background:rgba(168,85,247,.12)">👁️</div>
+        <span class="panel-title">Vista previa</span>
       </div>
 
-      <div class="qr-section">
-        <div class="qr-title">📱 Código QR</div>
-        <div class="qr-sub">Tus clientes escanean y ven el menú</div>
-        <div id="qr-container"><div style="font-size:11px;color:var(--muted)">Completá el menú para generar el QR</div></div>
+      <div class="menu-preview" id="menu-preview">
+        <div class="menu-hero" id="menu-hero" style="background:linear-gradient(135deg,#E53030,#B82424)">
+          <div class="menu-resto-name" id="prev-name" style="color:#fff">Mi Restaurante</div>
+          <div class="menu-tagline" id="prev-tagline" style="color:rgba(255,255,255,.8)">Menú digital</div>
+        </div>
+        <div id="menu-content">
+          <div class="empty-list" style="color:#aaa;background:#fff">Agregá platos para ver la preview</div>
+        </div>
+        <div class="menu-footer-bar">Menú digital · <strong>MenuLab</strong> por Atomic Kitchens</div>
+      </div>
+
+      <!-- QR -->
+      <div class="qr-panel">
+        <div class="qr-title">📱 Código QR del menú</div>
+        <div class="qr-sub">Tus clientes escanean y ven el menú actualizado</div>
+        <div id="qr-box"><span style="font-size:12px;color:var(--muted)">Agregá platos para generar el QR</span></div>
+        <div id="qr-url-display" class="qr-url" onclick="copyMenuUrl()" title="Click para copiar"></div>
         <div class="qr-actions">
-          <button class="btn btn-secondary btn-sm" onclick="generateQR()">🔄 Regenerar QR</button>
-          <button class="btn btn-primary btn-sm" onclick="downloadQR()"⬇️ Descargar QR</button>
+          <button class="btn btn-outline btn-sm" onclick="buildQR()">🔄 Regenerar</button>
+          <button class="btn btn-red btn-sm" onclick="downloadQR()">⬇️ Descargar QR</button>
         </div>
       </div>
     </div>
@@ -170,130 +319,347 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:8
 </div>
 
 <script>
+// ============================================================
+// AUTH SYSTEM
+// ============================================================
+const DB_KEY = 'menulab_db';
+
+function getDB() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY) || '{"users":{},"menus":{}}'); }
+  catch(e) { return {users:{},menus:{}}; }
+}
+function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+function hashPass(p) {
+  let h = 0;
+  for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i), h |= 0;
+  return 'h_' + Math.abs(h).toString(36);
+}
+
+let currentUser = null;
+
+function switchTab(t) {
+  document.querySelectorAll('.login-tab').forEach((b,i) => b.classList.toggle('active', (t==='login'&&i===0)||(t==='register'&&i===1)));
+  document.getElementById('login-form').style.display = t==='login'?'':'none';
+  document.getElementById('register-form').style.display = t==='register'?'':'none';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function showError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+function doRegister() {
+  const name = document.getElementById('r-name').value.trim();
+  const email = document.getElementById('r-email').value.trim().toLowerCase();
+  const pass = document.getElementById('r-pass').value;
+  if (!name) return showError('Ingresá el nombre del restaurante');
+  if (!email || !email.includes('@')) return showError('Ingresá un email válido');
+  if (pass.length < 6) return showError('La contraseña debe tener al menos 6 caracteres');
+  const db = getDB();
+  if (db.users[email]) return showError('Ya existe una cuenta con ese email. Iniciá sesión.');
+  db.users[email] = { name, hash: hashPass(pass), createdAt: Date.now() };
+  db.menus[email] = { restoName: name, tagline: '', color: '#E53030', items: [] };
+  saveDB(db);
+  localStorage.setItem('menulab_session', email);
+  loadApp(email);
+}
+
+function doLogin() {
+  const email = document.getElementById('l-email').value.trim().toLowerCase();
+  const pass = document.getElementById('l-pass').value;
+  if (!email || !pass) return showError('Completá todos los campos');
+  const db = getDB();
+  const user = db.users[email];
+  if (!user) return showError('No existe una cuenta con ese email. Registrate primero.');
+  if (user.hash !== hashPass(pass)) return showError('Contraseña incorrecta');
+  localStorage.setItem('menulab_session', email);
+  loadApp(email);
+}
+
+function doLogout() {
+  localStorage.removeItem('menulab_session');
+  currentUser = null;
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  showToast('Sesión cerrada', 'success');
+}
+
+function loadApp(email) {
+  const db = getDB();
+  currentUser = email;
+  const user = db.users[email];
+  document.getElementById('nav-username').textContent = user.name;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  loadMenuData();
+}
+
+// ============================================================
+// MENU DATA
+// ============================================================
 let currentCat = 'Entradas';
-let items = JSON.parse(localStorage.getItem('menulab-items') || '[]');
-let restoInfo = JSON.parse(localStorage.getItem('menulab-info') || '{"name":"","tagline":"","color":"#E53030"}');
-let qrInstance = null;
+let accentColor = '#E53030';
 
-document.getElementById('resto-name').value = restoInfo.name || '';
-document.getElementById('resto-tagline').value = restoInfo.tagline || '';
-document.getElementById('resto-color').value = restoInfo.color || '#E53030';
-renderItems();
-updatePreview();
+function getMenu() {
+  const db = getDB();
+  return db.menus[currentUser] || { restoName: '', tagline: '', color: '#E53030', items: [] };
+}
 
+function saveMenu(menu) {
+  const db = getDB();
+  db.menus[currentUser] = menu;
+  saveDB(db);
+}
+
+function loadMenuData() {
+  const menu = getMenu();
+  document.getElementById('resto-name').value = menu.restoName || '';
+  document.getElementById('resto-tagline').value = menu.tagline || '';
+  accentColor = menu.color || '#E53030';
+  document.getElementById('resto-color').value = accentColor;
+  updateColorSwatch();
+  renderItems();
+  updatePreview();
+  updatePublicLink();
+}
+
+function autoSave() {
+  const menu = getMenu();
+  menu.restoName = document.getElementById('resto-name').value;
+  menu.tagline = document.getElementById('resto-tagline').value;
+  menu.color = accentColor;
+  saveMenu(menu);
+  updatePreview();
+  updatePublicLink();
+}
+
+// ============================================================
+// COLOR
+// ============================================================
+function onColorChange() {
+  accentColor = document.getElementById('resto-color').value;
+  updateColorSwatch();
+  document.querySelectorAll('.color-preset').forEach(p => p.classList.toggle('active', p.style.background === accentColor || p.style.backgroundColor === accentColor));
+  autoSave();
+}
+
+function setColor(c) {
+  accentColor = c;
+  document.getElementById('resto-color').value = c;
+  updateColorSwatch();
+  document.querySelectorAll('.color-preset').forEach(p => p.classList.toggle('active', p.style.background===c||p.style.backgroundColor===c));
+  autoSave();
+}
+
+function updateColorSwatch() {
+  document.getElementById('color-swatch').style.background = accentColor;
+}
+
+function adjustColor(hex, amt) {
+  const n = parseInt(hex.replace('#',''),16);
+  const r = Math.max(0,Math.min(255,(n>>16)+amt));
+  const g = Math.max(0,Math.min(255,((n>>8)&0xff)+amt));
+  const b = Math.max(0,Math.min(255,(n&0xff)+amt));
+  return '#'+((1<<24)|(r<<16)|(g<<8)|b).toString(16).slice(1);
+}
+
+// ============================================================
+// CATEGORIES
+// ============================================================
 function selectCat(el, cat) {
   currentCat = cat;
   document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
 }
 
+// ============================================================
+// ITEMS
+// ============================================================
 function addItem() {
-  const name = document.getElementById('item-name').value.trim();
-  const price = document.getElementById('item-price').value.trim();
-  if (!name || !price) { alert('Ingresá nombre y precio'); return; }
-  items.push({
+  const name = document.getElementById('new-name').value.trim();
+  const price = document.getElementById('new-price').value.trim();
+  if (!name) { showToast('Ingresá el nombre del plato', 'error'); return; }
+  if (!price) { showToast('Ingresá el precio', 'error'); return; }
+  const menu = getMenu();
+  menu.items.push({
     id: Date.now(),
     cat: currentCat,
-    emoji: document.getElementById('item-emoji').value || '🍽️',
+    emoji: document.getElementById('new-emoji').value.trim() || '🍽️',
     name,
     price,
-    desc: document.getElementById('item-desc').value.trim()
+    desc: document.getElementById('new-desc').value.trim()
   });
-  localStorage.setItem('menulab-items', JSON.stringify(items));
-  document.getElementById('item-name').value = '';
-  document.getElementById('item-price').value = '';
-  document.getElementById('item-desc').value = '';
-  document.getElementById('item-emoji').value = '';
+  saveMenu(menu);
+  // Clear fields
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-price').value = '';
+  document.getElementById('new-desc').value = '';
+  document.getElementById('new-emoji').value = '';
+  document.getElementById('new-name').focus();
   renderItems();
   updatePreview();
+  showToast('✓ Plato agregado', 'success');
 }
 
 function deleteItem(id) {
-  items = items.filter(i => i.id !== id);
-  localStorage.setItem('menulab-items', JSON.stringify(items));
+  const menu = getMenu();
+  menu.items = menu.items.filter(i => i.id !== id);
+  saveMenu(menu);
   renderItems();
   updatePreview();
+  showToast('Plato eliminado', 'success');
 }
 
 function renderItems() {
-  const list = document.getElementById('items-list');
-  if (!items.length) {
-    list.innerHTML = '<div class="empty-state"><div class="emoji">🍽️</div><p>Agregá tu primer plato</p></div>';
+  const wrap = document.getElementById('items-wrap');
+  const menu = getMenu();
+  if (!menu.items.length) {
+    wrap.innerHTML = '<div class="empty-list"><div class="empty-icon">🍽️</div>Agregá tu primer plato arriba</div>';
     return;
   }
-  list.innerHTML = items.map(item => `
-    <div class="item-card">
-      <div class="item-emoji">${item.emoji}</div>
-      <div class="item-info">
-        <div class="item-name">${item.name} <span style="font-size:10px;color:var(--muted);font-weight:400">${item.cat}</span></div>
-        ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
-      </div>
-      <div class="item-price">$${item.price}</div>
-      <button class="item-del" onclick="deleteItem(${item.id})">×</button>
+  const cats = [...new Set(menu.items.map(i => i.cat))];
+  wrap.innerHTML = cats.map(cat => `
+    <div style="margin-bottom:6px">
+      <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 0 6px">${cat}</div>
+      ${menu.items.filter(i => i.cat === cat).map(item => `
+        <div class="item-row">
+          <span class="drag-handle">⠿</span>
+          <span class="item-emoji">${item.emoji}</span>
+          <div class="item-info">
+            <div class="item-name">${item.name}</div>
+            ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
+          </div>
+          <div class="item-price">${item.price}</div>
+          <div class="item-actions">
+            <button class="item-btn del" onclick="deleteItem(${item.id})" title="Eliminar">✕</button>
+          </div>
+        </div>
+      `).join('')}
     </div>
   `).join('');
 }
 
+// ============================================================
+// PREVIEW
+// ============================================================
 function updatePreview() {
-  const name = document.getElementById('resto-name').value || 'Mi Restaurante';
-  const tagline = document.getElementById('resto-tagline').value || 'Menú digital';
-  const color = document.getElementById('resto-color').value || '#E53030';
-  restoInfo = { name, tagline, color };
-  localStorage.setItem('menulab-info', JSON.stringify(restoInfo));
+  const menu = getMenu();
+  const name = menu.restoName || 'Mi Restaurante';
+  const tagline = menu.tagline || 'Menú digital';
+  const color = accentColor;
+  const dark = adjustColor(color, -30);
+
   document.getElementById('prev-name').textContent = name;
   document.getElementById('prev-tagline').textContent = tagline;
-  document.getElementById('menu-header').style.background = `linear-gradient(135deg,${color},${adjustColor(color,-30)})`;
-  const cats = [...new Set(items.map(i => i.cat))];
+  document.getElementById('menu-hero').style.background = `linear-gradient(135deg,${color},${dark})`;
+
   const content = document.getElementById('menu-content');
-  if (!items.length) { content.innerHTML = '<div class="empty-state" style="color:#999;padding:40px 20px"><div class="emoji">🍽️</div><p style="color:#999">Agregá platos para ver la preview</p></div>'; return; }
-  content.innerHTML = cats.map(cat => `
-    <div class="menu-cat">
-      <div class="menu-cat-title">${cat}</div>
-      ${items.filter(i => i.cat === cat).map(item => `
+  if (!menu.items.length) {
+    content.innerHTML = '<div class="empty-list" style="color:#aaa;background:#fff;padding:24px">Agregá platos para ver la preview</div>';
+    return;
+  }
+
+  const cats = [...new Set(menu.items.map(i => i.cat))];
+  content.innerHTML = cats.map((cat, idx) => `
+    ${idx > 0 ? '<div class="menu-divider"></div>' : ''}
+    <div class="menu-section">
+      <div class="menu-section-title">${cat}</div>
+      ${menu.items.filter(i => i.cat === cat).map(item => `
         <div class="menu-item">
           <div class="menu-item-left">
             <div class="menu-item-name">${item.emoji} ${item.name}</div>
             ${item.desc ? `<div class="menu-item-desc">${item.desc}</div>` : ''}
           </div>
-          <div class="menu-item-price" style="color:${color}">$${item.price}</div>
+          <div class="menu-item-price" style="color:${color}">${item.price}</div>
         </div>
       `).join('')}
     </div>
-  `).join('<div class="menu-divider"></div>');
-  generateQR();
+  `).join('');
+
+  buildQR();
 }
 
-function adjustColor(hex, amount) {
-  const num = parseInt(hex.replace('#',''), 16);
-  const r = Math.max(0, Math.min(255, (num >> 16) + amount));
-  const g = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amount));
-  const b = Math.max(0, Math.min(255, (num & 0x0000FF) + amount));
-  return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+// ============================================================
+// QR & PUBLIC LINK
+// ============================================================
+function getMenuUrl() {
+  const base = window.location.origin + '/atomic-lab/menu-view.html';
+  const id = btoa(currentUser).replace(/=/g,'');
+  return `${base}?u=${encodeURIComponent(id)}`;
 }
 
-function generateQR() {
-  if (!items.length) return;
-  const container = document.getElementById('qr-container');
-  container.innerHTML = '';
+function updatePublicLink() {
+  const url = getMenuUrl();
+  document.getElementById('qr-url-display').textContent = url;
+  document.getElementById('preview-link').href = url;
+}
+
+function buildQR() {
+  const menu = getMenu();
+  if (!menu.items.length) return;
+  const box = document.getElementById('qr-box');
+  box.innerHTML = '';
+  const url = getMenuUrl();
   try {
-    qrInstance = new QRCode(container, {
-      text: `Menu: ${restoInfo.name || 'Mi Restaurante'} - ${items.length} platos`,
+    new QRCode(box, {
+      text: url,
       width: 160, height: 160,
       colorDark: '#111111', colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.M
     });
-  } catch(e) { container.innerHTML = '<p style="font-size:11px;color:var(--muted)">QR generado</p>'; }
+  } catch(e) {
+    box.innerHTML = '<p style="font-size:11px;color:var(--muted)">QR listo</p>';
+  }
 }
 
 function downloadQR() {
-  const canvas = document.querySelector('#qr-container canvas');
-  const img = document.querySelector('#qr-container img');
+  const canvas = document.querySelector('#qr-box canvas');
+  const img = document.querySelector('#qr-box img');
   const src = canvas ? canvas.toDataURL() : (img ? img.src : null);
-  if (!src) { alert('Generá el QR primero'); return; }
-  const a = document.createElement('a'); a.href = src; a.download = 'menu-qr.png'; a.click();
+  if (!src) { showToast('Primero agregá platos al menú', 'error'); return; }
+  const a = document.createElement('a');
+  a.href = src; a.download = 'menu-qr.png'; a.click();
+  showToast('✓ QR descargado', 'success');
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.getElementById('item-name') === document.activeElement) addItem(); });
+function copyMenuUrl() {
+  navigator.clipboard.writeText(getMenuUrl()).then(() => showToast('✓ Link copiado', 'success'));
+}
+
+function shareMenu() {
+  const url = getMenuUrl();
+  if (navigator.share) {
+    navigator.share({ title: getMenu().restoName + ' — Menú digital', url });
+  } else {
+    copyMenuUrl();
+  }
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer;
+function showToast(msg, type='success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+const session = localStorage.getItem('menulab_session');
+if (session) {
+  const db = getDB();
+  if (db.users[session]) loadApp(session);
+}
+
+// Enter key on login
+document.getElementById('l-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('r-pass') && document.getElementById('r-pass').addEventListener('keydown', e => { if(e.key==='Enter') doRegister(); });
 </script>
 </body>
 </html>
