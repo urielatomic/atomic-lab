@@ -16,7 +16,7 @@ body{background:#f5f5f5;font-family:'DM Sans',sans-serif;min-height:100vh;-webki
 .menu-body{padding:0 0 80px}
 .cat-nav{display:flex;gap:8px;overflow-x:auto;padding:16px 20px;border-bottom:1px solid #f0f0f0;scrollbar-width:none;-ms-overflow-style:none}
 .cat-nav::-webkit-scrollbar{display:none}
-.cat-chip{padding:6px 16px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e5e5e5;background:#fff;color:#666;white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif}
+.cat-chip{padding:6px 16px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e5e5e5;background:#fff;color:#666;white-space:nowraw;transition:all .15s;font-family:'DM Sans',sans-serif}
 .cat-chip.active,.cat-chip:hover{color:#fff;border-color:transparent}
 .section{padding:20px 20px 4px}
 .section-title{font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#aaa;margin-bottom:14px}
@@ -61,28 +61,96 @@ const uid = params.get('u');
 function renderMenu() {
   const content = document.getElementById('menu-content');
   if (!uid) {
-    content.innerHTML = `<div class="not-found"><h2>Menú no encontrado</h2><p>El link es inválido o el menð no existe.</p><a href="/atomic-lab/menulab.html">Crear mi menú gratis →</a></div>`;
+    content.innerHTML = `<div class="not-found"><h2>Menú no encontrado</h2><p>El link es inválido o el menú no existe.</p><a href="/atomic-lab/menulab.html">Crear mi menú gratis →</a></div>`;
     return;
   }
+
   let email;
   try { email = atob(uid.replace(/-/g,'+').replace(/_/g,'/')); }
   catch(e) { email = null; }
+
   const db = getDB();
   const menu = email ? db.menus[email] : null;
+
   if (!menu || !menu.items || !menu.items.length) {
-    content.innerHTML = `<div class="not-found"><div style="font-size:48px;margin-bottom:16px">📋</div><h2>Menú no disponible en este dispositivo</h2><p>Si sos el dueño del restaurante, inicia sesión en MenuLab.</p><a href="/atomic-lab/menulab.html">Ir a MenuLab →</a></div>`;
+    content.innerHTML = `
+      <div class="not-found">
+        <div style="font-size:48px;margin-bottom:16px">📋</div>
+        <h2>Menú no disponible en este dispositivo</h2>
+        <p>Este menú está guardado en otro dispositivo.<br>Si sos el dueño del restaurante, inicia sesión en MenuLab para editarlo.</p>
+        <a href="/atomic-lab/menulab.html">Ir a MenuLab →</a>
+      </div>`;
     return;
   }
+
   const color = menu.color || '#E53030';
   const cats = [...new Set(menu.items.map(i => i.cat))];
   let activecat = cats[0];
+
   document.title = (menu.restoName || 'Menú digital') + ' — MenuLab';
-  content.innerHTML = `<div class="menu-hero" style="background:linear-gradient(160deg,${color},${adjustColor(color,-30)})"><div class="menu-logo" style="background:rgba(255,255,255,.2);font-size:26px">🍽️</div><div class="menu-name" style="color:#fff">${menu.restoName||'Menú digital'}</div><div class="menu-tag" style="color:rgba(255,255,255,.8)">${menu.tagline || ''}</div></div><div class="menu-body"><div class="cat-nav" id="cat-nav">${cats.map(cat => `<div class="cat-chip ${cat===activecat?'active':''}" onclick="filterCat('${cat}')" data-cat="${cat}" style="${cat===activecat?'background:'+color+';color:#fff;':''}"> ${cat}</div>`).join('')}</div><div id="items-area">${renderSection(menu.items,cats,activecat,color)}</div></div>`;
-  window.filterCat = function(cat) { activecat=cat; document.querySelectorAll('.cat-chip').forEach(c => { c.classList.toggle('active',c.dataset.cat===cat); c.style.background=c.dataset.cat===cat?color:''; c.style.color=c.dataset.cat===cat?'#fff':''; }); document.getElementById('items-area').innerHTML=renderSection(menu.items,cats,cat,color); };
+
+  content.innerHTML = `
+    <div class="menu-hero" style="background:linear-gradient(160deg,${color},${adjustColor(color,-30)})">
+      <div class="menu-logo" style="background:rgba(255,255,255,.2);font-size:26px">🍽️</div>
+      <div class="menu-name" style="color:#fff">${menu.restoName || 'Menú digital'}</div>
+      <div class="menu-tag" style="color:rgba(255,255,255,.8)">${menu.tagline || ''}</div>
+    </div>
+    <div class="menu-body">
+      <div class="cat-nav" id="cat-nav">
+        ${cats.map(cat => `<div class="cat-chip ${cat===activecat?'active':''}" onclick="filterCat('${cat}')" data-cat="${cat}" style="${cat===activecat?'background:'+color+';':''}"> ${cat}</div>`).join('')}
+      </div>
+      <div id="items-area">
+        ${renderSection(menu.items, cats, activecat, color)}
+      </div>
+    </div>
+  `;
+
+  window.filterCat = function(cat) {
+    activecat = cat;
+    document.querySelectorAll('.cat-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.cat === cat);
+      c.style.background = c.dataset.cat === cat ? color : '';
+      c.style.color = c.dataset.cat === cat ? '#fff' : '';
+    });
+    document.getElementById('items-area').innerHTML = renderSection(menu.items, cats, cat, color);
+  };
 }
-function renderSection(items,cats,active,color) { const filtered=items.filter(i=>i.cat===active); if(!filtered.length) return '<div class="empty-state"><div class="icon">🍽️</div><p>Sin platos en esta categoría</p></div>'; return `<div class="section"><div class="section-title">${active}</div>${filtered.map(i=>renderItem(i,color)).join('')}</div>`; }
-function renderItem(item,color) { return `<div class="item"><div class="item-emoji">${item.emoji||'🍽️'}</div><div class="item-left"><div class="item-name">${item.name}</div>${item.desc?`<div class="item-desc">${item.desc}</div>`:''}</div><div class="item-price" style="color:${color}">${item.price}</div></div>`; }
-function adjustColor(hex,amt) { try { const n=parseInt(hex.replace('#',''),16); const r=Math.max(0,Math.min(255,(n>>16)+amt)); const g=Math.max(0,Math.min(255,((n>>8)&0xff)+amt)); const b=Math.max(0,Math.min(255,(n&0xff)+amt)); return '#'+((1<<24)|(r<<16)|(g<<8)|b).toString(16).slice(1); } catch(e) { return hex; } }
+
+function renderSection(items, cats, active, color) {
+  if (active === 'all') {
+    return cats.map(cat => `
+      <div class="section">
+        <div class="section-title">${cat}</div>
+        ${items.filter(i=>i.cat===cat).map(item=>renderItem(item,color)).join('')}
+      </div>
+    `).join('');
+  }
+  const filtered = items.filter(i => i.cat === active);
+  if (!filtered.length) return '<div class="empty-state"><div class="icon">🍽️</div><p>No hay platos en esta categoría</p></div>';
+  return `<div class="section"><div class="section-title">${active}</div>${filtered.map(i=>renderItem(i,color)).join('')}</div>`;
+}
+
+function renderItem(item, color) {
+  return `<div class="item">
+    <div class="item-emoji">${item.emoji||'🍽️'}</div>
+    <div class="item-left">
+      <div class="item-name">${item.name}</div>
+      ${item.desc?`<div class="item-desc">${item.desc}</div>`:''}
+    </div>
+    <div class="item-price" style="color:${color}">${item.price}</div>
+  </div>`;
+}
+
+function adjustColor(hex, amt) {
+  try {
+    const n = parseInt(hex.replace('#',''),16);
+    const r = Math.max(0,Math.min(255,(n>>16)+amt));
+    const g = Math.max(0,Math.min(255,((n>>8)&0xff)+amt));
+    const b = Math.max(0,Math.min(255,(n&0xff)+amt));
+    return '#'+((1<<24)|(r<<16)|(g<<8)|b).toString(16).slice(1);
+  } catch(e) { return hex; }
+}
+
 renderMenu();
 </script>
 </body>
