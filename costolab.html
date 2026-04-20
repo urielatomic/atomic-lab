@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CostoLab — Calculadora de costos de platos</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#E53030;--red2:#B82424;--bg:#0A0A0A;--bg2:#111111;--bg3:#1A1A1A;--bg4:#222222;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#F0F0F0;--muted:#888;--muted2:#555;--green:#22c55e;--amber:#f59e0b}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(16px,4vw,60px);height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.9);backdrop-filter:blur(16px)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;text-decoration:none;color:var(--text)}
+.nav-dot{width:24px;height:24px;background:var(--red);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px}
+.back{color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s}.back:hover{color:var(--text)}
+.main{padding:80px clamp(16px,4vw,60px) 60px;max-width:1100px;margin:0 auto}
+.header{padding:40px 0 32px}
+.label{font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:10px}
+h1{font-family:'Manrope',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.02em;margin-bottom:12px}
+.subtitle{color:var(--muted);font-size:16px;max-width:500px;line-height:1.6}
+.tag-free{display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2);padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600;margin-top:12px}
+.layout{display:grid;grid-template-columns:1fr 400px;gap:24px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.panel-title{font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+input,select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border .2s}
+input:focus,select:focus{border-color:var(--red)}
+input[type="number"]{-moz-appearance:textfield}
+.row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px}
+.row .field{margin:0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif}
+.btn-primary{background:var(--red);color:#fff}.btn-primary:hover{background:var(--red2)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border2)}.btn-secondary:hover{border-color:rgba(255,255,255,.3)}
+.btn-icon{background:none;border:1px solid var(--border);color:var(--muted);padding:9px 10px;border-radius:8px;cursor:pointer;transition:all .2s}.btn-icon:hover{color:#f87171;border-color:#f87171}
+.ing-table{width:100%;border-collapse:collapse;font-size:13px}
+.ing-table th{text-align:left;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;border-bottom:1px solid var(--border)}
+.ing-table td{padding:10px 8px;border-bottom:1px solid var(--border)}
+.ing-table tr:last-child td{border:none}
+.ing-table .cost{color:var(--text);font-weight:600;font-family:'Manrope',sans-serif}
+.summary-panel{position:sticky;top:80px}
+.stat{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600;margin-bottom:4px}
+.stat-value{font-family:'Manrope',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.02em}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.good{color:var(--green)}.warn{color:var(--amber)}.bad{color:#f87171}
+.slider-row{display:flex;align-items:center;gap:10px}
+.slider-row input[type="range"]{flex:1;accent-color:var(--red);height:4px}
+.slider-val{font-family:'Manrope',sans-serif;font-weight:700;font-size:16px;width:48px;text-align:right}
+.recipes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.recipe-chip{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:6px}
+.recipe-chip.active,.recipe-chip:hover{border-color:var(--red);color:var(--text)}
+.recipe-chip .chip-del{font-size:14px;color:var(--muted2);transition:color .2s}.recipe-chip .chip-del:hover{color:#f87171}
+.meter{height:8px;background:var(--bg3);border-radius:100px;overflow:hidden;margin-top:8px}
+.meter-fill{height:100%;border-radius:100px;transition:width .5s,background .5s}
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="/"><div class="nav-dot">⚛</div>Atomic <span style="color:var(--red);margin-left:3px">Lab</span></a>
+  <a class="back" href="/">← Volver al Lab</a>
+</nav>
+
+<div class="main">
+  <div class="header">
+    <div class="label">CostoLab</div>
+    <h1>Calculá el costo<br>de cada plato</h1>
+    <p class="subtitle">Agregá ingredientes, fijá tu margen objetivo y sabé exactamente a qué precio vender.</p>
+    <div><span class="tag-free">✓ 100% Gratis · Sin registro</span></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="icon" style="background:rgba(229,48,48,0.12)">📋</div> Mis recetas</div>
+    <div class="recipes" id="recipes-list"></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="text" id="new-recipe-name" placeholder="Nombre de nueva receta..." style="max-width:280px">
+      <button class="btn btn-primary" onclick="addRecipe()">+ Nueva receta</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="panel">
+        <div class="panel-title"><div class="icon" style="background:rgba(59,130,246,0.12)">🥕</div> Ingredientes</div>
+        <div class="row" style="margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:12px">
+          <div class="field"><label>Ingrediente</label><input type="text" id="ing-name" placeholder="Ej: Bife de chorizo"></div>
+          <div class="field"><label>Cantidad</label><input type="number" id="ing-qty" placeholder="400" min="0" step="any"></div>
+          <div class="field"><label>Unidad &middot; Costo $</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <select id="ing-unit"><option>g</option><option>kg</option><option>ml</option><option>L</option><option>u</option><option>porciones</option></select>
+              <input type="number" id="ing-cost" placeholder="0.00" min="0" step="any">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="addIngredient()" style="margin-bottom:0;white-space:nowrap">+ Agregar</button>
+        </div>
+        <div id="ing-table-wrap"><div class="empty">Seleccióná o creá una receta para empezar</div></div>
+      </div>
+    </div>
+    <div class="summary-panel">
+      <div class="panel">
+        <div class="panel-title"><div class="icon" style="background:rgba(34,197,94,0.12)">📊</div> Resultados</div>
+        <div class="stat"><div class="stat-label">Costo total de ingredientes</div><div class="stat-value" id="stat-cost">$0.00</div><div class="stat-sub" id="stat-ing-count">0 ingredientes</div></div>
+        <div class="stat"><div class="stat-label">Food cost objetivo</div><div class="slider-row"><input type="range" id="food-cost-slider" min="10" max="60" value="30" oninput="updateCalc()"><div class="slider-val" id="food-cost-val">30%</div></div><div class="meter"><div class="meter-fill" id="food-meter" style="width:30%"></div></div><div class="stat-sub" style="margin-top:6px">Gastronomía: 25-35% ideal</div></div>
+        <div class="stat"><div class="stat-label">Precio de venta sugerido</div><div class="stat-value" id="stat-price" style="color:var(--green)">$0.00</div><div class="stat-sub" id="stat-margin">Margen bruto: $0.00</div></div>
+        <div class="stat"><div class="stat-label">¿Es rentable?</div><div id="rentability-msg" style="font-size:13px;font-weight:600;padding:8px 0">— Agregá ingredientes para ver</div></div>
+        <div style="margin-top:4px"><div class="field"><label>Overhead / gastos fijos (%)</label><div class="slider-row"><input type="range" id="overhead-slider" min="0" max="40" value="20" oninput="updateCalc()"><div class="slider-val" id="overhead-val">20%</div></div></div><div class="stat" style="margin-top:8px"><div class="stat-label">Precio con overhead incluido</div><div class="stat-value" id="stat-price-overhead">$0.00</div></div></div>
+        <button class="btn btn-secondary" onclick="exportCSV()" style="width:100%;justify-content:center;margin-top:8px">⬇ Exportar a CSV</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let recipes=JSON.parse(localStorage.getItem('costolab-recipes')||'[]');
+let currentRecipeId=null;
+function save(){localStorage.setItem('costolab-recipes',JSON.stringify(recipes));}
+function addRecipe(){const name=document.getElementById('new-recipe-name').value.trim();if(!name)return;const r={id:Date.now(),name,ingredients:[]};recipes.push(r);currentRecipeId=r.id;document.getElementById('new-recipe-name').value='';save();renderRecipes();renderIngredients();updateCalc();}
+function selectRecipe(id){currentRecipeId=id;renderRecipes();renderIngredients();updateCalc();}
+function deleteRecipe(id){if(!confirm('¿Eliminar receta?'))return;recipes=recipes.filter(r=>r.id!==id);if(currentRecipeId===id)currentRecipeId=recipes[0]?.id||null;save();renderRecipes();renderIngredients();updateCalc();}
+function renderRecipes(){const list=document.getElementById('recipes-list');if(!recipes.length){list.innerHTML='<div style="font-size:12px;color:var(--muted)">Sin recetas aún</div>';return;}list.innerHTML=recipes.map(r=>`<div class="recipe-chip ${r.id===currentRecipeId?'active':''}">
+      <span onclick="selectRecipe(${r.id})">${r.name}</span>
+      <span class="chip-del" onclick="deleteRecipe(${r.id})">×</span>
+    </div>`).join('');}
+function addIngredient(){const recipe=recipes.find(r=>r.id===currentRecipeId);if(!recipe){alert('Creá o seleccióná una receta primero');return;}const name=document.getElementById('ing-name').value.trim();const qty=parseFloat(document.getElementById('ing-qty').value);const unit=document.getElementById('ing-unit').value;const cost=parseFloat(document.getElementById('ing-cost').value);if(!name||isNaN(qty)||isNaN(cost)){alert('Completá todos los campos');return;}recipe.ingredients.push({id:Date.now(),name,qty,unit,cost});save();document.getElementById('ing-name').value='';document.getElementById('ing-qty').value='';document.getElementById('ing-cost').value='';renderIngredients();updateCalc();}
+function deleteIngredient(ingId){const recipe=recipes.find(r=>r.id===currentRecipeId);if(!recipe)return;recipe.ingredients=recipe.ingredients.filter(i=>i.id!==ingId);save();renderIngredients();updateCalc();}
+function renderIngredients(){const wrap=document.getElementById('ing-table-wrap');const recipe=recipes.find(r=>r.id===currentRecipeId);if(!recipe){wrap.innerHTML='<div class="empty">Seleccióná o creá una receta para empezar</div>';return;}if(!recipe.ingredients.length){wrap.innerHTML='<div class="empty">Agregá ingredientes a esta receta</div>';return;}wrap.innerHTML=`<table class="ing-table"><thead><tr><th>Ingrediente</th><th>Cantidad</th><th>Costo</th><th></th></tr></thead><tbody>${recipe.ingredients.map(i=>`<tr><td><strong>${i.name}</strong></td><td>${i.qty} ${i.unit}</td><td class="cost">$${i.cost.toFixed(2)}</td><td><button class="btn-icon" onclick="deleteIngredient(${i.id})">×</button></td></tr>`).join('')}</tbody></table>`;}
+function updateCalc(){const recipe=recipes.find(r=>r.id===currentRecipeId);const fc=parseInt(document.getElementById('food-cost-slider').value);const ov=parseInt(document.getElementById('overhead-slider').value);document.getElementById('food-cost-val').textContent=fc+'%';document.getElementById('overhead-val').textContent=ov+'%';const m=document.getElementById('food-meter');m.style.width=fc+'%';m.style.background=fc<25?'var(--green)':fc<=35?'var(--amber)':'var(--red)';if(!recipe||!recipe.ingredients.length){document.getElementById('stat-cost').textContent='$0.00';document.getElementById('stat-ing-count').textContent='0 ingredientes';document.getElementById('stat-price').textContent='$0.00';document.getElementById('stat-margin').textContent='Margen bruto: $0.00';document.getElementById('stat-price-overhead').textContent='$0.00';document.getElementById('rentability-msg').textContent='— Agregá ingredientes para ver';return;}const total=recipe.ingredients.reduce((s,i)=>s+i.cost,0);const sp=total/(fc/100);const margin=sp-total;const spOv=total/((fc-ov)/100);document.getElementById('stat-cost').textContent='$'+total.toFixed(2);document.getElementById('stat-ing-count').textContent=recipe.ingredients.length+' ingrediente'+(recipe.ingredients.length!==1?'s':'');document.getElementById('stat-price').textContent='$'+sp.toFixed(2);document.getElementById('stat-margin').textContent=`Margen bruto: $${margin.toFixed(2)} (${100-fc}%)`;document.getElementById('stat-price-overhead').textContent='$'+(isFinite(spOv)&&spOv>0?spOv.toFixed(2):'—');const rm=document.getElementById('rentability-msg');if(fc<=30)rm.innerHTML='<span class="good">✓ Excelente margen — muy rentable</span>';else if(fc<=40)rm.innerHTML='<span class="warn">⚠ Margen aceptable — controlá costos</span>';else rm.innerHTML='<span class="bad">✗ Margen ajustado — revisá precios</span>';}
+function exportCSV(){const recipe=recipes.find(r=>r.id===currentRecipeId);if(!recipe){alert('Seleccióná una receta');return;}const rows=[['Ingrediente','Cantidad','Unidad','Costo ($)']];recipe.ingredients.forEach(i=>rows.push([i.name,i.qty,i.unit,i.cost.toFixed(2)]));const total=recipe.ingredients.reduce((s,i)=>s+i.cost,0);rows.push(['','','TOTAL',total.toFixed(2)]);const csv=rows.map(r=>r.join(',')).join('
+');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download=recipe.name.replace(/\s+/g,'-')+'-costos.csv';a.click();}
+renderRecipes();renderIngredients();updateCalc();
+</script>
+</body>
+</html>

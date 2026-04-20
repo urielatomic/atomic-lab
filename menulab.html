@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MenuLab — Constructor de menú digital gratuito</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#E53030;--red2:#B82424;
+  --bg:#0A0A0A;--bg2:#111111;--bg3:#1A1A1A;--bg4:#222222;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#F0F0F0;--muted:#888;--muted2:#555;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;min-height:100vh;-webkit-font-smoothing:antialiased}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(16px,4vw,60px);height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.9);backdrop-filter:blur(16px)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;text-decoration:none;color:var(--text)}
+.nav-dot{width:24px;height:24px;background:var(--red);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px}
+.back{color:var(--muted);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:6px;transition:color .2s}
+.back:hover{color:var(--text)}
+.main{padding:80px clamp(16px,4vw,60px) 60px;max-width:1200px;margin:0 auto}
+.header{padding:40px 0 32px}
+.label{font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:10px}
+h1{font-family:'Manrope',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.02em;margin-bottom:12px}
+.subtitle{color:var(--muted);font-size:16px;max-width:500px}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px}
+.panel-title{font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.panel-title .icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border .2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red)}
+.field textarea{resize:vertical;min-height:60px}
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.cat-tab{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s}
+.cat-tab.active,.cat-tab:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.add-form{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.add-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.add-form-grid .full{grid-column:1/-1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red2)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border2)}
+.btn-secondary:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.items-list{display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto}
+.item-card{background:var(--bg4);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px}
+.item-emoji{font-size:20px;flex-shrink:0}
+.item-info{flex:1;min-width:0}
+.item-name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-desc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-price{font-family:'Manrope',sans-serif;font-weight:700;color:var(--red);font-size:14px;flex-shrink:0}
+.item-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;transition:color .2s}
+.item-del:hover{color:#f87171}
+.preview-panel{position:sticky;top:80px}
+.menu-preview{background:#fff;color:#111;border-radius:12px;overflow:hidden;box-shadow:0 0 40px rgba(0,0,0,.3)}
+.menu-header-bg{padding:28px 24px 20px;text-align:center}
+.menu-resto-name{font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;color:#111;letter-spacing:-0.01em}
+.menu-tagline{font-size:12px;color:#666;margin-top:4px}
+.menu-divider{height:1px;background:#eee;margin:0 24px}
+.menu-cat{padding:16px 24px 0}
+.menu-cat-title{font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#999;margin-bottom:10px}
+.menu-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f5f5f5}
+.menu-item:last-child{border-bottom:none}
+.menu-item-left{flex:1}
+.menu-item-name{font-size:13px;font-weight:600;color:#111}
+.menu-item-desc{font-size:11px;color:#888;margin-top:2px;line-height:1.4}
+.menu-item-price{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;flex-shrink:0}
+.menu-footer{padding:16px 24px;text-align:center;border-top:1px solid #eee;background:#fafafa}
+.menu-footer p{font-size:10px;color:#aaa}
+.qr-section{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:16px;text-align:center}
+.qr-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.qr-sub{font-size:11px;color:var(--muted);margin-bottom:16px}
+#qr-container{display:flex;justify-content:center;margin-bottom:12px}
+#qr-container canvas,#qr-container img{border-radius:8px;background:#fff;padding:8px}
+.qr-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty-state .emoji{font-size:32px;margin-bottom:8px}
+.empty-state p{font-size:13px}
+.tag-free{display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2);padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600;margin-bottom:16px}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="/">
+    <div class="nav-dot">⚛</div>
+    Atomic <span style="color:var(--red);margin-left:3px">Lab</span>
+  </a>
+  <a class="back" href="/">← Volver al Lab</a>
+</nav>
+
+<div class="main">
+  <div class="header">
+    <div class="label">MenuLab</div>
+    <h1>Tu menú digital,<br>listo en minutos</h1>
+    <p class="subtitle">Creá tu menú, generá el QR y compartilo con tus clientes. Gratis, sin registro.</p>
+    <div style="margin-top:12px"><span class="tag-free">✓ 100% Gratis</span></div>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-title"><div class="icon" style="background:rgba(229,48,48,0.12)">🏪</div> Tu restaurante</div>
+        <div class="field"><label>Nombre del restaurante</label><input type="text" id="resto-name" placeholder="Ej: La Parrilla de Juan" oninput="updatePreview()"></div>
+        <div class="field"><label>Slogan o descripción corta</label><input type="text" id="resto-tagline" placeholder="Ej: Desde 1985, sabor auténtico" oninput="updatePreview()"></div>
+        <div class="field"><label>Color de acento</label><input type="color" id="resto-color" value="#E53030" oninput="updatePreview()" style="height:40px;cursor:pointer"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><div class="icon" style="background:rgba(59,130,246,0.12)">🍽️</div> Agregar platos</div>
+        
+        <div class="cats" id="cats-tabs">
+          <button class="cat-tab active" onclick="selectCat(this,'Entradas')">Entradas</button>
+          <button class="cat-tab" onclick="selectCat(this,'Principales')">Principales</button>
+          <button class="cat-tab" onclick="selectCat(this,'Postres')">Postres</button>
+          <button class="cat-tab" onclick="selectCat(this,'Bebidas')">Bebidas</button>
+          <button class="cat-tab" onclick="selectCat(this,'Especiales')">Especiales</button>
+        </div>
+
+        <div class="add-form">
+          <div class="add-form-grid">
+            <div class="field" style="margin:0"><label>Emoji</label><input type="text" id="item-emoji" placeholder="🥩" maxlength="2" style="text-align:center;font-size:18px"></div>
+            <div class="field" style="margin:0"><label>Precio ($)</label><input type="text" id="item-price" placeholder="0.00"></div>
+            <div class="field full" style="margin:0"><label>Nombre del plato</label><input type="text" id="item-name" placeholder="Ej: Bife de chorizo 400g"></div>
+            <div class="field full" style="margin:0"><label>Descripción (opcional)</label><input type="text" id="item-desc" placeholder="Ej: Con papas fritas y ensalada"></div>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn btn-primary" onclick="addItem()">+ Agregar plato</button>
+          </div>
+        </div>
+
+        <div class="items-list" id="items-list">
+          <div class="empty-state"><div class="emoji">🍽️</div><p>Agregá tu primer plato</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-panel">
+      <div class="panel-title" style="margin-bottom:12px"><div class="icon" style="background:rgba(168,85,247,0.12)">👁️</div> Vista previa</div>
+      
+      <div class="menu-preview" id="menu-preview">
+        <div class="menu-header-bg" id="menu-header" style="background:linear-gradient(135deg,#E53030,#B82424)">
+          <div class="menu-resto-name" id="prev-name" style="color:#fff">Mi Restaurante</div>
+          <div class="menu-tagline" id="prev-tagline" style="color:rgba(255,255,255,0.8)">Menú digital</div>
+        </div>
+        <div id="menu-content" style="padding:0 0 8px">
+          <div class="empty-state" style="color:#999;padding:40px 20px"><div class="emoji">🍽️</div><p style="color:#999">Agregá platos para ver la preview</p></div>
+        </div>
+        <div class="menu-footer">
+          <p>Menú digital generado con <strong>MenuLab</strong> · Atomic Kitchens</p>
+        </div>
+      </div>
+
+      <div class="qr-section">
+        <div class="qr-title">📱 Código QR</div>
+        <div class="qr-sub">Tus clientes escanean y ven el menú</div>
+        <div id="qr-container"><div style="font-size:11px;color:var(--muted)">Completá el menú para generar el QR</div></div>
+        <div class="qr-actions">
+          <button class="btn btn-secondary btn-sm" onclick="generateQR()">🔄 Regenerar QR</button>
+          <button class="btn btn-primary btn-sm" onclick="downloadQR()"⬇️ Descargar QR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentCat = 'Entradas';
+let items = JSON.parse(localStorage.getItem('menulab-items') || '[]');
+let restoInfo = JSON.parse(localStorage.getItem('menulab-info') || '{"name":"","tagline":"","color":"#E53030"}');
+let qrInstance = null;
+
+document.getElementById('resto-name').value = restoInfo.name || '';
+document.getElementById('resto-tagline').value = restoInfo.tagline || '';
+document.getElementById('resto-color').value = restoInfo.color || '#E53030';
+renderItems();
+updatePreview();
+
+function selectCat(el, cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function addItem() {
+  const name = document.getElementById('item-name').value.trim();
+  const price = document.getElementById('item-price').value.trim();
+  if (!name || !price) { alert('Ingresá nombre y precio'); return; }
+  items.push({
+    id: Date.now(),
+    cat: currentCat,
+    emoji: document.getElementById('item-emoji').value || '🍽️',
+    name,
+    price,
+    desc: document.getElementById('item-desc').value.trim()
+  });
+  localStorage.setItem('menulab-items', JSON.stringify(items));
+  document.getElementById('item-name').value = '';
+  document.getElementById('item-price').value = '';
+  document.getElementById('item-desc').value = '';
+  document.getElementById('item-emoji').value = '';
+  renderItems();
+  updatePreview();
+}
+
+function deleteItem(id) {
+  items = items.filter(i => i.id !== id);
+  localStorage.setItem('menulab-items', JSON.stringify(items));
+  renderItems();
+  updatePreview();
+}
+
+function renderItems() {
+  const list = document.getElementById('items-list');
+  if (!items.length) {
+    list.innerHTML = '<div class="empty-state"><div class="emoji">🍽️</div><p>Agregá tu primer plato</p></div>';
+    return;
+  }
+  list.innerHTML = items.map(item => `
+    <div class="item-card">
+      <div class="item-emoji">${item.emoji}</div>
+      <div class="item-info">
+        <div class="item-name">${item.name} <span style="font-size:10px;color:var(--muted);font-weight:400">${item.cat}</span></div>
+        ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
+      </div>
+      <div class="item-price">$${item.price}</div>
+      <button class="item-del" onclick="deleteItem(${item.id})">×</button>
+    </div>
+  `).join('');
+}
+
+function updatePreview() {
+  const name = document.getElementById('resto-name').value || 'Mi Restaurante';
+  const tagline = document.getElementById('resto-tagline').value || 'Menú digital';
+  const color = document.getElementById('resto-color').value || '#E53030';
+  restoInfo = { name, tagline, color };
+  localStorage.setItem('menulab-info', JSON.stringify(restoInfo));
+  document.getElementById('prev-name').textContent = name;
+  document.getElementById('prev-tagline').textContent = tagline;
+  document.getElementById('menu-header').style.background = `linear-gradient(135deg,${color},${adjustColor(color,-30)})`;
+  const cats = [...new Set(items.map(i => i.cat))];
+  const content = document.getElementById('menu-content');
+  if (!items.length) { content.innerHTML = '<div class="empty-state" style="color:#999;padding:40px 20px"><div class="emoji">🍽️</div><p style="color:#999">Agregá platos para ver la preview</p></div>'; return; }
+  content.innerHTML = cats.map(cat => `
+    <div class="menu-cat">
+      <div class="menu-cat-title">${cat}</div>
+      ${items.filter(i => i.cat === cat).map(item => `
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">${item.emoji} ${item.name}</div>
+            ${item.desc ? `<div class="menu-item-desc">${item.desc}</div>` : ''}
+          </div>
+          <div class="menu-item-price" style="color:${color}">$${item.price}</div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('<div class="menu-divider"></div>');
+  generateQR();
+}
+
+function adjustColor(hex, amount) {
+  const num = parseInt(hex.replace('#',''), 16);
+  const r = Math.max(0, Math.min(255, (num >> 16) + amount));
+  const g = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amount));
+  const b = Math.max(0, Math.min(255, (num & 0x0000FF) + amount));
+  return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+}
+
+function generateQR() {
+  if (!items.length) return;
+  const container = document.getElementById('qr-container');
+  container.innerHTML = '';
+  try {
+    qrInstance = new QRCode(container, {
+      text: `Menu: ${restoInfo.name || 'Mi Restaurante'} - ${items.length} platos`,
+      width: 160, height: 160,
+      colorDark: '#111111', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) { container.innerHTML = '<p style="font-size:11px;color:var(--muted)">QR generado</p>'; }
+}
+
+function downloadQR() {
+  const canvas = document.querySelector('#qr-container canvas');
+  const img = document.querySelector('#qr-container img');
+  const src = canvas ? canvas.toDataURL() : (img ? img.src : null);
+  if (!src) { alert('Generá el QR primero'); return; }
+  const a = document.createElement('a'); a.href = src; a.download = 'menu-qr.png'; a.click();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.getElementById('item-name') === document.activeElement) addItem(); });
+</script>
+</body>
+</html>

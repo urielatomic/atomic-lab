@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewLab — Respondé reseñas con IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#E53030;--red2:#B82424;--bg:#0A0A0A;--bg2:#111111;--bg3:#1A1A1A;--bg4:#222222;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#F0F0F0;--muted:#888;--muted2:#555;--green:#22c55e;--amber:#f59e0b}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(16px,4vw,60px);height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.9);backdrop-filter:blur(16px)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;text-decoration:none;color:var(--text)}
+.nav-dot{width:24px;height:24px;background:var(--red);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px}
+.back{color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s}.back:hover{color:var(--text)}
+.main{padding:80px clamp(16px,4vw,60px) 60px;max-width:1000px;margin:0 auto}
+.header{padding:40px 0 32px}
+.label{font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:10px}
+h1{font-family:'Manrope',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.02em;margin-bottom:12px}
+.subtitle{color:var(--muted);font-size:16px;max-width:500px;line-height:1.6}
+.tag-ai{display:inline-flex;align-items:center;gap:4px;background:rgba(168,85,247,0.1);color:#c084fc;border:1px solid rgba(168,85,247,0.2);padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600;margin-top:12px}
+.api-banner{background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.2);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.api-banner p{font-size:13px;color:var(--muted);flex:1;min-width:200px}
+.api-key-input{flex:1;min-width:200px;background:var(--bg3);border:1px solid rgba(168,85,247,0.3);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.api-key-input:focus{border-color:rgba(168,85,247,0.6)}
+.api-save-btn{background:rgba(168,85,247,0.8);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}.api-save-btn:hover{background:rgba(168,85,247,1)}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:768px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px}
+.panel-title{font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+textarea,input,select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border .2s}
+textarea:focus,input:focus,select:focus{border-color:var(--red)}
+textarea{resize:vertical}
+.tones{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.tone-btn{padding:10px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center;font-size:12px;font-weight:600;transition:all .2s;font-family:'DM Sans',sans-serif}
+.tone-btn .emoji{font-size:18px;display:block;margin-bottom:4px}
+.tone-btn.active,.tone-btn:hover{border-color:var(--red);color:var(--text);background:rgba(229,48,48,0.06)}
+.stars{display:flex;gap:6px;margin-bottom:16px}
+.star{font-size:24px;cursor:pointer;transition:transform .1s;user-select:none}
+.star:hover,.star.active{transform:scale(1.2)}
+.gen-btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s}
+.gen-btn:hover{background:var(--red2)}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed}
+.sentiment{background:var(--bg3);border-radius:12px;padding:16px;margin-bottom:16px}
+.sentiment-score{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.score-emoji{font-size:28px}
+.score-info .title{font-family:'Manrope',sans-serif;font-weight:700;font-size:15px}
+.score-info .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600}
+.tag-pos{background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
+.tag-neg{background:rgba(229,48,48,0.1);color:#f87171;border:1px solid rgba(229,48,48,0.2)}
+.tag-neu{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--border)}
+.response-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:14px;line-height:1.7;min-height:120px;white-space:pre-wrap;word-break:break-word}
+.response-box.loading{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted)}
+.dot-pulse span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse .8s ease-in-out infinite}
+.dot-pulse span:nth-child(2){animation-delay:.2s}.dot-pulse span:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{transform:scale(0.8);opacity:.4}40%{transform:scale(1.1);opacity:1}}
+.copy-btn{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--border2);color:var(--muted);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-top:10px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.copy-btn:hover{color:var(--text);border-color:rgba(255,255,255,.3)}
+.examples{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.example-btn{text-align:left;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:12px;color:var(--muted);transition:all .2s;font-family:'DM Sans',sans-serif}
+.example-btn:hover{color:var(--text);border-color:var(--border2)}
+.no-api-msg{background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:14px;font-size:13px;color:var(--muted);text-align:center;margin-bottom:12px}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="/"><div class="nav-dot">⚛</div>Atomic <span style="color:var(--red);margin-left:3px">Lab</span></a>
+  <a class="back" href="/">← Volver al Lab</a>
+</nav>
+
+<div class="main">
+  <div class="header">
+    <div class="label">ReviewLab</div>
+    <h1>Respondé reseñas<br>con IA en segundos</h1>
+    <p class="subtitle">Pegá cualquier reseña, elegí el tono y la IA genera una respuesta profesional y personalizada para tu restaurante.</p>
+    <div><span class="tag-ai">✨ Powered by Claude AI</span></div>
+  </div>
+
+  <div class="api-banner" id="api-banner">
+    <p>🔑 Ingresá tu API key de Anthropic para activar la IA. <a href="https://console.anthropic.com" target="_blank" style="color:#c084fc">Obtener gratis →</a></p>
+    <input type="password" class="api-key-input" id="api-key-input" placeholder="sk-ant-api03-..." value="">
+    <button class="api-save-btn" onclick="saveApiKey()">Guardar</button>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="panel">
+        <div class="panel-title"><div class="icon" style="background:rgba(229,48,48,0.12)">💬</div> Reseña a responder</div>
+        <div style="margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Ejemplos rápidos</div>
+        <div class="examples" id="examples-list"></div></div>
+        <div class="field"><label>Texto de la reseña</label><textarea id="review-text" rows="5" placeholder="Pegá la reseña aquí..." oninput="analyzeSentiment()"></textarea></div>
+        <div class="field"><label>Estrellas recibidas</label><div class="stars" id="stars"><span class="star" onclick="setStars(1)" data-n="1">⭐</span><span class="star" onclick="setStars(2)" data-n="2">⭐</span><span class="star" onclick="setStars(3)" data-n="3">⭐</span><span class="star" onclick="setStars(4)" data-n="4">⭐</span><span class="star" onclick="setStars(5)" data-n="5">⭐</span></div></div>
+        <div class="field"><label>Nombre del restaurante</label><input type="text" id="resto-name" placeholder="Ej: La Parrilla de Juan" value=""></div>
+        <div class="field"><label>Tono de la respuesta</label><div class="tones"><button class="tone-btn active" onclick="setTone(this,'profesional')"><span class="emoji">🤝</span>Profesional</button><button class="tone-btn" onclick="setTone(this,'cercano')"><span class="emoji">😊</span>Cercano</button><button class="tone-btn" onclick="setTone(this,'disculpas')"><span class="emoji">🙏</span>Disculpas</button><button class="tone-btn" onclick="setTone(this,'agradecido')"><span class="emoji">🌟</span>Agradecido</button></div></div>
+        <button class="gen-btn" onclick="generateResponse()" id="gen-btn">✨ Generar respuesta con IA</button>
+      </div>
+    </div>
+    <div>
+      <div class="panel" style="margin-bottom:16px"><div class="panel-title"><div class="icon" style="background:rgba(245,158,11,0.12)">🔍</div> Análisis de sentimiento</div><div id="sentiment-result"><div style="font-size:13px;color:var(--muted);text-align:center;padding:20px">Pegá una reseña para analizarla</div></div></div>
+      <div class="panel"><div class="panel-title"><div class="icon" style="background:rgba(34,197,94,0.12)">💌</div> Respuesta generada</div><div id="response-output"><div style="font-size:13px;color:var(--muted);text-align:center;padding:30px">Tu respuesta aparecerá aquí</div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStars=5,currentTone='profesional';
+let apiKey=localStorage.getItem('reviewlab-api-key')||'';
+let restoName=localStorage.getItem('reviewlab-resto') || '';
+
+const examples=[
+  {stars:5,text:'Excelente servicio, la comida estaba espectacular y el ambiente muy agradable. Volvimos a comer los postres y tampoco decepcionaron. ¡Ya tenemos nuevo restaurante favorito!'},
+  {stars:2,text:'La comida tardó más de 40 minutos y cuando llegó estaba fría. El mozo apenas se acercó a la mesa. Para el precio que cobran esperaba mucho más.'},
+  {stars:4,text:'Muy buena relación calidad-precio. Los platos principales ricos, aunque el postre podría mejorar. El local está bien ambientado, volvería.'},
+  {stars:1,text:'Pésima experiencia. Me cobraron de más, al reclamar me trataron mal. La carne estaba cruda por dentro. No recomiendo para nada.'},
+];
+
+if(apiKey){document.getElementById('api-key-input').value=apiKey;document.getElementById('api-banner').style.background='rgba(34,197,94,0.06)';document.getElementById('api-banner').style.borderColor='rgba(34,197,94,0.2)';}
+if(restoName)document.getElementById('resto-name').value=restoName;
+renderExamples();
+
+function renderExamples(){const c=document.getElementById('examples-list');c.innerHTML=examples.map((e,i)=>`<button class="example-btn" onclick="loadExample(${i})">${'⭐'.repeat(e.stars)} "${e.text.slice(0,70)}..."</button>`).join('');}
+function loadExample(i){const e=examples[i];document.getElementById('review-text').value=e.text;setStars(e.stars);analyzeSentiment();}
+function saveApiKey(){apiKey=document.getElementById('api-key-input').value.trim();localStorage.setItem('reviewlab-api-key',apiKey);const b=document.getElementById('api-banner');b.style.background='rgba(34,197,94,0.06)';b.style.borderColor='rgba(34,197,94,0.2)';b.querySelector('p').textContent='✓ API key guardada correctamente';}
+function setStars(n){currentStars=n;document.querySelectorAll('.star').forEach((s,i)=>{s.style.filter=i<n?'none':'grayscale(1)';s.style.opacity=i<n?'1':'0.3';});}
+function setTone(el,tone){currentTone=tone;document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+function analyzeSentiment(){const text=document.getElementById('review-text').value.trim();const container=document.getElementById('sentiment-result');if(!text||text.length<10){container.innerHTML='<div style="font-size:13px;color:var(--muted);text-align:center;padding:20px">Pegá una reseña para analizarla</div>';return;}const posWords=['excelente','espectacular','increíble','genial','perfecto','rico','sabroso','amable','recomiendo','volvería','mejor','buenísimo','fantástico','impecable','maravilloso','delicioso','agradable'];const negWords=['pésimo','malo','terrible','frío','crudo','tarde','tardó','lento','sucio','horrible','caro','desilusión','decepción','nunca','cobrar de más','mal','peor','inaceptable','asco'];const low=text.toLowerCase();const pos=posWords.filter(w=>low.includes(w)).length;const neg=negWords.filter(w=>low.includes(w)).length;let score,emoji,title,sub,tagClass;const r=currentStars;if(r>=4||(pos>neg*2)){score='positiva';emoji='😊';title='Reseña positiva';sub='El cliente está satisfecho';tagClass='tag-pos';}else if(r<=2||(neg>pos*2)){score='negativa';emoji='😞';title='Reseña negativa';sub='Necesita atención urgente';tagClass='tag-neg';}else{score='mixta';emoji='🤔';title='Reseña mixta';sub='Tiene puntos buenos y malos';tagClass='tag-neu';}const topics=[];if(/comida|plato|carne|pollo|pasta|ensalada|menú|postre|sabor|rico|frío|crudo/.test(low))topics.push({label:'Comida',cls:neg>pos?'tag-neg':'tag-pos'});if(/mozo|servicio|atención|amable|rápido|lento|tardó|espera/.test(low))topics.push({label:'Servicio',cls:/lento|tardó|espera|mal/.test(low)?'tag-neg':'tag-pos'});if(/precio|caro|barato|relación|vale/.test(low))topics.push({label:'Precio',cls:/caro|cobrar de más/.test(low)?'tag-neg':'tag-pos'});if(/ambiente|local|música|lugar|decoración|agradable/.test(low))topics.push({label:'Ambiente',cls:'tag-pos'});if(!topics.length)topics.push({label:r>=4?'Experiencia positiva':'Experiencia negativa',cls:tagClass});container.innerHTML=`<div class="sentiment"><div class="sentiment-score"><div class="score-emoji">${emoji}</div><div class="score-info"><div class="title">${title}</div><div class="sub">${sub}</div></div></div><div class="tags">${topics.map(t=>`<span class="tag ${t.cls}">${t.label}</span>`).join('')}<span class="tag tag-neu">${r}★</span></div></div>`;}
+async function generateResponse(){const review=document.getElementById('review-text').value.trim();if(!review){alert('Pegá una reseña primero');return;}const resto=document.getElementById('resto-name').value.trim()||'el restaurante';const out=document.getElementById('response-output');localStorage.setItem('reviewlab-resto',resto);const toneInst={profesional:'formal, profesional y cordial',cercano:'cálida, cercana y personal',disculpas:'empática y con disculpas sinceras',agradecido:'muy agradecida y entusiasta'};if(!apiKey){out.innerHTML=`<div class="no-api-msg">💡 Respuesta sin IA. Agregá tu API key para respuestas personalizadas.</div><div class="response-box">${generateTemplate(review,currentStars,currentTone,resto)}</div><button class="copy-btn" onclick="copyResponse()">📋 Copiar respuesta</button>`;return;}out.innerHTML='<div class="response-box loading"><div class="dot-pulse"><span></span><span></span><span></span></div><span>Generando con Claude...</span></div>';const prompt=`Eres el community manager de "${resto}", un restaurante. Recibiste esta reseña con ${currentStars} estrella${currentStars!==1?'s':''}:
+
+"${review}"
+
+Escribí una respuesta ${toneInst[currentTone]} en español. Máximo 3-4 oraciones. No uses markdown. Si es negativa ofrecé soluciones. Firmá como "El equipo de ${resto}".`;try{const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:300,messages:[{role:'user',content:prompt}]})});const data=await resp.json();if(data.error)throw new Error(data.error.message);const text=data.content[0].text;out.innerHTML=`<div class="response-box">${text}</div><button class="copy-btn" onclick="copyResponse()">📋 Copiar respuesta</button>`;}catch(e){out.innerHTML=`<div class="no-api-msg">⚠ Error: ${e.message.slice(0,50)}</div><div class="response-box">${generateTemplate(review,currentStars,currentTone,resto)}</div><button class="copy-btn" onclick="copyResponse()">📋 Copiar respuesta</button>`;}}
+function generateTemplate(review,stars,tone,resto){const t={profesional:{pos:`Estimado cliente, muchas gracias por compartir su experiencia en ${resto}. Nos alegra que haya disfrutado su visita. Seguimos trabajando para mantener la calidad que nos caracteriza. ¡Esperamos recibirle pronto!
+
+El equipo de ${resto}`,neg:`Estimado cliente, lamentamos que su experiencia en ${resto} no cumpliera sus expectativas. Tomamos sus comentarios muy en serio y los transmitiremos a nuestro equipo. Le invitamos a contactarnos para compensar esta situación.
+
+El equipo de ${resto}`,mix:`Estimado cliente, gracias por su reseña de ${resto}. Nos alegran los aspectos positivos y tomamos nota de lo que podemos mejorar. Su opinión es fundamental para seguir creciendo.
+
+El equipo de ${resto}`},cercano:{pos:`¡Qué bueno leer esto! 😊 Muchas gracias por venir a ${resto} y contarnos tu experiencia. Nos pone muy contentos saber que la pasaste bien. ¡Estamos esperando tu próxima visita!
+
+El equipo de ${resto}`,neg:`Hola, te pedimos disculpas de verdad 🙏. No es para nada lo que queremos que vivas en ${resto}. Vamos a trabajar en esto, ¿nos das la oportunidad de compensarte?
+
+El equipo de ${resto}`,mix:`¡Gracias por contarnos! Nos alegra mucho lo bueno y tomamos nota de lo que podemos mejorar en ${resto}. Tu opinión vale mucho.
+
+El equipo de ${resto}`},disculpas:{pos:`Muchas gracias por esta maravillosa reseña. En ${resto} nos esforzamos cada día y comentarios como el tuyo nos motivan a seguir adelante. ¡Fue un placer recibirte!
+
+El equipo de ${resto}`,neg:`Pedimos sinceras disculpas por lo que viviste en ${resto}. Asumimos la responsabilidad y queremos revertir esta situación: contáctonos para ofrecerte una solución.
+
+El equipo de ${resto}`,mix:`Gracias por tu honestidad. En ${resto} pedimos disculpas por los aspectos negativos y prometemos trabajar en ellos.
+
+El equipo de ${resto}`},agradecido:{pos:`¡¡Muchas gracias!! 🌟🌟 En ${resto} ponemos el corazón en cada plato, leer esto es la mejor recompensa. ¡Hasta pronto!
+
+El equipo de ${resto} 💙`,neg:`Gracias por tomarte el tiempo de contarnos esto. Sin feedback como el tuyo no podríamos mejorar en ${resto}. Lamentamos no haber estado a la altura.
+
+El equipo de ${resto}`,mix:`¡Gracias! 🙏 Lo bueno nos inspira y lo que podemos mejorar nos impulsa en ${resto}.
+
+El equipo de ${resto}`}};const s=stars>=4?'pos':stars<=2?'neg':'mix';return t[tone]?.[s]||t.profesional.pos;}
+function copyResponse(){const box=document.querySelector('.response-box');if(!box)return;navigator.clipboard.writeText(box.textContent).then(()=>{const btn=document.querySelector('.copy-btn');btn.textContent='✓ ¡Copiado!';setTimeout(()=>btn.textContent='📋 Copiar respuesta',2000);});}
+setStars(5);
+</script>
+</body>
+</html>
