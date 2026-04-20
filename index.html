@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atomic Lab — Herramientas gratuitas para gastrónomicos</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -15,15 +15,15 @@
   --text:#F0F0F0;--muted:#888;--muted2:#555;
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;min-height:100vh;overflow-x:hidden;line-height:1.6}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;min-height:100vh;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 /* Noise */
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.35}
 /* Typography */
-.syne{font-family:'Syne',sans-serif}
-h1,h2,h3{font-family:'Syne',sans-serif;line-height:1.1}
+.syne{font-family:'Manrope',sans-serif}
+h1,h2,h3{font-family:'Manrope',sans-serif;line-height:1.15}
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,5vw,80px);height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.85);backdrop-filter:blur(16px)}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--text)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;color:var(--text)}
 .nav-logo-dot{width:28px;height:28px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s}
@@ -37,7 +37,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,5vw,80p
 .hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(229,48,48,0.1);border:1px solid rgba(229,48,48,0.25);color:#ff6b6b;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-bottom:28px}
 .hero-tag-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.hero h1{font-size:clamp(42px,7vw,88px);font-weight:800;letter-spacing:-2px;margin-bottom:24px;max-width:900px;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,0.6) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1{font-size:clamp(36px,5.5vw,72px);font-weight:800;letter-spacing:-0.03em;margin-bottom:24px;max-width:860px;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,0.65) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
 .hero-sub{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:560px;margin-bottom:48px;font-weight:300;line-height:1.7}
 .hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:64px}
 .btn-primary{background:var(--red);color:#fff;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
@@ -47,13 +47,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,5vw,80p
 /* KPI STRIP */
 .kpi-strip{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:40px;width:100%;max-width:720px}
 .kpi-item{flex:1;background:var(--bg2);padding:20px 24px;text-align:center}
-.kpi-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);margin-bottom:4px}
+.kpi-val{font-family:'Manrope',sans-serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:4px}
 .kpi-val span{color:var(--red);font-size:32px}
 .kpi-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 /* SECTION WRAPPER */
 .section{padding:100px clamp(20px,5vw,80px);position:relative}
 .section-label{font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:16px}
-.section-title{font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-1px;margin-bottom:20px;max-width:700px}
+.section-title{font-size:clamp(28px,3.5vw,48px);font-weight:700;letter-spacing:-0.02em;margin-bottom:20px;max-width:700px}
 .section-sub{font-size:17px;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:64px}
 /* ECOSYSTEM */
 .ecosystem-wrap{position:relative;width:100%;max-width:1100px;margin:0 auto}
@@ -64,7 +64,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,5vw,80p
 .syn-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,0.02));pointer-events:none}
 .syn-card:hover{border-color:var(--border2);transform:translateY(-2px)}
 .syn-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:18px}
-.syn-card h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.syn-card h4{font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
 .syn-card p{font-size:13px;color:var(--muted);line-height:1.6}
 .syn-badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px;margin-top:12px}
 /* TOOLS SECTION */
@@ -79,7 +79,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,5vw,80p
 .tool-badge{font-size:11px;font-weight:500;padding:4px 12px;border-radius:100px;letter-spacing:.04em;text-transform:uppercase}
 .badge-free{background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
 .badge-freemium{background:rgba(229,48,48,0.1);color:#f87171;border:1px solid rgba(229,48,48,0.2)}
-.tool-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+.tool-name{font-family:'Manrope',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.01em;margin-bottom:8px}
 .tool-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
 .tool-features{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
 .tool-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
@@ -92,11 +92,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,5vw,80p
 /* BENEFITS */
 .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-top:24px}
 .benefit-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px}
-.benefit-num{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:8px}
+.benefit-num{font-family:'Manrope',sans-serif;font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1;margin-bottom:8px}
 .benefit-label{font-size:14px;color:var(--muted);line-height:1.5}
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:48px clamp(20px,5vw,80px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
-.footer-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:16px}
+.footer-brand{font-family:'Manrope',sans-serif;font-weight:700;font-size:16px}
 .footer-brand span{color:var(--red)}
 .footer-links{display:flex;gap:28px;flex-wrap:wrap}
 .footer-links a{color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s}
@@ -322,171 +322,92 @@ footer{border-top:1px solid var(--border);padding:48px clamp(20px,5vw,80px);disp
 </footer>
 
 <script>
-// Fade in on scroll
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-// Ecosystem Canvas
 const canvas = document.getElementById('ecosystem-canvas');
 const ctx = canvas.getContext('2d');
 const W = 1100, H = 620;
 canvas.width = W; canvas.height = H;
-
-const cx = W / 2, cy = H / 2 - 20;
-
-// Nodes
+const cx = W/2, cy = H/2-20;
 const nodes = {
-  center: { x: cx, y: cy, r: 56, label: 'Tu\nRestaurante', color: '#E53030', glow: 'rgba(229,48,48,0.3)', icon: '⚛' },
-  growth: { x: cx - 370, y: cy - 30, r: 48, label: 'Growth\nDelivery', color: '#E53030', glow: 'rgba(229,48,48,0.25)', icon: '🚀' },
-  mesa:   { x: cx + 370, y: cy - 80, r: 48, label: 'MesaLab', color: '#3b82f6', glow: 'rgba(59,130,246,0.25)', icon: '🗓' },
-  tribu:  { x: cx, y: cy - 220, r: 48, label: 'Tribu\nWallet', color: '#a855f7', glow: 'rgba(168,85,247,0.25)', icon: '💜' },
+  center:{x:cx,y:cy,r:56,label:'Tu\nRestaurante',color:'#E53030',glow:'rgba(229,48,48,0.3)',icon:'⚛'},
+  growth:{x:cx-370,y:cy-30,r:48,label:'Growth\nDelivery',color:'#E53030',glow:'rgba(229,48,48,0.25)',icon:'🚀'},
+  mesa:{x:cx+370,y:cy-80,r:48,label:'MesaLab',color:'#3b82f6',glow:'rgba(59,130,246,0.25)',icon:'🗓'},
+  tribu:{x:cx,y:cy-220,r:48,label:'Tribu\nWallet',color:'#a855f7',glow:'rgba(168,85,247,0.25)',icon:'💜'},
 };
-
-// Connections with benefits
-const connections = [
-  { from: 'growth', to: 'center', label: '+28% ticket delivery', color: '#E53030' },
-  { from: 'mesa',   to: 'center', label: '+35% reservas online', color: '#3b82f6' },
-  { from: 'tribu',  to: 'center', label: '+35% retención', color: '#a855f7' },
-  { from: 'growth', to: 'tribu',  label: 'Menú → Premios', color: '#f59e0b', dashed: true },
-  { from: 'mesa',   to: 'tribu',  label: 'Reserva → Sello', color: '#22c55e', dashed: true },
-  { from: 'growth', to: 'mesa',   label: 'Clientes delivery → Local', color: '#e879f9', dashed: true },
+const connections=[
+  {from:'growth',to:'center',label:'+28% ticket delivery',color:'#E53030'},
+  {from:'mesa',to:'center',label:'+35% reservas online',color:'#3b82f6'},
+  {from:'tribu',to:'center',label:'+35% retención',color:'#a855f7'},
+  {from:'growth',to:'tribu',label:'Menú → Premios',color:'#f59e0b',dashed:true},
+  {from:'mesa',to:'tribu',label:'Reserva → Sello',color:'#22c55e',dashed:true},
+  {from:'growth',to:'mesa',label:'Clientes delivery → Local',color:'#e879f9',dashed:true},
 ];
-
-// Floating data particles
-const particles = [];
-const connectionDefs = [
-  { from: nodes.growth, to: nodes.center, color: '#E53030' },
-  { from: nodes.mesa,   to: nodes.center, color: '#3b82f6' },
-  { from: nodes.tribu,  to: nodes.center, color: '#a855f7' },
-  { from: nodes.growth, to: nodes.tribu,  color: '#f59e0b' },
-  { from: nodes.mesa,   to: nodes.tribu,  color: '#22c55e' },
+const particles=[];
+const cdefs=[
+  {from:nodes.growth,to:nodes.center,color:'#E53030'},
+  {from:nodes.mesa,to:nodes.center,color:'#3b82f6'},
+  {from:nodes.tribu,to:nodes.center,color:'#a855f7'},
+  {from:nodes.growth,to:nodes.tribu,color:'#f59e0b'},
+  {from:nodes.mesa,to:nodes.tribu,color:'#22c55e'},
 ];
-connectionDefs.forEach(c => {
-  for (let i = 0; i < 3; i++) {
-    particles.push({ from: c.from, to: c.to, color: c.color, t: Math.random(), speed: 0.002 + Math.random() * 0.003 });
-  }
-});
-
-let animFrame, t = 0;
-
-function lerp(a, b, t) { return a + (b - a) * t; }
-
-function drawNode(n, glow = true) {
-  // Glow
-  if (glow) {
-    const g = ctx.createRadialGradient(n.x, n.y, n.r * 0.5, n.x, n.y, n.r * 2.2);
-    g.addColorStop(0, n.glow);
-    g.addColorStop(1, 'transparent');
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 2.2, 0, Math.PI * 2); ctx.fill();
-  }
-  // Circle
-  ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(10,10,10,0.9)'; ctx.fill();
-  ctx.strokeStyle = n.color; ctx.lineWidth = 1.5;
-  ctx.stroke();
-  // Icon
-  ctx.font = n === nodes.center ? '28px sans-serif' : '22px sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText(n.icon, n.x, n.y - (n.label.includes('\n') ? 8 : 6));
-  // Label
-  ctx.font = n === nodes.center ? '500 13px "DM Sans", sans-serif' : '500 12px "DM Sans", sans-serif';
-  ctx.fillStyle = '#F0F0F0';
-  const lines = n.label.split('\n');
-  const lineH = 16;
-  const startY = n.y + (n === nodes.center ? 16 : 14) - (lines.length - 1) * lineH / 2;
-  lines.forEach((line, i) => ctx.fillText(line, n.x, startY + i * lineH));
+cdefs.forEach(c=>{for(let i=0;i<3;i++)particles.push({from:c.from,to:c.to,color:c.color,t:Math.random(),speed:0.002+Math.random()*0.003});});
+let t=0;
+function lerp(a,b,t){return a+(b-a)*t;}
+function drawNode(n){
+  const g=ctx.createRadialGradient(n.x,n.y,n.r*0.5,n.x,n.y,n.r*2.2);
+  g.addColorStop(0,n.glow);g.addColorStop(1,'transparent');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(n.x,n.y,n.r*2.2,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+  ctx.fillStyle='rgba(10,10,10,0.9)';ctx.fill();
+  ctx.strokeStyle=n.color;ctx.lineWidth=1.5;ctx.stroke();
+  ctx.font=n===nodes.center?'28px sans-serif':'22px sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(n.icon,n.x,n.y-(n.label.includes('\n')?8:6));
+  ctx.font=n===nodes.center?'500 13px "DM Sans",sans-serif':'500 12px "DM Sans",sans-serif';
+  ctx.fillStyle='#F0F0F0';
+  const lines=n.label.split('\n'),lineH=16;
+  const startY=n.y+(n===nodes.center?16:14)-(lines.length-1)*lineH/2;
+  lines.forEach((l,i)=>ctx.fillText(l,n.x,startY+i*lineH));
 }
-
-function drawConnection(from, to, label, color, dashed = false) {
-  ctx.save();
-  ctx.strokeStyle = color; ctx.lineWidth = 1;
-  ctx.globalAlpha = 0.35;
-  if (dashed) ctx.setLineDash([5, 6]);
-  ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y); ctx.stroke();
-  ctx.setLineDash([]); ctx.globalAlpha = 1;
-  // Label
-  const mx = (from.x + to.x) / 2, my = (from.y + to.y) / 2;
-  const angle = Math.atan2(to.y - from.y, to.x - from.x);
-  const perpX = Math.sin(angle) * 18, perpY = -Math.cos(angle) * 18;
-  const px = mx + perpX, py = my + perpY;
-  ctx.font = '11px "DM Sans", sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  const tw = ctx.measureText(label).width;
-  ctx.fillStyle = 'rgba(10,10,10,0.85)';
-  ctx.beginPath(); ctx.roundRect(px - tw / 2 - 8, py - 9, tw + 16, 18, 4); ctx.fill();
-  ctx.fillStyle = color; ctx.globalAlpha = .9;
-  ctx.fillText(label, px, py);
-  ctx.globalAlpha = 1;
-  ctx.restore();
+function drawConn(from,to,label,color,dashed=false){
+  ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1;ctx.globalAlpha=0.35;
+  if(dashed)ctx.setLineDash([5,6]);
+  ctx.beginPath();ctx.moveTo(from.x,from.y);ctx.lineTo(to.x,to.y);ctx.stroke();
+  ctx.setLineDash([]);ctx.globalAlpha=1;
+  const mx=(from.x+to.x)/2,my=(from.y+to.y)/2;
+  const angle=Math.atan2(to.y-from.y,to.x-from.x);
+  const px=mx+Math.sin(angle)*18,py=my-Math.cos(angle)*18;
+  ctx.font='11px "DM Sans",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  const tw=ctx.measureText(label).width;
+  ctx.fillStyle='rgba(10,10,10,0.85)';
+  ctx.beginPath();ctx.roundRect(px-tw/2-8,py-9,tw+16,18,4);ctx.fill();
+  ctx.fillStyle=color;ctx.globalAlpha=.9;ctx.fillText(label,px,py);
+  ctx.globalAlpha=1;ctx.restore();
 }
-
-function drawParticle(p) {
-  const x = lerp(p.from.x, p.to.x, p.t);
-  const y = lerp(p.from.y, p.to.y, p.t);
-  ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
-  ctx.fillStyle = p.color; ctx.globalAlpha = 0.8 * (1 - Math.abs(p.t - 0.5) * 1.5);
-  ctx.fill(); ctx.globalAlpha = 1;
+function drawP(p){
+  const x=lerp(p.from.x,p.to.x,p.t),y=lerp(p.from.y,p.to.y,p.t);
+  ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);
+  ctx.fillStyle=p.color;ctx.globalAlpha=0.8*(1-Math.abs(p.t-0.5)*1.5);
+  ctx.fill();ctx.globalAlpha=1;
 }
-
-// Data flow labels
-const dataLabels = [
-  { from: nodes.center, to: nodes.tribu, text: 'Historial de visitas', color: '#a855f7' },
-  { from: nodes.center, to: nodes.growth, text: 'Preferencias', color: '#E53030' },
-  { from: nodes.center, to: nodes.mesa, text: 'Perfil del cliente', color: '#3b82f6' },
-];
-
-function drawDataLabel(dl) {
-  const angle = Math.atan2(dl.to.y - dl.from.y, dl.to.x - dl.from.x);
-  const d = 120;
-  const x = dl.from.x + Math.cos(angle) * d, y = dl.from.y + Math.sin(angle) * d;
-  ctx.font = '10px "DM Sans", sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  const tw = ctx.measureText(dl.text).width;
-  ctx.fillStyle = 'rgba(10,10,10,0.7)';
-  ctx.beginPath(); ctx.roundRect(x - tw/2 - 6, y - 8, tw + 12, 16, 3); ctx.fill();
-  ctx.fillStyle = dl.color; ctx.globalAlpha = 0.6;
-  ctx.fillText(dl.text, x, y);
-  ctx.globalAlpha = 1;
-}
-
-function draw() {
-  ctx.clearRect(0, 0, W, H);
-
-  // Background rings
-  [120, 200, 290].forEach((r, i) => {
-    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(229,48,48,${0.04 - i * 0.01})`; ctx.lineWidth = 1;
-    ctx.stroke();
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  [120,200,290].forEach((r,i)=>{
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(229,48,48,${0.04-i*0.01})`;ctx.lineWidth=1;ctx.stroke();
   });
-
-  // Draw connections
-  connections.forEach(c => drawConnection(nodes[c.from], nodes[c.to], c.label, c.color, c.dashed));
-
-  // Data flow labels
-  // drawDataLabel(dataLabels[Math.floor(t / 60) % dataLabels.length]);
-
-  // Particles
-  particles.forEach(p => {
-    p.t += p.speed;
-    if (p.t > 1) p.t = 0;
-    drawParticle(p);
-  });
-
-  // Nodes
-  Object.values(nodes).forEach(n => drawNode(n));
-
-  // Center glow pulse
-  const pulse = 0.7 + Math.sin(t * 0.05) * 0.3;
-  ctx.beginPath(); ctx.arc(nodes.center.x, nodes.center.y, nodes.center.r + 10, 0, Math.PI * 2);
-  ctx.strokeStyle = `rgba(229,48,48,${pulse * 0.3})`; ctx.lineWidth = 2; ctx.stroke();
-
-  t++;
-  animFrame = requestAnimationFrame(draw);
+  connections.forEach(c=>drawConn(nodes[c.from],nodes[c.to],c.label,c.color,c.dashed));
+  particles.forEach(p=>{p.t+=p.speed;if(p.t>1)p.t=0;drawP(p);});
+  Object.values(nodes).forEach(n=>drawNode(n));
+  const pulse=0.7+Math.sin(t*0.05)*0.3;
+  ctx.beginPath();ctx.arc(nodes.center.x,nodes.center.y,nodes.center.r+10,0,Math.PI*2);
+  ctx.strokeStyle=`rgba(229,48,48,${pulse*0.3})`;ctx.lineWidth=2;ctx.stroke();
+  t++;requestAnimationFrame(draw);
 }
-
 draw();
 </script>
 </body>
