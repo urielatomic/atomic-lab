@@ -24,7 +24,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
 .back:hover{color:var(--text)}
 
 /* LOGIN SCREEN */
-#login-screen{display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+#login-screen{display:none;min-height:100vh;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
 .login-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:420px}
 .login-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center}
 .login-logo-dot{width:36px;height:36px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
@@ -43,7 +43,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
 .login-error{background:rgba(229,48,48,.1);border:1px solid rgba(229,48,48,.3);color:#f87171;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none}
 
 /* APP SCREEN */
-#app-screen{display:none;padding-top:60px;min-height:100vh}
+#app-screen{display:block;padding-top:60px;min-height:100vh}
 .app-header{padding:32px clamp(16px,4vw,60px) 0}
 .app-header-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px}
 .app-title-group .label{font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:6px}
@@ -95,9 +95,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
 .drag-handle{color:var(--muted2);font-size:16px;flex-shrink:0;cursor:grab}
 .item-emoji{font-size:18px;flex-shrink:0;width:28px;text-align:center}
 .item-info{flex:1;min-width:0}
-.item-name{font-weight:600;font-size:12px;white-space:nowraw;overflow:hidden;text-overflow:ellipsis}
+.item-name{font-weight:600;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .item-cat{font-size:10px;color:var(--muted);margin-top:1px}
-.item-desc{font-size:11px;color:var(--muted2);white-space:nowraw;overflow:hidden;text-overflow:ellipsis}
+.item-desc{font-size:11px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .item-price{font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;flex-shrink:0}
 .item-actions{display:flex;gap:4px;flex-shrink:0}
 .item-btn{background:none;border:none;cursor:pointer;font-size:14px;padding:3px 5px;border-radius:4px;color:var(--muted2);transition:color .2s}
@@ -156,6 +156,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
   .add-form-grid{grid-template-columns:1fr 1fr}
   .add-form-grid .emoji-field{grid-column:1/-1}
 }
+
+#login-modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px}
+#login-modal.open{display:flex}
 </style>
 </head>
 <body>
@@ -203,8 +206,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
       Atomic <span style="color:var(--red);margin-left:3px">Lab</span>
     </a>
     <div class="nav-right">
-      <span class="nav-user">Hola, <strong id="nav-username">—</strong></span>
-      <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+      <span class="nav-user" id="nav-user-info" style="display:none">Hola, <strong id="nav-username">—</strong></span>
+      <button class="btn-logout" id="btn-logout" onclick="doLogout()" style="display:none">Cerrar sesión</button>
+      <button class="btn-logout" id="btn-entrar" onclick="showLoginModal()" style="border-color:var(--red);color:var(--red)">Entrar →</button>
     </div>
   </nav>
 
@@ -386,6 +390,7 @@ function doLogout() {
 }
 
 function loadApp(email) {
+  document.getElementById('btn-entrar').style.display='none';document.getElementById('btn-logout').style.display='';document.getElementById('nav-user-info').style.display='';
   const db = getDB();
   currentUser = email;
   const user = db.users[email];
@@ -424,7 +429,7 @@ function loadMenuData() {
   updatePublicLink();
 }
 
-function autoSave() {
+function autoSave() { if(!currentUser){showLoginModal();return;}
   const menu = getMenu();
   menu.restoName = document.getElementById('resto-name').value;
   menu.tagline = document.getElementById('resto-tagline').value;
@@ -651,15 +656,53 @@ function showToast(msg, type='success') {
 // ============================================================
 // INIT
 // ============================================================
+function showLoginModal(){document.getElementById('login-modal').classList.add('open');}
+function closeLoginModal(){document.getElementById('login-modal').classList.remove('open');}
+
 const session = localStorage.getItem('menulab_session');
 if (session) {
   const db = getDB();
   if (db.users[session]) loadApp(session);
+  else startDemoMode();
+} else { startDemoMode(); }
+
+function startDemoMode(){
+  document.getElementById('btn-entrar').style.display='';
+  document.getElementById('btn-logout').style.display='none';
+  document.getElementById('nav-user-info').style.display='none';
+  currentUser=null;
+  // Load demo data into the UI
+  loadMenuData();
+  updatePreview();
+  renderCategories();
+  renderItems();
 }
 
 // Enter key on login
 document.getElementById('l-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 document.getElementById('r-pass') && document.getElementById('r-pass').addEventListener('keydown', e => { if(e.key==='Enter') doRegister(); });
 </script>
+
+<div id="login-modal">
+  <div class="login-card" style="position:relative;max-width:400px">
+    <button onclick="closeLoginModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer">✕</button>
+    <div class="login-logo"><div class="login-logo-dot">♣</div><div class="login-logo-text"><span style="color:var(--red)">Menu</span>Lab</div></div>
+    <p style="color:var(--muted);font-size:13px;text-align:center;margin-bottom:20px">Guardá tu menú y compartilo con tu código QR</p>
+    <div class="login-tabs"><button class="login-tab active" onclick="switchTab('login')">Iniciar sesión</button><button class="login-tab" onclick="switchTab('register')">Crear cuenta</button></div>
+    <div id="login-error" class="login-error"></div>
+    <div id="login-form">
+      <div class="f"><label>Email</label><input type="email" id="l-email" placeholder="tu@restaurante.com"></div>
+      <div class="f"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••"></div>
+      <button class="btn-main" onclick="doLogin()">Entrar →</button>
+    </div>
+    <div id="register-form" style="display:none">
+      <div class="f"><label>Nombre del restaurante</label><input type="text" id="r-name" placeholder="Ej: La Parrilla de Juan"></div>
+      <div class="f"><label>Email</label><input type="email" id="r-email" placeholder="tu@restaurante.com"></div>
+      <div class="f"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres"></div>
+      <button class="btn-main" onclick="doRegister()">Crear cuenta →</button>
+      <p class="login-note">Gratis. Sin límites. Sin tarjeta.</p>
+    </div>
+  </div>
+</div>
 </body>
 </html>
