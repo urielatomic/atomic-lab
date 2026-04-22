@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
+<html lang="es"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MenuLab â Tu menÃº digital</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>MenuLab — Tu menú digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -167,15 +165,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
 <div class="toast" id="toast"></div>
 
 <!-- LOGIN SCREEN -->
-<div id="login-screen">
+<div id="login-screen" style="display: none;">
   <div class="login-card">
     <div class="login-logo">
-      <div class="login-logo-dot">ð½ï¸</div>
+      <div class="login-logo-dot">🍽️</div>
       <div class="login-logo-text">Menu<span class="login-logo-sub">Lab</span></div>
     </div>
 
     <div class="login-tabs">
-      <button class="login-tab active" onclick="switchTab('login')">Iniciar sesiÃ³n</button>
+      <button class="login-tab active" onclick="switchTab('login')">Iniciar sesión</button>
       <button class="login-tab" onclick="switchTab('register')">Crear cuenta</button>
     </div>
 
@@ -183,32 +181,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
 
     <div id="login-form">
       <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="tu@restaurante.com" autocomplete="email"></div>
-      <div class="field"><label>ContraseÃ±a</label><input type="password" id="l-pass" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" autocomplete="current-password"></div>
-      <button class="btn-main" onclick="doLogin()">Entrar â</button>
-      <p class="login-note">Tus datos se guardan en este dispositivo.<br>Tu menÃº siempre disponible.</p>
+      <div class="field"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="btn-main" onclick="doLogin()">Entrar →</button>
+      <p class="login-note">Tus datos se guardan en este dispositivo.<br>Tu menú siempre disponible.</p>
     </div>
 
     <div id="register-form" style="display:none">
       <div class="field"><label>Nombre del restaurante</label><input type="text" id="r-name" placeholder="Ej: La Parrilla de Juan"></div>
       <div class="field"><label>Email</label><input type="email" id="r-email" placeholder="tu@restaurante.com" autocomplete="email"></div>
-      <div class="field"><label>ContraseÃ±a</label><input type="password" id="r-pass" placeholder="MÃ­nimo 6 caracteres" autocomplete="new-password"></div>
-      <button class="btn-main" onclick="doRegister()">Crear cuenta â</button>
-      <p class="login-note">Gratis. Sin tarjeta de crÃ©dito. Sin sorpresas.</p>
+      <div class="field"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres" autocomplete="new-password"></div>
+      <button class="btn-main" onclick="doRegister()">Crear cuenta →</button>
+      <p class="login-note">Gratis. Sin tarjeta de crédito. Sin sorpresas.</p>
     </div>
   </div>
 </div>
 
 <!-- APP SCREEN -->
-<div id="app-screen">
+<div id="app-screen" style="display: block;">
   <nav>
     <a class="nav-brand" href="/atomic-lab/">
-      <div class="nav-dot">â</div>
+      <div class="nav-dot">⚛</div>
       Atomic <span style="color:var(--red);margin-left:3px">Lab</span>
     </a>
     <div class="nav-right">
-      <span class="nav-user" id="nav-user-info" style="display:none">Hola, <strong id="nav-username">â</strong></span>
-      <button class="btn-logout" id="btn-logout" onclick="doLogout()" style="display:none">Cerrar sesiÃ³n</button>
-      <button class="btn-logout" id="btn-entrar" onclick="showLoginModal()" style="border-color:var(--red);color:var(--red)">Entrar â</button>
+      <span class="nav-user" id="nav-user-info" style="">Hola, <strong id="nav-username">La Parrilla</strong></span>
+      <button class="btn-logout" id="btn-logout" onclick="doLogout()" style="">Cerrar sesión</button>
+      <button class="btn-logout" id="btn-entrar" onclick="showLoginModal()" style="border-color: var(--red); color: var(--red); display: none;">Entrar →</button>
     </div>
   </nav>
 
@@ -216,12 +214,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
     <div class="app-header-top">
       <div class="app-title-group">
         <div class="label">MenuLab</div>
-        <h1>Tu menÃº digital</h1>
-        <div class="save-status"><span class="save-dot"></span> Guardado automÃ¡ticamente</div>
+        <h1>Tu menú digital</h1>
+        <div class="save-status"><span class="save-dot"></span> Guardado automáticamente</div>
       </div>
       <div class="header-actions">
-        <a id="preview-link" href="#" target="_blank" class="btn btn-outline btn-sm">ð Ver menÃº pÃºblico</a>
-        <button onclick="shareMenu()" class="btn btn-outline btn-sm">ð Compartir link</button>
+        <a id="preview-link" href="http://atomiclab.atomickitchens.tech/atomic-lab/menu-view.html?u=dGVzdEB0ZXN0LmNvbQ" target="_blank" class="btn btn-outline btn-sm">👁 Ver menú público</a>
+        <button onclick="shareMenu()" class="btn btn-outline btn-sm">🔗 Compartir link</button>
       </div>
     </div>
   </div>
@@ -232,17 +230,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
       <!-- Restaurant info -->
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-icon" style="background:rgba(229,48,48,.12)">ðª</div>
-          <span class="panel-title">InformaciÃ³n del restaurante</span>
+          <div class="panel-icon" style="background:rgba(229,48,48,.12)">🏪</div>
+          <span class="panel-title">Información del restaurante</span>
         </div>
         <div class="field-row">
           <div class="f" style="grid-column:1/-1"><label>Nombre del restaurante</label><input type="text" id="resto-name" placeholder="Ej: La Parrilla de Juan" oninput="autoSave()"></div>
         </div>
-        <div class="f"><label>DescripciÃ³n / slogan</label><input type="text" id="resto-tagline" placeholder="Ej: Parrilla argentina desde 1985" oninput="autoSave()"></div>
+        <div class="f"><label>Descripción / slogan</label><input type="text" id="resto-tagline" placeholder="Ej: Parrilla argentina desde 1985" oninput="autoSave()"></div>
         <div class="f">
           <label>Color de acento</label>
           <div class="color-row">
-            <div class="color-swatch" id="color-swatch">
+            <div class="color-swatch" id="color-swatch" style="background: rgb(229, 48, 48);">
               <input type="color" id="resto-color" value="#E53030" oninput="onColorChange()">
             </div>
             <div class="color-presets">
@@ -261,7 +259,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
       <!-- Add items -->
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-icon" style="background:rgba(59,130,246,.12)">â</div>
+          <div class="panel-icon" style="background:rgba(59,130,246,.12)">➕</div>
           <span class="panel-title">Agregar platos</span>
         </div>
 
@@ -275,47 +273,43 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
 
         <div class="add-form">
           <div class="add-form-grid">
-            <div class="f emoji-field"><label>Emoji</label><input type="text" id="new-emoji" placeholder="ð½ï¸" maxlength="2" style="text-align:center;font-size:17px"></div>
+            <div class="f emoji-field"><label>Emoji</label><input type="text" id="new-emoji" placeholder="🍽️" maxlength="2" style="text-align:center;font-size:17px"></div>
             <div class="f"><label>Nombre del plato *</label><input type="text" id="new-name" placeholder="Ej: Bife de chorizo" onkeydown="if(event.key==='Enter')addItem()"></div>
             <div class="f"><label>Precio *</label><input type="text" id="new-price" placeholder="$0" onkeydown="if(event.key==='Enter')addItem()"></div>
           </div>
-          <div class="f" style="margin-bottom:10px"><label>DescripciÃ³n (opcional)</label><input type="text" id="new-desc" placeholder="Ej: Con papas fritas y ensalada mixta" onkeydown="if(event.key==='Enter')addItem()"></div>
+          <div class="f" style="margin-bottom:10px"><label>Descripción (opcional)</label><input type="text" id="new-desc" placeholder="Ej: Con papas fritas y ensalada mixta" onkeydown="if(event.key==='Enter')addItem()"></div>
           <button class="btn btn-red btn-sm" onclick="addItem()">+ Agregar plato</button>
         </div>
 
-        <div class="items-wrap" id="items-wrap">
-          <div class="empty-list"><div class="empty-icon">ð½ï¸</div>AgregÃ¡ tu primer plato arriba</div>
-        </div>
+        <div class="items-wrap" id="items-wrap"><div class="empty-list"><div class="empty-icon">🍽️</div>Agregá tu primer plato arriba</div></div>
       </div>
     </div>
 
     <!-- PREVIEW COLUMN -->
     <div class="preview-sticky">
       <div class="panel-head" style="margin-bottom:12px">
-        <div class="panel-icon" style="background:rgba(168,85,247,.12)">ðï¸</div>
+        <div class="panel-icon" style="background:rgba(168,85,247,.12)">👁️</div>
         <span class="panel-title">Vista previa</span>
       </div>
 
       <div class="menu-preview" id="menu-preview">
-        <div class="menu-hero" id="menu-hero" style="background:linear-gradient(135deg,#E53030,#B82424)">
-          <div class="menu-resto-name" id="prev-name" style="color:#fff">Mi Restaurante</div>
-          <div class="menu-tagline" id="prev-tagline" style="color:rgba(255,255,255,.8)">MenÃº digital</div>
+        <div class="menu-hero" id="menu-hero" style="background: linear-gradient(135deg, rgb(229, 48, 48), rgb(199, 18, 18));">
+          <div class="menu-resto-name" id="prev-name" style="color:#fff">La Parrilla</div>
+          <div class="menu-tagline" id="prev-tagline" style="color:rgba(255,255,255,.8)">Menú digital</div>
         </div>
-        <div id="menu-content">
-          <div class="empty-list" style="color:#aaa;background:#fff">AgregÃ¡ platos para ver la preview</div>
-        </div>
-        <div class="menu-footer-bar">MenÃº digital Â· <strong>MenuLab</strong> por Atomic Kitchens</div>
+        <div id="menu-content"><div class="empty-list" style="color:#aaa;background:#fff;padding:24px">Agregá platos para ver la preview</div></div>
+        <div class="menu-footer-bar">Menú digital · <strong>MenuLab</strong> por Atomic Kitchens</div>
       </div>
 
       <!-- QR -->
       <div class="qr-panel">
-        <div class="qr-title">ð± CÃ³digo QR del menÃº</div>
-        <div class="qr-sub">Tus clientes escanean y ven el menÃº actualizado</div>
-        <div id="qr-box"><span style="font-size:12px;color:var(--muted)">AgregÃ¡ platos para generar el QR</span></div>
-        <div id="qr-url-display" class="qr-url" onclick="copyMenuUrl()" title="Click para copiar"></div>
+        <div class="qr-title">📱 Código QR del menú</div>
+        <div class="qr-sub">Tus clientes escanean y ven el menú actualizado</div>
+        <div id="qr-box"><span style="font-size:12px;color:var(--muted)">Agregá platos para generar el QR</span></div>
+        <div id="qr-url-display" class="qr-url" onclick="copyMenuUrl()" title="Click para copiar">http://atomiclab.atomickitchens.tech/atomic-lab/menu-view.html?u=dGVzdEB0ZXN0LmNvbQ</div>
         <div class="qr-actions">
-          <button class="btn btn-outline btn-sm" onclick="buildQR()">ð Regenerar</button>
-          <button class="btn btn-red btn-sm" onclick="downloadQR()">â¬ï¸ Descargar QR</button>
+          <button class="btn btn-outline btn-sm" onclick="buildQR()">🔄 Regenerar</button>
+          <button class="btn btn-red btn-sm" onclick="downloadQR()">⬇️ Descargar QR</button>
         </div>
       </div>
     </div>
@@ -357,11 +351,11 @@ function doRegister() {
   const name = document.getElementById('r-name').value.trim();
   const email = document.getElementById('r-email').value.trim().toLowerCase();
   const pass = document.getElementById('r-pass').value;
-  if (!name) return showError('IngresÃ¡ el nombre del restaurante');
-  if (!email || !email.includes('@')) return showError('IngresÃ¡ un email vÃ¡lido');
-  if (pass.length < 6) return showError('La contraseÃ±a debe tener al menos 6 caracteres');
+  if (!name) return showError('Ingresá el nombre del restaurante');
+  if (!email || !email.includes('@')) return showError('Ingresá un email válido');
+  if (pass.length < 6) return showError('La contraseña debe tener al menos 6 caracteres');
   const db = getDB();
-  if (db.users[email]) return showError('Ya existe una cuenta con ese email. IniciÃ¡ sesiÃ³n.');
+  if (db.users[email]) return showError('Ya existe una cuenta con ese email. Iniciá sesión.');
   db.users[email] = { name, hash: hashPass(pass), createdAt: Date.now() };
   db.menus[email] = { restoName: name, tagline: '', color: '#E53030', items: [] };
   saveDB(db);
@@ -372,11 +366,11 @@ function doRegister() {
 function doLogin() {
   const email = document.getElementById('l-email').value.trim().toLowerCase();
   const pass = document.getElementById('l-pass').value;
-  if (!email || !pass) return showError('CompletÃ¡ todos los campos');
+  if (!email || !pass) return showError('Completá todos los campos');
   const db = getDB();
   const user = db.users[email];
   if (!user) return showError('No existe una cuenta con ese email. Registrate primero.');
-  if (user.hash !== hashPass(pass)) return showError('ContraseÃ±a incorrecta');
+  if (user.hash !== hashPass(pass)) return showError('Contraseña incorrecta');
   localStorage.setItem('menulab_session', email);
   loadApp(email);
 }
@@ -386,7 +380,7 @@ function doLogout() {
   currentUser = null;
   document.getElementById('app-screen').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
-  showToast('SesiÃ³n cerrada', 'success');
+  showToast('Sesión cerrada', 'success');
 }
 
 function loadApp(email) {
@@ -490,13 +484,13 @@ function selectCat(el, cat) {
 function addItem() {
   const name = document.getElementById('new-name').value.trim();
   const price = document.getElementById('new-price').value.trim();
-  if (!name) { showToast('IngresÃ¡ el nombre del plato', 'error'); return; }
-  if (!price) { showToast('IngresÃ¡ el precio', 'error'); return; }
+  if (!name) { showToast('Ingresá el nombre del plato', 'error'); return; }
+  if (!price) { showToast('Ingresá el precio', 'error'); return; }
   const menu = getMenu();
   menu.items.push({
     id: Date.now(),
     cat: currentCat,
-    emoji: document.getElementById('new-emoji').value.trim() || 'ð½ï¸',
+    emoji: document.getElementById('new-emoji').value.trim() || '🍽️',
     name,
     price,
     desc: document.getElementById('new-desc').value.trim()
@@ -510,7 +504,7 @@ function addItem() {
   document.getElementById('new-name').focus();
   renderItems();
   updatePreview();
-  showToast('â Plato agregado', 'success');
+  showToast('✓ Plato agregado', 'success');
 }
 
 function deleteItem(id) {
@@ -526,7 +520,7 @@ function renderItems() {
   const wrap = document.getElementById('items-wrap');
   const menu = getMenu();
   if (!menu.items.length) {
-    wrap.innerHTML = '<div class="empty-list"><div class="empty-icon">ð½ï¸</div>AgregÃ¡ tu primer plato arriba</div>';
+    wrap.innerHTML = '<div class="empty-list"><div class="empty-icon">🍽️</div>Agregá tu primer plato arriba</div>';
     return;
   }
   const cats = [...new Set(menu.items.map(i => i.cat))];
@@ -535,7 +529,7 @@ function renderItems() {
       <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 0 6px">${cat}</div>
       ${menu.items.filter(i => i.cat === cat).map(item => `
         <div class="item-row">
-          <span class="drag-handle">â ¿</span>
+          <span class="drag-handle">⠿</span>
           <span class="item-emoji">${item.emoji}</span>
           <div class="item-info">
             <div class="item-name">${item.name}</div>
@@ -543,7 +537,7 @@ function renderItems() {
           </div>
           <div class="item-price">${item.price}</div>
           <div class="item-actions">
-            <button class="item-btn del" onclick="deleteItem(${item.id})" title="Eliminar">â</button>
+            <button class="item-btn del" onclick="deleteItem(${item.id})" title="Eliminar">✕</button>
           </div>
         </div>
       `).join('')}
@@ -557,7 +551,7 @@ function renderItems() {
 function updatePreview() {
   const menu = getMenu();
   const name = menu.restoName || 'Mi Restaurante';
-  const tagline = menu.tagline || 'MenÃº digital';
+  const tagline = menu.tagline || 'Menú digital';
   const color = accentColor;
   const dark = adjustColor(color, -30);
 
@@ -567,7 +561,7 @@ function updatePreview() {
 
   const content = document.getElementById('menu-content');
   if (!menu.items.length) {
-    content.innerHTML = '<div class="empty-list" style="color:#aaa;background:#fff;padding:24px">AgregÃ¡ platos para ver la preview</div>';
+    content.innerHTML = '<div class="empty-list" style="color:#aaa;background:#fff;padding:24px">Agregá platos para ver la preview</div>';
     return;
   }
 
@@ -628,20 +622,20 @@ function downloadQR() {if(!currentUser){showLoginModal();return;}
   const canvas = document.querySelector('#qr-box canvas');
   const img = document.querySelector('#qr-box img');
   const src = canvas ? canvas.toDataURL() : (img ? img.src : null);
-  if (!src) { showToast('Primero agregÃ¡ platos al menÃº', 'error'); return; }
+  if (!src) { showToast('Primero agregá platos al menú', 'error'); return; }
   const a = document.createElement('a');
   a.href = src; a.download = 'menu-qr.png'; a.click();
-  showToast('â QR descargado', 'success');
+  showToast('✓ QR descargado', 'success');
 }
 
 function copyMenuUrl() {if(!currentUser){showLoginModal();return;}
-  navigator.clipboard.writeText(getMenuUrl()).then(() => showToast('â Link copiado', 'success'));
+  navigator.clipboard.writeText(getMenuUrl()).then(() => showToast('✓ Link copiado', 'success'));
 }
 
 function shareMenu() {if(!currentUser){showLoginModal();return;}
   const url = getMenuUrl();
   if (navigator.share) {
-    navigator.share({ title: getMenu().restoName + ' â MenÃº digital', url });
+    navigator.share({ title: getMenu().restoName + ' — Menú digital', url });
   } else {
     copyMenuUrl();
   }
@@ -691,24 +685,25 @@ document.getElementById('r-pass') && document.getElementById('r-pass').addEventL
 
 <div id="login-modal">
   <div class="login-card" style="position:relative;max-width:400px">
-    <button onclick="closeLoginModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer">â</button>
-    <div class="login-logo"><div class="login-logo-dot">â£</div><div class="login-logo-text"><span style="color:var(--red)">Menu</span>Lab</div></div>
-    <p style="color:var(--muted);font-size:13px;text-align:center;margin-bottom:20px">GuardÃ¡ tu menÃº y compartilo con tu cÃ³digo QR</p>
-    <div class="login-tabs"><button class="login-tab active" onclick="switchTab('login')">Iniciar sesiÃ³n</button><button class="login-tab" onclick="switchTab('register')">Crear cuenta</button></div>
+    <button onclick="closeLoginModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer">✕</button>
+    <div class="login-logo"><div class="login-logo-dot">♣</div><div class="login-logo-text"><span style="color:var(--red)">Menu</span>Lab</div></div>
+    <p style="color:var(--muted);font-size:13px;text-align:center;margin-bottom:20px">Guardá tu menú y compartilo con tu código QR</p>
+    <div class="login-tabs"><button class="login-tab active" onclick="switchTab('login')">Iniciar sesión</button><button class="login-tab" onclick="switchTab('register')">Crear cuenta</button></div>
     <div id="login-error" class="login-error"></div>
     <div id="login-form">
       <div class="f"><label>Email</label><input type="email" id="l-email" placeholder="tu@restaurante.com"></div>
-      <div class="f"><label>ContraseÃ±a</label><input type="password" id="l-pass" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢"></div>
-      <button class="btn-main" onclick="doLogin()">Entrar â</button>
+      <div class="f"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••"></div>
+      <button class="btn-main" onclick="doLogin()">Entrar →</button>
     </div>
     <div id="register-form" style="display:none">
       <div class="f"><label>Nombre del restaurante</label><input type="text" id="r-name" placeholder="Ej: La Parrilla de Juan"></div>
       <div class="f"><label>Email</label><input type="email" id="r-email" placeholder="tu@restaurante.com"></div>
-      <div class="f"><label>ContraseÃ±a</label><input type="password" id="r-pass" placeholder="MÃ­nimo 6 caracteres"></div>
-      <button class="btn-main" onclick="doRegister()">Crear cuenta â</button>
-      <p class="login-note">Gratis. Sin lÃ­mites. Sin tarjeta.</p>
+      <div class="f"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres"></div>
+      <button class="btn-main" onclick="doRegister()">Crear cuenta →</button>
+      <p class="login-note">Gratis. Sin límites. Sin tarjeta.</p>
     </div>
   </div>
 </div>
-</body>
-</html>
+
+
+</body></html>
