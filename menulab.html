@@ -429,7 +429,7 @@ function loadMenuData() {
   updatePublicLink();
 }
 
-function autoSave() { if(!currentUser){showLoginModal();return;}
+function autoSave() { if(!currentUser){return;} // demo mode: allow typing but don't save
   const menu = getMenu();
   menu.restoName = document.getElementById('resto-name').value;
   menu.tagline = document.getElementById('resto-tagline').value;
@@ -674,7 +674,6 @@ function startDemoMode(){
   // Load demo data into the UI
   loadMenuData();
   updatePreview();
-  renderCategories();
   renderItems();
 }
 

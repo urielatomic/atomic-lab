@@ -44,18 +44,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
 .page-header h1{font-family:'Manrope',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
 .page-header p{color:var(--muted);font-size:15px}
 
-/* API KEY BANNER */
-.api-banner{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.2);border-radius:12px;padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.api-banner-icon{font-size:20px;flex-shrink:0}
-.api-banner-text{flex:1;min-width:180px}
-.api-banner-text p{font-size:13px;color:var(--muted)}
-.api-banner-text p a{color:#c084fc}
-.api-key-row{display:flex;gap:8px;align-items:center;flex:2;min-width:200px}
-.api-key-input{flex:1;background:var(--bg3);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:0}
-.api-key-input:focus{border-color:rgba(168,85,247,.6)}
-.btn-save-key{background:rgba(168,85,247,.8);color:#fff;border:none;padding:8px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:background .2s}
-.btn-save-key:hover{background:var(--purple)}
-
 /* LAYOUT */
 .layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
 @media(max-width:780px){.layout{grid-template-columns:1fr}}
@@ -192,19 +180,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
       <h1>Respondé reseñas con IA</h1>
       <p>Pegá cualquier reseña y generá una respuesta profesional en segundos.</p>
     </div>
-
-    <!-- API KEY -->
-    <div class="api-banner" id="api-banner">
-      <div class="api-banner-icon">🔑</div>
-      <div class="api-banner-text">
-        <p><strong style="color:var(--text)">Activar IA real</strong> — Ingresá tu API key de Anthropic para respuestas generadas por Claude. <a href="https://console.anthropic.com" target="_blank">Obtener gratis →</a></p>
-      </div>
-      <div class="api-key-row">
-        <input type="password" class="api-key-input" id="api-key-input" placeholder="sk-ant-api03-...">
-        <button class="btn-save-key" onclick="saveApiKey()">Guardar</button>
-      </div>
-    </div>
-
     <div class="layout">
       <!-- INPUT PANEL -->
       <div>
@@ -308,11 +283,7 @@ function doLogin(){const email=document.getElementById('l-email').value.trim().t
 function doLogout(){localStorage.removeItem('reviewlab_session');currentUser=null;document.getElementById('btn-entrar').style.display='';document.getElementById('btn-logout').style.display='none';document.getElementById('nav-user-info').style.display='none';document.getElementById('history-list').innerHTML='<div class="empty-history">Las respuestas que guardés aparecerán acá</div>';}
 function loadApp(email){document.getElementById('btn-entrar').style.display='none';document.getElementById('btn-logout').style.display='';document.getElementById('nav-user-info').style.display='';const db=getDB();currentUser=email;document.getElementById('nav-username').textContent=db.users[email].name;document.getElementById('login-screen').style.display='none';document.getElementById('app-screen').style.display='block';const data=db.data[email];document.getElementById('resto-name').value=data.restoName||'';const apiKey=localStorage.getItem('reviewlab_apikey_'+email)||'';if(apiKey)document.getElementById('api-key-input').value=apiKey;renderHistory();renderExamples();}
 
-// ============================================================
-// API KEY
-// ============================================================
-function saveApiKey(){const key=document.getElementById('api-key-input').value.trim();localStorage.setItem('reviewlab_apikey_'+currentUser,key);const b=document.getElementById('api-banner');b.style.background='rgba(34,197,94,.06)';b.style.borderColor='rgba(34,197,94,.2)';b.querySelector('.api-banner-text p').innerHTML='<strong style="color:var(--green)">✓ API key guardada</strong> — La IA real está activa.';showToast('✓ API key guardada','success');}
-function getApiKey(){return localStorage.getItem('reviewlab_apikey_'+currentUser)||'';}
+// API KEY removed
 
 // ============================================================
 // EXAMPLES
@@ -342,35 +313,21 @@ function analyzeSentiment(text){const out=document.getElementById('sentiment-out
 // ============================================================
 // GENERATE RESPONSE
 // ============================================================
-async function generateResponse(){if(!currentUser){showLoginModal();return;}
+async function generateResponse(){
+  if(!currentUser){showLoginModal();return;}
   const review=document.getElementById('review-text').value.trim();
   if(!review){showToast('Pegá una reseña primero','error');return;}
   const resto=document.getElementById('resto-name').value.trim()||'el restaurante';
   const out=document.getElementById('response-out');
   const btn=document.getElementById('gen-btn');
   btn.disabled=true;
-  const apiKey=getApiKey();
-  const toneMap={profesional:'formal, profesional y cordial',cercano:'cálida, cercana y personal',disculpas:'empática, con disculpas sinceras',agradecido:'muy agradecida y entusiasta'};
-  if(!apiKey){
-    const resp=generateTemplate(review,currentStars,currentTone,resto);
-    out.innerHTML=`<div class="no-api-note">💡 Sin API key de Anthropic — usando plantilla inteligente. <a href="#" onclick="document.getElementById('api-banner').scrollIntoView({behavior:'smooth'})" style="color:#c084fc">Activar IA real →</a></div><div class="response-box">${resp}</div><div class="response-actions"><button class="btn btn-outline" onclick="copyResponse()">📋 Copiar</button><button class="btn btn-green-sm" onclick="saveToHistory('${escapeStr(review)}','${escapeStr(resp)}')">💾 Guardar</button></div>`;
-    btn.disabled=false;
-    return;
-  }
-  out.innerHTML=`<div class="response-box loading-state"><div class="dots"><span></span><span></span><span></span></div><span>Generando con Claude...</span></div>`;
-  const prompt=`Sos el community manager de "${resto}". Recibiste esta reseña con ${currentStars} estrella${currentStars!==1?'s':''}:\n\n"${review}"\n\nEscribí una respuesta ${toneMap[currentTone]} en español. Máximo 3-4 oraciones cortas. Sin markdown ni asteriscos. Si es negativa, ofrecé solución concreta. Firmá como "El equipo de ${resto}".`;
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:300,messages:[{role:'user',content:prompt}]})});
-    const d=await r.json();
-    if(d.error)throw new Error(d.error.message);
-    const text=d.content[0].text;
-    out.innerHTML=`<div class="response-box">${text}</div><div class="response-actions"><button class="btn btn-outline" onclick="copyResponse()">📋 Copiar</button><button class="btn btn-green-sm" onclick="saveToHistory('${escapeStr(review)}','${escapeStr(text)}')">💾 Guardar</button></div>`;
-  }catch(e){
-    const fallback=generateTemplate(review,currentStars,currentTone,resto);
-    out.innerHTML=`<div class="no-api-note">⚠ Error de API: ${e.message.slice(0,60)}. Usando plantilla.</div><div class="response-box">${fallback}</div><div class="response-actions"><button class="btn btn-outline" onclick="copyResponse()">📋 Copiar</button></div>`;
-  }
+  out.innerHTML=`<div class="response-box loading-state"><div class="dots"><span></span><span></span><span></span></div><span>Generando respuesta...</span></div>`;
+  await new Promise(r=>setTimeout(r,700));
+  const resp=generateTemplate(review,currentStars,currentTone,resto);
+  out.innerHTML=`<div class="response-box">${resp}</div><div class="response-actions"><button class="btn btn-outline" onclick="copyResponse()">📋 Copiar</button><button class="btn btn-green-sm" onclick="saveToHistory('${escapeStr(review)}','${escapeStr(resp)}')">💾 Guardar</button></div>`;
   btn.disabled=false;
 }
+
 
 function escapeStr(s){return(s||'').replace(/'/g,"\\'").replace(/\n/g,' ').slice(0,200);}
 
