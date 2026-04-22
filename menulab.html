@@ -360,6 +360,7 @@ function doRegister() {
   db.menus[email] = { restoName: name, tagline: '', color: '#E53030', items: [] };
   saveDB(db);
   localStorage.setItem('menulab_session', email);
+  closeLoginModal();
   loadApp(email);
 }
 
