@@ -299,28 +299,28 @@ function switchTab(t){document.querySelectorAll('.login-tab').forEach((b,i)=>b.c
 function showError(msg){const el=document.getElementById('login-error');el.textContent=msg;el.style.display='block';}
 function doRegister(){const name=document.getElementById('r-name').value.trim();const email=document.getElementById('r-email').value.trim().toLowerCase();const pass=document.getElementById('r-pass').value;if(!name)return showError('Nombre requerido');if(!email||!email.includes('@'))return showError('Email inválido');if(pass.length<6)return showError('Contraseña mínimo 6 caracteres');const db=getDB();if(db.users[email])return showError('Ya existe esa cuenta. Iniciá sesión.');db.users[email]={name,hash:hashPass(pass)};db.data[email]={recipes:[]};saveDB(db);localStorage.setItem('costolab_session',email);closeLoginModal();loadApp(email);}
 function doLogin(){const email=document.getElementById('l-email').value.trim().toLowerCase();const pass=document.getElementById('l-pass').value;if(!email||!pass)return showError('Completá todos los campos');const db=getDB();const user=db.users[email];if(!user)return showError('No existe cuenta con ese email');if(user.hash!==hashPass(pass))return showError('Contraseña incorrecta');localStorage.setItem('costolab_session',email);closeLoginModal();loadApp(email);}
-function doLogout(){localStorage.removeItem('costolab_session');currentUser=null;document.getElementById('btn-entrar').style.display='';document.getElementById('btn-logout').style.display='none';document.getElementById('nav-user-info').style.display='none';startDemoMode();}
+function doLogout(){localStorage.removeItem('costolab_session');currentUser=null;window._demoData=null;document.getElementById('btn-entrar').style.display='';document.getElementById('btn-logout').style.display='none';document.getElementById('nav-user-info').style.display='none';startDemoMode();}
 function loadApp(email){document.getElementById('btn-entrar').style.display='none';document.getElementById('btn-logout').style.display='';document.getElementById('nav-user-info').style.display='';const db=getDB();currentUser=email;document.getElementById('nav-username').textContent=db.users[email].name;document.getElementById('login-screen').style.display='none';document.getElementById('app-screen').style.display='block';renderRecipes();updateCalc();}
 
 // ============================================================
 // DATA
 // ============================================================
-function getData(){const db=getDB();return db.data[currentUser]||(db.data[currentUser]={recipes:[]},saveDB(db),db.data[currentUser]);}
-function saveData(d){if(!currentUser){showLoginModal();return;}const db=getDB();db.data[currentUser]=d;saveDB(db);}
+function getData(){if(window._demoData)return window._demoData;const db=getDB();return db.data[currentUser]||(db.data[currentUser]={recipes:[]},saveDB(db),db.data[currentUser]);}
+function saveData(d){if(window._demoData){window._demoData=d;renderRecipes();return;}if(!currentUser){showLoginModal();return;}const db=getDB();db.data[currentUser]=d;saveDB(db);}
 function getRecipe(){return getData().recipes.find(r=>r.id===currentRecipeId)||null;}
 
 // ============================================================
 // RECIPES
 // ============================================================
-function addRecipe(){const name=document.getElementById('new-recipe-input').value.trim();if(!name)return;const d=getData();const recipe={id:Date.now(),name,ingredients:[]};d.recipes.push(recipe);saveData(d);currentRecipeId=recipe.id;document.getElementById('new-recipe-input').value='';renderRecipes();renderIngredients();updateCalc();showToast('✓ Receta creada','success');}
+function addRecipe(){if(!currentUser){showLoginModal();return;}const name=document.getElementById('new-recipe-input').value.trim();if(!name)return;const d=getData();const recipe={id:Date.now(),name,ingredients:[]};d.recipes.push(recipe);saveData(d);currentRecipeId=recipe.id;document.getElementById('new-recipe-input').value='';renderRecipes();renderIngredients();updateCalc();showToast('✓ Receta creada','success');}
 function selectRecipe(id){currentRecipeId=id;renderRecipes();renderIngredients();updateCalc();}
-function deleteRecipe(id){if(!confirm('¿Eliminar esta receta?'))return;const d=getData();d.recipes=d.recipes.filter(r=>r.id!==id);if(currentRecipeId===id)currentRecipeId=d.recipes[0]?.id||null;saveData(d);renderRecipes();renderIngredients();updateCalc();showToast('Receta eliminada','success');}
+function deleteRecipe(id){if(!currentUser){showLoginModal();return;}if(!confirm('¿Eliminar esta receta?'))return;const d=getData();d.recipes=d.recipes.filter(r=>r.id!==id);if(currentRecipeId===id)currentRecipeId=d.recipes[0]?.id||null;saveData(d);renderRecipes();renderIngredients();updateCalc();showToast('Receta eliminada','success');}
 function renderRecipes(){const d=getData();const scroll=document.getElementById('recipes-scroll');if(!d.recipes.length){scroll.innerHTML='<div style="font-size:12px;color:var(--muted)">Creá tu primera receta →</div>';return;}scroll.innerHTML=d.recipes.map(r=>`<div class="recipe-chip ${r.id===currentRecipeId?'active':''}" onclick="selectRecipe(${r.id})">${r.name}<span class="chip-del" onclick="event.stopPropagation();deleteRecipe(${r.id})">×</span></div>`).join('');}
 
 // ============================================================
 // INGREDIENTS
 // ============================================================
-function addIngredient(){if(!currentUser){showLoginModal();return;}if(!currentRecipeId){showToast('Primero creá o seleccioná una receta','error');return;}const name=document.getElementById('ing-name').value.trim();const qty=parseFloat(document.getElementById('ing-qty').value)||0;const unit=document.getElementById('ing-unit').value;const cost=parseFloat(document.getElementById('ing-cost').value)||0;if(!name){showToast('Ingresá el nombre del ingrediente','error');return;}if(!cost){showToast('Ingresá el costo','error');return;}const d=getData();const recipe=d.recipes.find(r=>r.id===currentRecipeId);recipe.ingredients.push({id:Date.now(),name,qty,unit,cost});saveData(d);document.getElementById('ing-name').value='';document.getElementById('ing-qty').value='';document.getElementById('ing-cost').value='';document.getElementById('ing-name').focus();renderIngredients();updateCalc();showToast('✓ Ingrediente agregado','success');}
+function addIngredient(){if(!currentUser&&!window._demoData){showLoginModal();return;}if(!currentRecipeId){showToast('Primero creá o seleccioná una receta','error');return;}const name=document.getElementById('ing-name').value.trim();const qty=parseFloat(document.getElementById('ing-qty').value)||0;const unit=document.getElementById('ing-unit').value;const cost=parseFloat(document.getElementById('ing-cost').value)||0;if(!name){showToast('Ingresá el nombre del ingrediente','error');return;}if(!cost){showToast('Ingresá el costo','error');return;}const d=getData();const recipe=d.recipes.find(r=>r.id===currentRecipeId);recipe.ingredients.push({id:Date.now(),name,qty,unit,cost});saveData(d);document.getElementById('ing-name').value='';document.getElementById('ing-qty').value='';document.getElementById('ing-cost').value='';document.getElementById('ing-name').focus();renderIngredients();updateCalc();showToast('✓ Ingrediente agregado','success');}
 function deleteIngredient(ingId){const d=getData();const recipe=d.recipes.find(r=>r.id===currentRecipeId);if(!recipe)return;recipe.ingredients=recipe.ingredients.filter(i=>i.id!==ingId);saveData(d);renderIngredients();updateCalc();}
 function renderIngredients(){const wrap=document.getElementById('ing-table-wrap');const recipe=getRecipe();document.getElementById('recipe-panel-title').textContent=recipe?`Ingredientes — ${recipe.name}`:'Ingredientes';if(!recipe){wrap.innerHTML='<div class="empty-state"><div class="empty-icon">🥕</div>Seleccioná o creá una receta primero</div>';return;}if(!recipe.ingredients.length){wrap.innerHTML='<div class="empty-state"><div class="empty-icon">🥕</div>Agregá ingredientes a "'+recipe.name+'"</div>';return;}wrap.innerHTML=`<table class="ing-table"><thead><tr><th>Ingrediente</th><th>Cantidad</th><th>Costo</th><th></th></tr></thead><tbody>${recipe.ingredients.map(i=>`<tr><td><strong>${i.name}</strong></td><td>${i.qty} ${i.unit}</td><td class="cost-cell">$${i.cost.toFixed(2)}</td><td><button class="del-btn" onclick="deleteIngredient(${i.id})">✕</button></td></tr>`).join('')}<tr style="background:rgba(34,197,94,.04)"><td colspan="2" style="font-weight:700;font-size:12px;color:var(--green)">TOTAL</td><td class="cost-cell" style="color:var(--green)">$${recipe.ingredients.reduce((s,i)=>s+i.cost,0).toFixed(2)}</td><td></td></tr></tbody></table>`;}
 
@@ -338,7 +338,7 @@ function loadExample(key){const ex=EXAMPLES[key];if(!ex)return;const d=getData()
 // ============================================================
 // EXPORT
 // ============================================================
-function exportCSV(){if(!currentUser){showLoginModal();return;}exportCSVReal();}
+function exportCSV(){exportCSVReal();}
 function exportCSVReal(){const recipe=getRecipe();if(!recipe){showToast('Seleccioná una receta primero','error');return;}const fc=parseInt(document.getElementById('fc-slider').value);const rows=[['Ingrediente','Cantidad','Unidad','Costo ($)']];recipe.ingredients.forEach(i=>rows.push([i.name,i.qty,i.unit,i.cost.toFixed(2)]));const total=recipe.ingredients.reduce((s,i)=>s+i.cost,0);rows.push(['','','TOTAL INGREDIENTES',total.toFixed(2)]);rows.push(['','','Precio sugerido ('+fc+'% FC)',(total/(fc/100)).toFixed(2)]);const csv=rows.map(r=>r.join(',')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download=recipe.name.replace(/\s+/g,'-').toLowerCase()+'-costos.csv';a.click();showToast('✓ CSV descargado','success');}
 
 // TOAST
@@ -358,12 +358,13 @@ function startDemoMode(){
   document.getElementById('btn-logout').style.display='none';
   document.getElementById('nav-user-info').style.display='none';
   currentUser=null;
-  // Load demo recipe
-  if(SAMPLE_RECIPES && SAMPLE_RECIPES.length>0){
-    currentRecipeId=SAMPLE_RECIPES[0].id;
-    renderRecipes();
-    selectRecipe(currentRecipeId);
-  }
+  // Demo in-memory data - pre-load bife example
+  const ex=EXAMPLES['bife'];
+  window._demoData={recipes:[{id:1,name:ex.name,ingredients:ex.ingredients.map((ing,i)=>({id:i+1,...ing}))}]};
+  currentRecipeId=1;
+  renderRecipes();
+  renderIngredients();
+  updateCalc();
 }
 
 document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});

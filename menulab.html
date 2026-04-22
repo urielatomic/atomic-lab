@@ -407,11 +407,14 @@ let currentCat = 'Entradas';
 let accentColor = '#E53030';
 
 function getMenu() {
+  if(window._demoMenu) return window._demoMenu;
   const db = getDB();
   return db.menus[currentUser] || { restoName: '', tagline: '', color: '#E53030', items: [] };
 }
 
 function saveMenu(menu) {
+  if(window._demoMenu !== undefined){window._demoMenu=menu;return;}
+  if(!currentUser) return;
   const db = getDB();
   db.menus[currentUser] = menu;
   saveDB(db);
@@ -429,7 +432,7 @@ function loadMenuData() {
   updatePublicLink();
 }
 
-function autoSave() { if(!currentUser){return;} // demo mode: allow typing but don't save
+function autoSave() { // works in both demo and logged-in mode
   const menu = getMenu();
   menu.restoName = document.getElementById('resto-name').value;
   menu.tagline = document.getElementById('resto-tagline').value;
@@ -618,7 +621,7 @@ function buildQR() {
   }
 }
 
-function downloadQR() {
+function downloadQR() {if(!currentUser){showLoginModal();return;}
   const canvas = document.querySelector('#qr-box canvas');
   const img = document.querySelector('#qr-box img');
   const src = canvas ? canvas.toDataURL() : (img ? img.src : null);
@@ -628,11 +631,11 @@ function downloadQR() {
   showToast('✓ QR descargado', 'success');
 }
 
-function copyMenuUrl() {
+function copyMenuUrl() {if(!currentUser){showLoginModal();return;}
   navigator.clipboard.writeText(getMenuUrl()).then(() => showToast('✓ Link copiado', 'success'));
 }
 
-function shareMenu() {
+function shareMenu() {if(!currentUser){showLoginModal();return;}
   const url = getMenuUrl();
   if (navigator.share) {
     navigator.share({ title: getMenu().restoName + ' — Menú digital', url });
@@ -671,7 +674,8 @@ function startDemoMode(){
   document.getElementById('btn-logout').style.display='none';
   document.getElementById('nav-user-info').style.display='none';
   currentUser=null;
-  // Load demo data into the UI
+  // In-memory demo menu
+  window._demoMenu={restoName:'',tagline:'',color:'#E53030',items:[],categories:['Entradas','Principales','Postres','Bebidas','Especiales']};
   loadMenuData();
   updatePreview();
   renderItems();
