@@ -165,36 +165,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
 <div class="toast" id="toast"></div>
 
 <!-- LOGIN SCREEN -->
-<div id="login-screen" style="display: none;">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="login-logo-dot">🍽️</div>
-      <div class="login-logo-text">Menu<span class="login-logo-sub">Lab</span></div>
-    </div>
 
-    <div class="login-tabs">
-      <button class="login-tab active" onclick="switchTab('login')">Iniciar sesión</button>
-      <button class="login-tab" onclick="switchTab('register')">Crear cuenta</button>
-    </div>
-
-    <div id="login-error" class="login-error"></div>
-
-    <div id="login-form">
-      <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="tu@restaurante.com" autocomplete="email"></div>
-      <div class="field"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
-      <button class="btn-main" onclick="doLogin()">Entrar →</button>
-      <p class="login-note">Tus datos se guardan en este dispositivo.<br>Tu menú siempre disponible.</p>
-    </div>
-
-    <div id="register-form" style="display:none">
-      <div class="field"><label>Nombre del restaurante</label><input type="text" id="r-name" placeholder="Ej: La Parrilla de Juan"></div>
-      <div class="field"><label>Email</label><input type="email" id="r-email" placeholder="tu@restaurante.com" autocomplete="email"></div>
-      <div class="field"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres" autocomplete="new-password"></div>
-      <button class="btn-main" onclick="doRegister()">Crear cuenta →</button>
-      <p class="login-note">Gratis. Sin tarjeta de crédito. Sin sorpresas.</p>
-    </div>
-  </div>
-</div>
 
 <!-- APP SCREEN -->
 <div id="app-screen" style="display: block;">
