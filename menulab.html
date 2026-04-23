@@ -350,7 +350,7 @@ function doLogin() {
 function doLogout() {
   localStorage.removeItem('menulab_session');
   currentUser = null;
-  document.getElementById('app-screen').style.display = 'none';
+  
   
   showToast('Sesión cerrada', 'success');
 }
@@ -639,6 +639,7 @@ if (session) {
 } else { startDemoMode(); }
 
 function startDemoMode(){
+  document.getElementById('app-screen').style.display='block';
   document.getElementById('app-screen').style.display='block';
   document.getElementById('btn-entrar').style.display='';
   document.getElementById('btn-logout').style.display='none';
