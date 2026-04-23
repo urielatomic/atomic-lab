@@ -131,32 +131,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:4px}
 <div class="toast" id="toast"></div>
 
 <!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="login-logo-dot">📊</div>
-      <div class="login-logo-text">Costo<span style="color:var(--green)">Lab</span></div>
-    </div>
-    <div class="login-tabs">
-      <button class="login-tab active" onclick="switchTab('login')">Iniciar sesión</button>
-      <button class="login-tab" onclick="switchTab('register')">Crear cuenta</button>
-    </div>
-    <div id="login-error" class="login-error"></div>
-    <div id="login-form">
-      <div class="f"><label>Email</label><input type="email" id="l-email" placeholder="tu@restaurante.com"></div>
-      <div class="f"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••"></div>
-      <button class="btn-main" onclick="doLogin()">Entrar →</button>
-      <p class="login-note">Tus recetas y costos quedan guardados para siempre.</p>
-    </div>
-    <div id="register-form" style="display:none">
-      <div class="f"><label>Nombre del restaurante</label><input type="text" id="r-name" placeholder="Ej: La Parrilla de Juan"></div>
-      <div class="f"><label>Email</label><input type="email" id="r-email" placeholder="tu@restaurante.com"></div>
-      <div class="f"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres"></div>
-      <button class="btn-main" onclick="doRegister()">Crear cuenta →</button>
-      <p class="login-note">Gratis. Sin límites. Sin tarjeta.</p>
-    </div>
-  </div>
-</div>
+
 
 <!-- APP -->
 <div id="app-screen">
