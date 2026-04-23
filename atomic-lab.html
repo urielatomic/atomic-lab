@@ -617,6 +617,17 @@ function draw() {
 }
 
 draw();
+
+// Scroll nav fix
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var id=this.getAttribute('href').slice(1);
+      var el=document.getElementById(id);
+      if(el){e.preventDefault();window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset,behavior:'smooth'});}
+    });
+  });
+});
 </script>
 </body>
 </html>
