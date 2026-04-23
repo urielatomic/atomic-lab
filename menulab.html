@@ -601,7 +601,7 @@ function downloadQR() {if(!currentUser){showLoginModal();return;}
 }
 
 function copyMenuUrl() {if(!currentUser){showLoginModal();return;}
-  navigator.clipboard.writeText(getMenuUrl()).then(() => showToast('✓ Link copiado', 'success'));
+  const url=getMenuUrl(); if(navigator.clipboard){navigator.clipboard.writeText(url).then(()=>showToast('✓ Link copiado','success')).catch(()=>{window.prompt('Copiá el link:',url);});} else{window.prompt('Copiá el link:',url);}
 }
 
 function shareMenu() {if(!currentUser){showLoginModal();return;}
@@ -639,6 +639,7 @@ if (session) {
 } else { startDemoMode(); }
 
 function startDemoMode(){
+  document.getElementById('app-screen').style.display='block';
   document.getElementById('btn-entrar').style.display='';
   document.getElementById('btn-logout').style.display='none';
   document.getElementById('nav-user-info').style.display='none';
