@@ -121,12 +121,12 @@ footer{border-top:1px solid var(--border);padding:48px clamp(20px,5vw,80px);disp
     Atomic <span style="color:var(--red);margin-left:4px">Lab</span>
   </a>
   <div class="nav-links">
-    <a href="#ecosystem" onclick="event.preventDefault();document.getElementById('ecosystem').scrollIntoView({behavior:'smooth'})">Ecosistema</a>
-    <a href="#herramientas" onclick="event.preventDefault();document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Herramientas</a>
-    <a href="#beneficios" onclick="event.preventDefault();document.getElementById('beneficios').scrollIntoView({behavior:'smooth'})">Beneficios</a>
+    <a href="#ecosystem" onclick="event.preventDefault();scrollTo('ecosystem')" onclick="event.preventDefault();document.getElementById('ecosystem').scrollIntoView({behavior:'smooth'})">Ecosistema</a>
+    <a href="#herramientas" onclick="event.preventDefault();scrollTo('herramientas')" onclick="event.preventDefault();document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Herramientas</a>
+    <a href="#beneficios" onclick="event.preventDefault();scrollTo('beneficios')" onclick="event.preventDefault();document.getElementById('beneficios').scrollIntoView({behavior:'smooth'})">Beneficios</a>
     <a href="https://atomickitchens.tech" target="_blank">Atomic Kitchens</a>
   </div>
-  <a class="nav-cta" href="#herramientas" onclick="event.preventDefault();document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Explorar herramientas</a>
+  <a class="nav-cta" href="#herramientas" onclick="event.preventDefault();scrollTo('herramientas')" onclick="event.preventDefault();document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Explorar herramientas</a>
 </nav>
 
 <!-- HERO -->
@@ -140,8 +140,8 @@ footer{border-top:1px solid var(--border);padding:48px clamp(20px,5vw,80px);disp
   <h1 class="syne">El ecosistema completo para tu restaurante</h1>
   <p class="hero-sub">Seis herramientas gratuitas diseñadas para hacer crecer tu restaurante. Más reservas, más fidelidad, más ventas en delivery. Todo conectado.</p>
   <div class="hero-actions">
-    <a href="#ecosystem" class="btn-primary" onclick="event.preventDefault();document.getElementById('ecosystem').scrollIntoView({behavior:'smooth'})">Ver el ecosistema →</a>
-    <a href="#herramientas" class="btn-secondary" onclick="event.preventDefault();document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Ver herramientas</a>
+    <a href="#ecosystem" onclick="event.preventDefault();scrollTo('ecosystem')" class="btn-primary" onclick="event.preventDefault();document.getElementById('ecosystem').scrollIntoView({behavior:'smooth'})">Ver el ecosistema →</a>
+    <a href="#herramientas" onclick="event.preventDefault();scrollTo('herramientas')" class="btn-secondary" onclick="event.preventDefault();document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Ver herramientas</a>
   </div>
   <div class="kpi-strip">
     <div class="kpi-item">
@@ -449,6 +449,8 @@ footer{border-top:1px solid var(--border);padding:48px clamp(20px,5vw,80px);disp
 </footer>
 
 <script>
+function scrollTo(id){var el=document.getElementById(id);if(el){window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset,behavior:'smooth'});}}
+
 // Fade in on scroll
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
