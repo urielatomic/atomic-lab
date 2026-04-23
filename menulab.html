@@ -351,7 +351,7 @@ function doLogout() {
   localStorage.removeItem('menulab_session');
   currentUser = null;
   document.getElementById('app-screen').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
+  
   showToast('Sesión cerrada', 'success');
 }
 
@@ -362,7 +362,7 @@ function loadApp(email) {
   currentUser = email;
   const user = db.users[email];
   document.getElementById('nav-username').textContent = user.name;
-  document.getElementById('login-screen').style.display = 'none';
+  
   document.getElementById('app-screen').style.display = 'block';
   loadMenuData();
 }
@@ -561,7 +561,7 @@ function updatePreview() {
 // QR & PUBLIC LINK
 // ============================================================
 function getMenuUrl() {
-  const base = window.location.origin + '/atomic-lab/menu-view.html';
+  const base = window.location.origin + '/menu-view.html';
   const id = btoa(currentUser).replace(/=/g,'');
   return `${base}?u=${encodeURIComponent(id)}`;
 }
