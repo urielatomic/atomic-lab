@@ -305,6 +305,6 @@ document.addEventListener('click', function(e) {
   if (!el) return;
   e.preventDefault();
   e.stopPropagation();
-  el.scrollIntoView();
+  window.scrollTo({top: el.offsetTop, behavior: "smooth"});
 });
 </script></body></html>
