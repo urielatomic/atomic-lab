@@ -290,15 +290,17 @@ function draw(){
 }
 draw();
 
-// Scroll fix
+
 document.addEventListener('click', function(e) {
-  var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+  var a = e.target.tagName === 'A' ? e.target : e.target.parentElement && e.target.parentElement.tagName === 'A' ? e.target.parentElement : null;
   if (!a) return;
-  var id = a.getAttribute('href').slice(1);
-  var el = id ? document.getElementById(id) : null;
+  var href = a.getAttribute('href');
+  if (!href || href.charAt(0) !== '#') return;
+  var id = href.slice(1);
+  if (!id) return;
+  var el = document.getElementById(id);
   if (!el) return;
   e.preventDefault();
-  e.stopPropagation();
   window.scrollTo({top: el.offsetTop, behavior: 'instant'});
 }, true);
 </script></body></html>
