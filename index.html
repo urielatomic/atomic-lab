@@ -101,17 +101,17 @@ footer{border-top:1px solid var(--border);padding:48px clamp(20px,5vw,80px);disp
 <nav>
   <a class="nav-logo" href="#"><div class="nav-logo-dot">⚛</div>Atomic <span style="color:var(--red);margin-left:4px">Lab</span></a>
   <div class="nav-links">
-    <a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('ecosystem').offsetTop,behavior:'instant'})">Ecosistema</a><a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('herramientas').offsetTop,behavior:'instant'})">Herramientas</a><a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('beneficios').offsetTop,behavior:'instant'})">Beneficios</a>
+    <a href="#ecosystem">Ecosistema</a><a href="#herramientas">Herramientas</a><a href="#beneficios">Beneficios</a>
     <a href="https://atomickitchens.tech" target="_blank">Atomic Kitchens</a>
   </div>
-  <a class="nav-cta" href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('herramientas').offsetTop,behavior:'instant'})">Explorar herramientas</a>
+  <a class="nav-cta" href="#herramientas">Explorar herramientas</a>
 </nav>
 <section class="hero">
   <div class="hero-glow"></div><div class="hero-grid"></div>
   <div class="hero-tag"><span class="hero-tag-dot"></span>Por Atomic Kitchens · Para gastrónomicos</div>
   <h1 class="syne">El ecosistema completo para tu restaurante</h1>
   <p class="hero-sub">Seis herramientas gratuitas diseñadas para hacer crecer tu restaurante. Más reservas, más fidelidad, más ventas en delivery. Todo conectado.</p>
-  <div class="hero-actions"><a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('ecosystem').offsetTop,behavior:'instant'})" class="btn-primary">Ver el ecosistema →</a><a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('herramientas').offsetTop,behavior:'instant'})" class="btn-secondary">Ver herramientas</a></div>
+  <div class="hero-actions"><a href="#ecosystem" class="btn-primary">Ver el ecosistema →</a><a href="#herramientas" class="btn-secondary">Ver herramientas</a></div>
   <div class="kpi-strip">
     <div class="kpi-item"><div class="kpi-val"><span>+</span>35%</div><div class="kpi-label">Retención de clientes</div></div>
     <div class="kpi-item"><div class="kpi-val"><span>3</span>x</div><div class="kpi-label">Más datos de clientes</div></div>
@@ -293,5 +293,18 @@ draw();
       }
     });
   });
+});
+
+// Scroll fix: delegate click on all internal hash links
+document.addEventListener('click', function(e) {
+  var link = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+  if (!link) return;
+  var id = link.getAttribute('href').replace('#','');
+  if (!id) return;
+  var el = document.getElementById(id);
+  if (!el) return;
+  e.preventDefault();
+  e.stopPropagation();
+  el.scrollIntoView();
 });
 </script></body></html>
