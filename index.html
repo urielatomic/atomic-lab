@@ -111,7 +111,7 @@ footer{border-top:1px solid var(--border);padding:48px clamp(20px,5vw,80px);disp
   <div class="hero-tag"><span class="hero-tag-dot"></span>Por Atomic Kitchens · Para gastrónomicos</div>
   <h1 class="syne">El ecosistema completo para tu restaurante</h1>
   <p class="hero-sub">Seis herramientas gratuitas diseñadas para hacer crecer tu restaurante. Más reservas, más fidelidad, más ventas en delivery. Todo conectado.</p>
-  <div class="hero-actions"><a href="#ecosystem" class="btn-primary">Ver el ecosistema →</a><a href="#herramientas" class="btn-secondary">Ver herramientas</a></div>
+  <div class="hero-actions"><button class="btn-primary" onclick="var e=document.getElementById('ecosystem');if(e)window.scrollTo({top:e.offsetTop,behavior:'instant'})">Ver el ecosistema →</button><button class="btn-secondary" onclick="var e=document.getElementById('herramientas');if(e)window.scrollTo({top:e.offsetTop,behavior:'instant'})">Ver herramientas</button></div>
   <div class="kpi-strip">
     <div class="kpi-item"><div class="kpi-val"><span>+</span>35%</div><div class="kpi-label">Retención de clientes</div></div>
     <div class="kpi-item"><div class="kpi-val"><span>3</span>x</div><div class="kpi-label">Más datos de clientes</div></div>
@@ -291,16 +291,4 @@ function draw(){
 draw();
 
 
-document.addEventListener('click', function(e) {
-  var a = e.target.tagName === 'A' ? e.target : e.target.parentElement && e.target.parentElement.tagName === 'A' ? e.target.parentElement : null;
-  if (!a) return;
-  var href = a.getAttribute('href');
-  if (!href || href.charAt(0) !== '#') return;
-  var id = href.slice(1);
-  if (!id) return;
-  var el = document.getElementById(id);
-  if (!el) return;
-  e.preventDefault();
-  window.scrollTo({top: el.offsetTop, behavior: 'instant'});
-}, true);
 </script></body></html>
