@@ -375,6 +375,21 @@ function startDemoMode(){document.getElementById('app-screen').style.display='bl
 }
 
 document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+function resetAccount(){
+  const email = document.getElementById('l-email').value.trim().toLowerCase();
+  if(!email) return showError('Ingresá tu email primero');
+  if(!confirm('Esto borrará tu cuenta y recetas. ¿Confirmás?')) return;
+  const users = JSON.parse(localStorage.getItem('costolab_users')||'{}');
+  const db = JSON.parse(localStorage.getItem('costolab_db')||'{"users":{},"data":{}}');
+  delete users[email];
+  delete db.users[email];
+  delete db.data[email];
+  localStorage.setItem('costolab_users', JSON.stringify(users));
+  localStorage.setItem('costolab_db', JSON.stringify(db));
+  localStorage.removeItem('costolab_session');
+  showError('Cuenta eliminada. Podés registrarte de nuevo.');
+}
 </script>
 
 <div id="login-modal">
@@ -384,6 +399,7 @@ document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Ent
     <p style="color:var(--muted);font-size:13px;text-align:center;margin-bottom:20px">Guardá tus recetas y costos para siempre</p>
     <div class="login-tabs"><button class="login-tab active" onclick="switchTab('login')">Iniciar sesión</button><button class="login-tab" onclick="switchTab('register')">Crear cuenta</button></div>
     <div id="login-error" class="login-error"></div>
+<button type="button" onclick="resetAccount()" style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;margin-top:4px;text-decoration:underline">Olvidé mi contraseña / Resetear cuenta</button>
     <div id="login-form">
       <div class="f"><label>Email</label><input type="email" id="l-email" placeholder="tu@restaurante.com"></div>
       <div class="f"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••"></div>
