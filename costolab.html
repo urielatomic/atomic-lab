@@ -295,7 +295,8 @@ function loadApp(email){window._demoData=null;document.getElementById('btn-entra
 // ============================================================
 // DATA
 // ============================================================
-function getData(){if(window._demoData)return window._demoData;const db=getDB();return db.data[currentUser]||(db.data[currentUser]={recipes:[]},saveDB(db),db.data[currentUser]);}
+function getData(){if(currentUser){const db=getDB();if(!db.data[currentUser]){db.data[currentUser]={recipes:[]};saveDB(db);}return db.data[currentUser];}if(window._demoData)return window._demoData;return{recipes:[]};}
+
 function saveData(d){if(currentUser){const db=getDB();db.data[currentUser]=d;saveDB(db);renderRecipes();return;}if(window._demoData){window._demoData=d;renderRecipes();return;}showLoginModal();}
 
 function getRecipe(){return getData().recipes.find(r=>r.id===currentRecipeId)||null;}
