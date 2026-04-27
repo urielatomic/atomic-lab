@@ -356,6 +356,33 @@ function showLoginModal(){document.getElementById('login-modal').classList.add('
 function closeLoginModal(){document.getElementById('login-modal').classList.remove('open');}
 
 
+
+function startDemoMode(){
+  document.getElementById('app-screen').style.display='block';
+  document.getElementById('btn-entrar').style.display='';
+  document.getElementById('btn-logout').style.display='none';
+  document.getElementById('nav-user-info').style.display='none';
+  currentUser=null;
+  const ex=EXAMPLES['bife'];
+  window._demoData={recipes:[{id:1,name:ex.name,ingredients:ex.ingredients.map((ing,i)=>({id:i+1,...ing}))}]};
+  currentRecipeId=1;
+  renderRecipes();
+  renderIngredients();
+  updateCalc();
+}
+function resetAccount(){
+  const email=document.getElementById('l-email').value.trim().toLowerCase();
+  if(!email)return showError('Ingresá tu email primero');
+  if(!confirm('Esto borrará tu cuenta y recetas. ¿Confirmás?'))return;
+  const users=JSON.parse(localStorage.getItem(USERS_KEY)||'{}');
+  const db=JSON.parse(localStorage.getItem(DB_KEY)||'{"users":{},"data":{}}');
+  delete users[email];delete db.users[email];delete db.data[email];
+  localStorage.setItem(USERS_KEY,JSON.stringify(users));
+  localStorage.setItem(DB_KEY,JSON.stringify(db));
+  localStorage.removeItem(SESSION_KEY);
+  showError('Cuenta eliminada. Podés registrarte de nuevo.');
+}
+
 (function(){const s=localStorage.getItem(SESSION_KEY);if(s){const u=getUsers();if(u[s])loadApp(s);else{localStorage.removeItem(SESSION_KEY);startDemoMode();}}else{startDemoMode();}})();
 </script>
 
