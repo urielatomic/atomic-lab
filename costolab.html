@@ -246,10 +246,25 @@ input[type=range]{width:100%;accent-color:var(--green);height:4px}
             <div class="hint">Alquiler, luz, sueldo prorrateado</div>
           </div>
 
+          <div class="slider-group">
+            <div class="slider-top">
+              <span class="label-txt">Comisión app delivery</span>
+              <span class="val" id="del-val">0%</span>
+            </div>
+            <input type="range" id="del-slider" min="0" max="40" value="0" oninput="updateCalc()">
+            <div class="hint">Rappi, PedidosYa, Glovo, etc.</div>
+          </div>
+
           <div class="result-card">
             <div class="result-label">Precio con overhead incluido</div>
             <div class="result-value" id="stat-price-ov">$0.00</div>
             <div class="result-sub">Precio real de venta recomendado</div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-label">Precio con delivery</div>
+            <div class="result-value" id="stat-price-del">$0.00</div>
+            <div class="result-sub">Incluyendo comisión de la app</div>
           </div>
 
           <div id="verdict-box"></div>
@@ -302,7 +317,7 @@ function renderIngredients(){const wrap=document.getElementById('ing-table-wrap'
 // ============================================================
 // CALC
 // ============================================================
-function updateCalc(){const recipe=getRecipe();const fc=parseInt(document.getElementById('fc-slider').value);const ov=parseInt(document.getElementById('ov-slider').value);document.getElementById('fc-val').textContent=fc+'%';document.getElementById('ov-val').textContent=ov+'%';const m=document.getElementById('fc-meter');m.style.width=(fc/60*100)+'%';m.style.background=fc<25?'var(--green)':fc<=35?'var(--amber)':'#f87171';if(!recipe||!recipe.ingredients.length){['stat-cost','stat-price','stat-price-ov'].forEach(id=>document.getElementById(id).textContent='$0.00');document.getElementById('stat-count').textContent='0 ingredientes';document.getElementById('stat-margin').textContent='Margen: $0.00';document.getElementById('verdict-box').innerHTML='';return;}const total=recipe.ingredients.reduce((s,i)=>s+i.cost,0);const sp=total/(fc/100);const margin=sp-total;const effFC=fc-ov;const spOv=effFC>0?total/(effFC/100):0;document.getElementById('stat-cost').textContent='$'+total.toFixed(2);document.getElementById('stat-count').textContent=recipe.ingredients.length+' ingrediente'+(recipe.ingredients.length!==1?'s':'');document.getElementById('stat-price').textContent='$'+sp.toFixed(2);document.getElementById('stat-margin').textContent=`Margen: $${margin.toFixed(2)} (${100-fc}%)`;document.getElementById('stat-price-ov').textContent=spOv>0?'$'+spOv.toFixed(2):'—';const verdict=document.getElementById('verdict-box');if(fc<=30)verdict.innerHTML='<div class="verdict good">✓ Excelente margen — plato muy rentable</div>';else if(fc<=40)verdict.innerHTML='<div class="verdict warn">⚠ Margen aceptable — controlá el costo</div>';else verdict.innerHTML='<div class="verdict bad">✗ Margen ajustado — revisá los precios</div>';}
+function updateCalc(){const recipe=getRecipe();const fc=parseInt(document.getElementById('fc-slider').value);const ov=parseInt(document.getElementById('ov-slider').value);document.getElementById('fc-val').textContent=fc+'%';document.getElementById('ov-val').textContent=ov+'%';const m=document.getElementById('fc-meter');m.style.width=(fc/60*100)+'%';m.style.background=fc<25?'var(--green)':fc<=35?'var(--amber)':'#f87171';if(!recipe||!recipe.ingredients.length){['stat-cost','stat-price','stat-price-ov','stat-price-del'].forEach(id=>document.getElementById(id).textContent='$0.00');document.getElementById('stat-count').textContent='0 ingredientes';document.getElementById('stat-margin').textContent='Margen: $0.00';document.getElementById('verdict-box').innerHTML='';return;}const total=recipe.ingredients.reduce((s,i)=>s+i.cost,0);const sp=total/(fc/100);const margin=sp-total;const effFC=fc-ov;const spOv=effFC>0?total/(effFC/100):0;const del=parseInt(document.getElementById('del-slider').value);document.getElementById('del-val').textContent=del+'%';const effFCDel=effFC-del;const spDel=effFCDel>0?total/(effFCDel/100):0;document.getElementById('stat-cost').textContent='$'+total.toFixed(2);document.getElementById('stat-count').textContent=recipe.ingredients.length+' ingrediente'+(recipe.ingredients.length!==1?'s':'');document.getElementById('stat-price').textContent='$'+sp.toFixed(2);document.getElementById('stat-margin').textContent=`Margen: $${margin.toFixed(2)} (${100-fc}%)`;document.getElementById('stat-price-ov').textContent=spOv>0?'$'+spOv.toFixed(2):'—';document.getElementById('stat-price-del').textContent=spDel>0?'$'+spDel.toFixed(2):'—';const verdict=document.getElementById('verdict-box');if(fc<=30)verdict.innerHTML='<div class="verdict good">✓ Excelente margen — plato muy rentable</div>';else if(fc<=40)verdict.innerHTML='<div class="verdict warn">⚠ Margen aceptable — controlá el costo</div>';else verdict.innerHTML='<div class="verdict bad">✗ Margen ajustado — revisá los precios</div>';}
 
 // ============================================================
 // EXAMPLES
