@@ -286,6 +286,7 @@ const DB_KEY='costolab_db';
 const USERS_KEY='costolab_users';
 const SESSION_KEY='costolab_session';
 let currentUser=null;
+let currentRecipeId=null;
 function getDB(){try{return JSON.parse(localStorage.getItem(DB_KEY)||'{"users":{},"data":{}}');}catch(e){return{users:{},data:{}};}}
 function saveDB(db){try{localStorage.setItem(DB_KEY,JSON.stringify(db));}catch(e){}}
 function getUsers(){try{const u=JSON.parse(localStorage.getItem(USERS_KEY)||'{}');const db=getDB();return Object.assign({},db.users||{},u);}catch(e){return{};}}
