@@ -342,6 +342,16 @@ function showToast(msg,type='success'){const el=document.getElementById('toast')
 function showLoginModal(){document.getElementById('login-modal').classList.add('open');}
 function closeLoginModal(){document.getElementById('login-modal').classList.remove('open');}
 
+
+// Cleanup any corrupted localStorage keys from debugging
+(function(){
+  const validKeys = ['costolab_db','costolab_session'];
+  for(let i = localStorage.length - 1; i >= 0; i--){
+    const k = localStorage.key(i);
+    if(k && !validKeys.includes(k)) localStorage.removeItem(k);
+  }
+})();
+
 const session=localStorage.getItem('costolab_session');
 if(session){const db=getDB();if(db.users[session])loadApp(session);else startDemoMode();}
 else{startDemoMode();}
