@@ -3,471 +3,196 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atomic Lab — Herramientas gratuitas para gastrónomicos</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Atomic Lab — El sistema operativo de tu restaurante</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --red:#E53030;--red2:#B82424;--red-glow:rgba(229,48,48,0.15);
-  --blue:#3b82f6;--purple:#a855f7;--green:#22c55e;--amber:#f59e0b;
-  --bg:#0A0A0A;--bg2:#111111;--bg3:#1A1A1A;--bg4:#222222;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --text:#F0F0F0;--muted:#888;--muted2:#555;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;min-height:100vh;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
-/* Noise */
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.35}
-.syne{font-family:'Manrope',sans-serif}
-h1,h2,h3{font-family:'Manrope',sans-serif;line-height:1.15}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,5vw,80px);height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.85);backdrop-filter:blur(16px)}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;color:var(--text)}
-.nav-logo-dot{width:28px;height:28px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px}
-.nav-links{display:flex;gap:28px;align-items:center}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s}
+:root{--red:#E53030;--red2:#c42424;--bg:#0a0a0a;--bg2:#111;--card:#161616;--border:#222;--text:#f0f0f0;--muted:#888;--green:#22c55e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6}
+.syne{font-family:'Syne',sans-serif}
+a{color:inherit;text-decoration:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(12px);background:rgba(10,10,10,0.85);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px}
+.logo-icon{width:32px;height:32px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo span{color:var(--red)}
+.nav-links{display:flex;gap:28px;font-size:14px;color:var(--muted)}
 .nav-links a:hover{color:var(--text)}
-.nav-cta{background:var(--red);color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;transition:opacity .2s}
-.nav-cta:hover{opacity:.85}
-.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px clamp(20px,5vw,80px) 80px;text-align:center;overflow:hidden}
-.hero-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse at center top, rgba(229,48,48,0.2) 0%, transparent 65%);pointer-events:none}
-.hero-grid{pointer-events:none;position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);opacity:.4}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(229,48,48,0.1);border:1px solid rgba(229,48,48,0.25);color:#ff6b6b;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-bottom:28px}
-.hero-tag-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.hero h1{font-size:clamp(36px,5.5vw,72px);font-weight:800;letter-spacing:-0.03em;margin-bottom:24px;max-width:860px;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,0.65) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
-.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:560px;margin-bottom:48px;font-weight:300;line-height:1.7}
-.hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:64px}
-.btn-primary{background:var(--red);color:#fff;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
-.btn-primary:hover{background:var(--red2);transform:translateY(-1px)}
-.btn-secondary{background:transparent;color:var(--text);padding:13px 28px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;border:1px solid var(--border2);transition:all .2s}
-.btn-secondary:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04)}
-.kpi-strip{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:40px;width:100%;max-width:720px}
-.kpi-item{flex:1;background:var(--bg2);padding:20px 24px;text-align:center}
-.kpi-val{font-family:'Manrope',sans-serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:4px}
-.kpi-val span{color:var(--red);font-size:32px}
-.kpi-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.section{padding:100px clamp(20px,5vw,80px);position:relative}
-.section-label{font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:16px}
-.section-title{font-size:clamp(28px,3.5vw,48px);font-weight:700;letter-spacing:-0.02em;margin-bottom:20px;max-width:700px}
-.section-sub{font-size:17px;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:64px}
-.ecosystem-wrap{position:relative;width:100%;max-width:1100px;margin:0 auto}
-#ecosystem-canvas{width:100%;height:auto;display:block}
-.synergy-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:48px}
-.syn-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all .3s;cursor:pointer;position:relative;overflow:hidden}
-.syn-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,0.02));pointer-events:none}
-.syn-card:hover{border-color:var(--border2);transform:translateY(-2px)}
-.syn-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:18px}
-.syn-card h4{font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
-.syn-card p{font-size:13px;color:var(--muted);line-height:1.6}
-.syn-badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px;margin-top:12px}
-.tools-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--border);border-radius:0;overflow:visible}
-.tool-card{background:var(--bg2);padding:40px;position:relative;overflow:hidden;transition:background .2s;text-decoration:none;display:block;color:var(--text)}
-.tool-card:hover{background:var(--bg3)}
-.tool-card-glow{position:absolute;top:-80px;right:-80px;width:200px;height:200px;border-radius:50%;opacity:0;transition:opacity .4s;pointer-events:none}
-.tool-card:hover .tool-card-glow{opacity:.15}
-.tool-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px}
-.tool-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.tool-badge{font-size:11px;font-weight:500;padding:4px 12px;border-radius:100px;letter-spacing:.04em;text-transform:uppercase}
-.badge-free{background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
-.badge-freemium{background:rgba(229,48,48,0.1);color:#f87171;border:1px solid rgba(229,48,48,0.2)}
-.tool-name{font-family:'Manrope',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.01em;margin-bottom:8px}
-.tool-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
-.tool-features{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
-.tool-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
-.feat-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.tool-footer{display:flex;align-items:center;justify-content:space-between}
-.tool-url{font-size:12px;color:var(--muted2);font-family:monospace}
-.tool-arrow{width:32px;height:32px;border:1px solid var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.tool-card:hover .tool-arrow{background:var(--text);border-color:var(--text)}
-.tool-card:hover .tool-arrow svg path{stroke:#000}
-.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-top:24px}
-.benefit-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px}
-.benefit-num{font-family:'Manrope',sans-serif;font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1;margin-bottom:8px}
-.benefit-label{font-size:14px;color:var(--muted);line-height:1.5}
-footer{border-top:1px solid var(--border);padding:48px clamp(20px,5vw,80px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
-.footer-brand{font-family:'Manrope',sans-serif;font-weight:700;font-size:16px}
-.footer-brand span{color:var(--red)}
-.footer-links{display:flex;gap:28px;flex-wrap:wrap}
-.footer-links a{color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s}
-.footer-links a:hover{color:var(--text)}
-.footer-copy{font-size:12px;color:var(--muted2)}
-@media(max-width:768px){.kpi-strip{flex-direction:column}.nav-links{display:none}}
-.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
-.fade-in.visible{opacity:1;transform:translateY(0)}
+.nav-cta{background:var(--red);color:#fff;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;border:none;cursor:pointer}
+.nav-cta:hover{background:var(--red2)}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(229,48,48,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(229,48,48,0.08);border:1px solid rgba(229,48,48,0.2);border-radius:20px;padding:6px 16px;font-size:13px;color:#E53030;font-weight:500;margin-bottom:28px}
+.dot{width:7px;height:7px;background:var(--red);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.08;letter-spacing:-.03em;max-width:900px;margin:0 auto 24px}
+.hero h1 em{color:var(--red);font-style:normal}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:560px;margin:0 auto 40px;line-height:1.6}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+.btn-p{background:var(--red);color:#fff;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:500;border:none;cursor:pointer;transition:all .2s}
+.btn-p:hover{background:var(--red2);transform:translateY(-1px)}
+.btn-s{background:transparent;color:var(--text);padding:13px 28px;border-radius:10px;font-size:15px;font-weight:500;border:1px solid var(--border);cursor:pointer;transition:all .2s}
+.btn-s:hover{border-color:var(--muted)}
+.kpi-strip{display:flex;border:1px solid var(--border);border-radius:14px;overflow:hidden;max-width:520px;margin:0 auto}
+.kpi{flex:1;padding:20px;text-align:center;border-right:1px solid var(--border)}
+.kpi:last-child{border-right:none}
+.kpi-n{font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--red)}
+.kpi-l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+section{padding:96px 0}
+.stag{font-size:12px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;display:block}
+.stitle{font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.1;margin-bottom:16px;font-family:'Syne',sans-serif}
+.ssub{font-size:17px;color:var(--muted);max-width:560px;line-height:1.6}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:48px}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px;transition:background .2s;position:relative}
+.tcard:hover{background:#1a1a1a}
+.thead{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.ticon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.tbadge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;letter-spacing:.04em;text-transform:uppercase}
+.bfree{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.bia{background:rgba(168,85,247,.12);color:#c084fc;border:1px solid rgba(168,85,247,.25)}
+.tname{font-size:20px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:8px}
+.tdesc{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+.tfeats{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.tfeat{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.fdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.tfoot{display:flex;justify-content:space-between;align-items:center;padding-top:20px;border-top:1px solid var(--border)}
+.turl{font-size:12px;color:#444;font-family:monospace}
+.tarrow{width:32px;height:32px;background:var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s}
+.tcard:hover .tarrow{background:var(--red)}
+.eco-box{background:var(--bg2);border-radius:24px;padding:64px 24px;text-align:center;margin-top:48px;border:1px solid var(--border);position:relative;overflow:hidden}
+.eco-hub{display:inline-flex;align-items:center;gap:12px;background:var(--red);color:white;border-radius:16px;padding:16px 28px;font-size:18px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:48px}
+.eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto}
+.eco-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:left}
+.eco-em{font-size:20px;margin-bottom:12px}
+.eco-name{font-size:15px;font-weight:700;margin-bottom:6px}
+.eco-desc{font-size:13px;color:var(--muted)}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:48px}
+.icard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px}
+.inum{font-size:42px;font-weight:800;font-family:'Syne',sans-serif;line-height:1;margin-bottom:8px}
+.ilabel{font-size:16px;font-weight:600;margin-bottom:6px}
+.idesc{font-size:14px;color:var(--muted);line-height:1.6}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:48px}
+.rcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative}
+.ricon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.rname{font-size:16px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:6px}
+.rtagline{font-size:13px;color:var(--muted);margin-bottom:14px;font-style:italic}
+.rpoints{font-size:12px;color:#555;line-height:1.8}
+.rbadge{position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:.05em;text-transform:uppercase}
+.bg2{background:var(--bg2)}
+footer{border-top:1px solid var(--border);padding:48px 24px;text-align:center}
+.flogo{font-size:20px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:12px}
+.flogo em{color:var(--red);font-style:normal}
+.fsub{font-size:14px;color:var(--muted);margin-bottom:24px}
+.flinks{display:flex;gap:24px;justify-content:center;font-size:14px;color:var(--muted)}
+.flinks a:hover{color:var(--text)}
+@media(max-width:768px){.nav-links{display:none}.eco-grid{grid-template-columns:1fr}.kpi-strip{flex-direction:column}.kpi{border-right:none;border-bottom:1px solid var(--border)}.kpi:last-child{border-bottom:none}}
 </style>
 </head>
 <body>
 <nav>
-  <a class="nav-logo" href="#"><div class="nav-logo-dot">⚛</div>Atomic <span style="color:var(--red);margin-left:4px">Lab</span></a>
-  <div class="nav-links">
-    <a href="#ecosystem">Ecosistema</a><a href="#herramientas">Herramientas</a><a href="#beneficios">Beneficios</a><a href="#roadmap">Roadmap</a>
-    <a href="https://atomickitchens.tech" target="_blank">Atomic Kitchens</a>
+  <div class="nav-inner">
+    <a href="/" class="logo"><div class="logo-icon">⚡</div>Atomic <span>Lab</span></a>
+    <div class="nav-links">
+      <a href="#herramientas">Herramientas</a>
+      <a href="#ecosistema">Ecosistema</a>
+      <a href="#impacto">Impacto</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="https://atomickitchens.com" target="_blank">Atomic Kitchens</a>
+    </div>
+    <button class="nav-cta" onclick="document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Explorar herramientas</button>
   </div>
-  <a class="nav-cta" href="#herramientas">Explorar herramientas</a>
 </nav>
+
 <section class="hero">
-  <div class="hero-glow"></div><div class="hero-grid"></div>
-  <div class="hero-tag"><span class="hero-tag-dot"></span>Por Atomic Kitchens · Para gastrónomicos</div>
-  <h1 class="syne">El ecosistema completo para tu restaurante</h1>
-  <p class="hero-sub">Seis herramientas gratuitas diseñadas para hacer crecer tu restaurante. Más reservas, más fidelidad, más ventas en delivery. Todo conectado.</p>
-  <div class="hero-actions"><button class="btn-primary" onclick="var e=document.getElementById('ecosystem');if(e)window.scrollTo({top:e.offsetTop,behavior:'instant'})">Ver el ecosistema →</button><button class="btn-secondary" onclick="var e=document.getElementById('herramientas');if(e)window.scrollTo({top:e.offsetTop,behavior:'instant'})">Ver herramientas</button></div>
-  <div class="kpi-strip">
-    <div class="kpi-item"><div class="kpi-val"><span>+</span>35%</div><div class="kpi-label">Retención de clientes</div></div>
-    <div class="kpi-item"><div class="kpi-val"><span>3</span>x</div><div class="kpi-label">Más datos de clientes</div></div>
-    <div class="kpi-item"><div class="kpi-val"><span>+</span>28%</div><div class="kpi-label">Facturación promedio</div></div>
-    <div class="kpi-item"><div class="kpi-val" style="font-size:20px">100%</div><div class="kpi-label">Gratis siempre</div></div>
+  <div>
+    <div class="hero-tag"><span class="dot"></span>Por Atomic Kitchens · Para gastrónomicos</div>
+    <h1 class="syne">El sistema operativo<br>de tu <em>restaurante</em></h1>
+    <p class="hero-sub">Seis herramientas gratuitas hoy. Dieciséis mañana. El ecosistema completo para operar, crecer y dominar tu mercado gastronómico.</p>
+    <div class="hero-actions">
+      <button class="btn-p" onclick="document.getElementById('herramientas').scrollIntoView({behavior:'instant'})">Ver herramientas gratis →</button>
+      <button class="btn-s" onclick="document.getElementById('roadmap').scrollIntoView({behavior:'instant'})">Ver roadmap 2026</button>
+    </div>
+    <div class="kpi-strip">
+      <div class="kpi"><div class="kpi-n">6</div><div class="kpi-l">Herramientas activas</div></div>
+      <div class="kpi"><div class="kpi-n">10</div><div class="kpi-l">En desarrollo</div></div>
+      <div class="kpi"><div class="kpi-n">100%</div><div class="kpi-l">Gratis para empezar</div></div>
+    </div>
   </div>
 </section>
-<section class="section" id="ecosystem" style="padding-top:120px">
-  <div class="section-label">Ecosistema</div>
-  <h2 class="section-title syne">Seis herramientas.<br>Un solo ecosistema.</h2>
-  <p class="section-sub">Reservas, fidelidad, delivery, menú, costos y reseñas — todo conectado para multiplicar el impacto en tu negocio.</p>
-  <div class="ecosystem-wrap fade-in"><canvas id="ecosystem-canvas" width="1100" height="620"></canvas></div>
-  <div class="synergy-panel fade-in" style="margin-top:48px;max-width:1100px;margin-left:auto;margin-right:auto">
-    <div class="syn-card"><div class="syn-card-icon" style="background:rgba(59,130,246,0.12)">🗓️</div><h4>Reservas → Sellos de fidelidad</h4><p>Cada reserva en MesaLab puede traducirse automáticamente en un sello de TribuWallet.</p><span class="syn-badge" style="background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.2)">Mesa + Tribu</span></div>
-    <div class="syn-card"><div class="syn-card-icon" style="background:rgba(168,85,247,0.12)">💜</div><h4>Datos de clientes → Menú optimizado</h4><p>Los patrones de canje de TribuWallet revelan qué platos mover a delivery. Growth Delivery usa esa inteligencia.</p><span class="syn-badge" style="background:rgba(168,85,247,0.1);color:#c084fc;border:1px solid rgba(168,85,247,0.2)">Tribu + Growth</span></div>
-    <div class="syn-card"><div class="syn-card-icon" style="background:rgba(229,48,48,0.12)">🚀</div><h4>Delivery optimizado → Más visitas al local</h4><p>Growth Delivery aumenta tu ticket promedio. Los clientes satisfechos reservan mesa y se unen al programa.</p><span class="syn-badge" style="background:rgba(229,48,48,0.1);color:#f87171;border:1px solid rgba(229,48,48,0.2)">Growth + Mesa</span></div>
-    <div class="syn-card" style="background:linear-gradient(135deg,rgba(229,48,48,0.05),var(--bg2));border-color:rgba(229,48,48,0.2)"><div class="syn-card-icon" style="background:rgba(229,48,48,0.15)">⚛</div><h4>Vista 360° de tus clientes</h4><p>Las seis herramientas juntas te dan reservas, premios, delivery, costos y reseñas en un solo ecosistema.</p><span class="syn-badge" style="background:rgba(229,48,48,0.1);color:#f87171;border:1px solid rgba(229,48,48,0.2)">Las 6 juntas</span></div>
+
+<section id="herramientas">
+  <div class="container">
+    <span class="stag">Disponibles hoy</span>
+    <h2 class="stitle">Las 6 herramientas activas</h2>
+    <p class="ssub">Empezá a usarlas ahora. Sin tarjeta de crédito, sin setup, sin excusas.</p>
+    <div class="tgrid">
+      <div class="tcard"><div class="thead"><div class="ticon" style="background:rgba(229,48,48,.12)">🍽️</div><span class="tbadge bfree">100% Gratis</span></div><div class="tname">MenuLab</div><div class="tdesc">Menú digital con QR. Creá tu carta en minutos con fotos por plato y compartíla con tus clientes.</div><div class="tfeats"><div class="tfeat"><div class="fdot" style="background:#E53030"></div>Menú digital + QR descargable</div><div class="tfeat"><div class="fdot" style="background:#E53030"></div>Fotos por plato, categorías, colores</div><div class="tfeat"><div class="fdot" style="background:#E53030"></div>Vista pública en cualquier celular</div></div><div class="tfoot"><span class="turl">atomic-lab/menulab</span><a href="/menulab.html" class="tarrow">↗</a></div></div>
+      <div class="tcard"><div class="thead"><div class="ticon" style="background:rgba(168,85,247,.12)">⭐</div><span class="tbadge bfree">100% Gratis</span></div><div class="tname">ReviewLab</div><div class="tdesc">Respondé cualquier reseña en segundos. Detecta críticas mixtas y responde con matiz — no solo agradece.</div><div class="tfeats"><div class="tfeat"><div class="fdot" style="background:#a855f7"></div>Análisis de sentimiento automático</div><div class="tfeat"><div class="fdot" style="background:#a855f7"></div>Respuestas generadas por Claude IA</div><div class="tfeat"><div class="fdot" style="background:#a855f7"></div>Funciona sin IA con plantillas</div></div><div class="tfoot"><span class="turl">atomic-lab/reviewlab</span><a href="/reviewlab.html" class="tarrow">↗</a></div></div>
+      <div class="tcard"><div class="thead"><div class="ticon" style="background:rgba(34,197,94,.12)">📊</div><span class="tbadge bfree">100% Gratis</span></div><div class="tname">CostoLab</div><div class="tdesc">Calculá el costo real de cada plato, tu food cost % y el precio ideal — incluyendo comisión de apps de delivery.</div><div class="tfeats"><div class="tfeat"><div class="fdot" style="background:#22c55e"></div>Calculadora de ingredientes y costos</div><div class="tfeat"><div class="fdot" style="background:#22c55e"></div>Food cost % con slider interactivo</div><div class="tfeat"><div class="fdot" style="background:#22c55e"></div>Precio con comisión Rappi/PedidosYa</div></div><div class="tfoot"><span class="turl">atomic-lab/costolab</span><a href="/costolab.html" class="tarrow">↗</a></div></div>
+      <div class="tcard"><div class="thead"><div class="ticon" style="background:rgba(59,130,246,.12)">📅</div><span class="tbadge bfree">100% Gratis</span></div><div class="tname">MesaLab</div><div class="tdesc">Reservas online sin comisiones ni intermediarios. Tus clientes reservan directo con vos.</div><div class="tfeats"><div class="tfeat"><div class="fdot" style="background:#3b82f6"></div>Reservas online en tiempo real</div><div class="tfeat"><div class="fdot" style="background:#3b82f6"></div>Gestión de mesas por zonas</div><div class="tfeat"><div class="fdot" style="background:#3b82f6"></div>Sin costo ni comisiones</div></div><div class="tfoot"><span class="turl">mesalabreservas.com</span><a href="https://mesalabreservas.com" target="_blank" class="tarrow">↗</a></div></div>
+      <div class="tcard"><div class="thead"><div class="ticon" style="background:rgba(244,63,94,.12)">💜</div><span class="tbadge bfree">100% Gratis</span></div><div class="tname">TribuWallet</div><div class="tdesc">Programa de fidelización digital. Sellos, premios y comunidad para que tus clientes vuelvan solos.</div><div class="tfeats"><div class="tfeat"><div class="fdot" style="background:#f43f5e"></div>Sellos y premios digitales</div><div class="tfeat"><div class="fdot" style="background:#f43f5e"></div>Happy Hours con multiplicador</div><div class="tfeat"><div class="fdot" style="background:#f43f5e"></div>Dashboard de métricas</div></div><div class="tfoot"><span class="turl">tribuwallet.com</span><a href="https://tribuwallet.com" target="_blank" class="tarrow">↗</a></div></div>
+      <div class="tcard"><div class="thead"><div class="ticon" style="background:rgba(245,158,11,.12)">🚀</div><span class="tbadge bia">IA</span></div><div class="tname">Growth Delivery</div><div class="tdesc">IA que audita tu menú de delivery y te dice exactamente qué cambiar para vender más.</div><div class="tfeats"><div class="tfeat"><div class="fdot" style="background:#f59e0b"></div>Auditoría de menú con IA</div><div class="tfeat"><div class="fdot" style="background:#f59e0b"></div>Recomendaciones personalizadas</div><div class="tfeat"><div class="fdot" style="background:#f59e0b"></div>Análisis de competencia</div></div><div class="tfoot"><span class="turl">growthdeliveryapp.com</span><a href="https://growthdeliveryapp.com" target="_blank" class="tarrow">↗</a></div></div>
+    </div>
   </div>
 </section>
-<section class="section tools-section" id="herramientas" style="padding:0">
-  <div style="padding:80px clamp(20px,5vw,80px) 40px">
-    <div class="section-label">Herramientas</div>
-    <h2 class="section-title syne fade-in">Empezá con una.<br>Usá las seis.</h2>
-    <p class="section-sub fade-in">Cada herramienta funciona sola. Juntas, se potencian. Todas son gratuitas para empezar.</p>
-  </div>
-  <div class="tools-grid">
-    <a class="tool-card" href="https://growthdeliveryapp.com/" target="_blank" rel="noopener">
-      <div class="tool-card-glow" style="background:var(--red)"></div>
-      <div class="tool-header"><div class="tool-icon" style="background:rgba(229,48,48,0.12)">🚀</div><span class="tool-badge badge-freemium">Freemium</span></div>
-      <div class="tool-name">Growth Delivery</div>
-      <div class="tool-desc">IA que audita tu menú de delivery, encuentra oportunidades y te dice exactamente qué cambiar para vender más.</div>
-      <div class="tool-features"><div class="tool-feat"><div class="feat-dot" style="background:var(--red)"></div>Auditoría de menú con IA</div><div class="tool-feat"><div class="feat-dot" style="background:var(--red)"></div>Recomendaciones personalizadas</div><div class="tool-feat"><div class="feat-dot" style="background:var(--red)"></div>Análisis de competencia</div></div>
-      <div class="tool-footer"><span class="tool-url">growthdeliveryapp.com</span><div class="tool-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H5M11 3V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-    </a>
-    <a class="tool-card" href="https://www.mesalabreservas.com/" target="_blank" rel="noopener">
-      <div class="tool-card-glow" style="background:var(--blue)"></div>
-      <div class="tool-header"><div class="tool-icon" style="background:rgba(59,130,246,0.12)">🗓️</div><span class="tool-badge badge-free">100% Gratis</span></div>
-      <div class="tool-name">MesaLab</div>
-      <div class="tool-desc">Sistema completo de reservas online. Sin comisiones.</div>
-      <div class="tool-features"><div class="tool-feat"><div class="feat-dot" style="background:var(--blue)"></div>Reservas online en tiempo real</div><div class="tool-feat"><div class="feat-dot" style="background:var(--blue)"></div>Gestión de mesas por zonas</div><div class="tool-feat"><div class="feat-dot" style="background:var(--blue)"></div>Sin costo ni comisiones</div></div>
-      <div class="tool-footer"><span class="tool-url">mesalabreservas.com</span><div class="tool-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H5M11 3V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-    </a>
-    <a class="tool-card" href="https://tribuwallet.com/" target="_blank" rel="noopener">
-      <div class="tool-card-glow" style="background:var(--purple)"></div>
-      <div class="tool-header"><div class="tool-icon" style="background:rgba(168,85,247,0.12)">💜</div><span class="tool-badge badge-free">100% Gratis</span></div>
-      <div class="tool-name">TribuWallet</div>
-      <div class="tool-desc">Programa de fidelización digital. Sellos, premios y comunidad.</div>
-      <div class="tool-features"><div class="tool-feat"><div class="feat-dot" style="background:var(--purple)"></div>Sellos y premios digitales</div><div class="tool-feat"><div class="feat-dot" style="background:var(--purple)"></div>Happy Hours con multiplicador</div><div class="tool-feat"><div class="feat-dot" style="background:var(--purple)"></div>Dashboard de métricas</div></div>
-      <div class="tool-footer"><span class="tool-url">tribuwallet.com</span><div class="tool-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H5M11 3V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-    </a>
-    <a class="tool-card" href="menulab.html" target="_blank" rel="noopener">
-      <div class="tool-card-glow" style="background:var(--amber)"></div>
-      <div class="tool-header"><div class="tool-icon" style="background:rgba(245,158,11,0.12)">🍽️</div><span class="tool-badge badge-free">100% Gratis</span></div>
-      <div class="tool-name">MenuLab</div>
-      <div class="tool-desc">Constructor de menú digital con QR. Creá tu carta en minutos y compartila con tus clientes.</div>
-      <div class="tool-features"><div class="tool-feat"><div class="feat-dot" style="background:var(--amber)"></div>Menú digital con preview en vivo</div><div class="tool-feat"><div class="feat-dot" style="background:var(--amber)"></div>Generador de QR descargable</div><div class="tool-feat"><div class="feat-dot" style="background:var(--amber)"></div>Múltiples categorías y colores</div></div>
-      <div class="tool-footer"><span class="tool-url">atomic-lab/menulab</span><div class="tool-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H5M11 3V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-    </a>
-    <a class="tool-card" href="reviewlab.html" target="_blank" rel="noopener">
-      <div class="tool-card-glow" style="background:var(--purple)"></div>
-      <div class="tool-header"><div class="tool-icon" style="background:rgba(168,85,247,0.12)">⭐</div><span class="tool-badge badge-free">100% Gratis</span></div>
-      <div class="tool-name">ReviewLab</div>
-      <div class="tool-desc">Respondé cualquier reseña en segundos con IA. Análisis de sentimiento, 4 tonos de respuesta.</div>
-      <div class="tool-features"><div class="tool-feat"><div class="feat-dot" style="background:var(--purple)"></div>Análisis de sentimiento automático</div><div class="tool-feat"><div class="feat-dot" style="background:var(--purple)"></div>Respuestas generadas por Claude</div><div class="tool-feat"><div class="feat-dot" style="background:var(--purple)"></div>Funciona sin IA con plantillas</div></div>
-      <div class="tool-footer"><span class="tool-url">atomic-lab/reviewlab</span><div class="tool-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H5M11 3V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-    </a>
-    <a class="tool-card" href="costolab.html" target="_blank" rel="noopener">
-      <div class="tool-card-glow" style="background:var(--green)"></div>
-      <div class="tool-header"><div class="tool-icon" style="background:rgba(34,197,94,0.12)">📊</div><span class="tool-badge badge-free">100% Gratis</span></div>
-      <div class="tool-name">CostoLab</div>
-      <div class="tool-desc">Calculá el costo real de cada plato, tu food cost % y el precio de venta ideal.</div>
-      <div class="tool-features"><div class="tool-feat"><div class="feat-dot" style="background:var(--green)"></div>Calculadora de ingredientes y costos</div><div class="tool-feat"><div class="feat-dot" style="background:var(--green)"></div>Food cost % con slider interactivo</div><div class="tool-feat"><div class="feat-dot" style="background:var(--green)"></div>Exportá tus recetas a CSV</div></div>
-      <div class="tool-footer"><span class="tool-url">atomic-lab/costolab</span><div class="tool-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H5M11 3V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-    </a>
-  </div>
-</section>
-<section class="section" 
-  <!-- ROADMAP SECTION -->
-  <section id="roadmap" style="padding:80px 0;background:var(--bg2)">
-    <div class="container">
-      <div style="text-align:center;margin-bottom:56px">
-        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(229,48,48,0.08);border:1px solid rgba(229,48,48,0.2);border-radius:20px;padding:6px 16px;margin-bottom:20px">
-          <span style="width:8px;height:8px;background:#E53030;border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span>
-          <span style="font-size:13px;color:var(--red);font-weight:500">Roadmap 2025</span>
-        </div>
-        <h2 class="syne" style="font-size:clamp(28px,4vw,40px);font-weight:700;margin-bottom:16px">Lo que viene</h2>
-        <p style="color:var(--muted);font-size:17px;max-width:560px;margin:0 auto">El ecosistema completo para operar, crecer y dominar tu mercado gastronómico.</p>
-      </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
-
-        <!-- DemandLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(239,68,68,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🧠</div>
-            <span style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.3);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">🔥 MUY CLAVE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">DemandLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Qué vender, cuándo y a qué precio — automáticamente</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • Predicción de demanda por día/hora<br>
-            • Ajustes de pricing dinámico<br>
-            • Sugerencias tipo “Subí este plato 12% viernes noche”
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- ChannelLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(59,130,246,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">📲</div>
-            <span style="background:rgba(229,48,48,0.08);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">PRÓXIMAMENTE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">ChannelLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Tu canal propio de pedidos</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • Web ordering (tipo Tiendanube + delivery)<br>
-            • WhatsApp ordering bot<br>
-            • Link propio tipo pedir.turestaurante.com
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- AgentLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(139,92,246,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🤖</div>
-            <span style="background:rgba(229,48,48,0.08);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">PRÓXIMAMENTE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">AgentLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Integrá con agentes que venden por vos</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • API para que agentes (ChatGPT, etc) pidan comida<br>
-            • Ranking de platos para agentes<br>
-            • Optimización para AI ordering
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- SupplyLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(245,158,11,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">📦</div>
-            <span style="background:rgba(229,48,48,0.08);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">PRÓXIMAMENTE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">SupplyLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Comprá mejor, más barato y con financiamiento</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • Comparador de precios de insumos<br>
-            • “Estás pagando 18% de más en pollo”<br>
-            • Integración con proveedores
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- OpsLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(239,68,68,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🚨</div>
-            <span style="background:rgba(229,48,48,0.08);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">PRÓXIMAMENTE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">OpsLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Detectamos errores antes de que pierdas ventas</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • Productos apagados, tiempos altos<br>
-            • Caídas de conversión<br>
-            • “Perdiste $120k hoy por ítems offline”
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- PromoLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(16,185,129,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🎯</div>
-            <span style="background:rgba(229,48,48,0.08);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">PRÓXIMAMENTE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">PromoLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Promos que se crean solas</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • IA que arma combos óptimos<br>
-            • IA que define descuentos ideales<br>
-            • Test A/B automático
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- FinanceLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(59,130,246,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🧾</div>
-            <span style="background:rgba(229,48,48,0.08);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">PRÓXIMAMENTE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">FinanceLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Tu P&L en tiempo real</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • Ingresos por canal, margen por plato<br>
-            • Cashflow simple<br>
-            • Integración con Mercado Pago
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- BrandLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(229,48,48,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🧠</div>
-            <span style="background:rgba(229,48,48,0.08);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">PRÓXIMAMENTE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">BrandLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Creá marcas nuevas en minutos</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • Naming, branding, menú sugerido<br>
-            • Pricing por zona y app<br>
-            • Target de mercado automático
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- GeoLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(16,185,129,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">📍</div>
-            <span style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.3);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">🔥 CLAVE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">GeoLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Dónde abrir o activar marcas</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • Análisis por zona y saturación<br>
-            • Oportunidades por barrio<br>
-            • Escala perfecto con franquicias
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
-        <!-- EngageLab -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;opacity:0.85">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div style="width:44px;height:44px;background:rgba(139,92,246,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🎮</div>
-            <span style="background:rgba(229,48,48,0.08);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;letter-spacing:.04em">PRÓXIMAMENTE</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:6px">EngageLab</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Gamificación para clientes</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.7">
-            • Rankings, desafíos y premios automáticos<br>
-            • Integración con TribuWallet<br>
-            • Crecimiento orgánico viral
-          </div>
-          <div style="position:absolute;bottom:16px;right:16px;font-size:11px;color:var(--muted);font-weight:500">Próximamente</div>
-        </div>
-
+<section id="ecosistema" class="bg2">
+  <div class="container">
+    <span class="stag">Cómo funciona</span>
+    <h2 class="stitle">Todo conectado, todo tuyo</h2>
+    <p class="ssub">Cada herramienta resuelve un problema real. Juntas, forman el sistema operativo de tu negocio gastronómico.</p>
+    <div class="eco-box">
+      <div class="eco-hub">⚡ Atomic Lab — Tu centro de control</div>
+      <div class="eco-grid">
+        <div class="eco-card"><div class="eco-em">🍽️</div><div class="eco-name">MenuLab → presencia</div><div class="eco-desc">Tu menú digital que los clientes ven al escanear el QR en la mesa</div></div>
+        <div class="eco-card"><div class="eco-em">⭐</div><div class="eco-name">ReviewLab → reputación</div><div class="eco-desc">Respondés cada reseña bien, construís marca y subís en rankings</div></div>
+        <div class="eco-card"><div class="eco-em">📊</div><div class="eco-name">CostoLab → rentabilidad</div><div class="eco-desc">Sabés qué platos te dan margen real, incluyendo delivery</div></div>
+        <div class="eco-card"><div class="eco-em">📅</div><div class="eco-name">MesaLab → operación</div><div class="eco-desc">Reservas sin intermediarios, mesas optimizadas, cero comisiones</div></div>
+        <div class="eco-card"><div class="eco-em">💜</div><div class="eco-name">TribuWallet → fidelización</div><div class="eco-desc">Tus clientes vuelven solos, acumulan sellos y traen amigos</div></div>
+        <div class="eco-card"><div class="eco-em">🚀</div><div class="eco-name">Growth Delivery → ventas</div><div class="eco-desc">IA audita tu menú online y te dice qué cambiar para vender más</div></div>
       </div>
     </div>
-  </section>
-
-  id="beneficios" style="padding-bottom:120px">
-  <div class="section-label">Impacto real</div>
-  <h2 class="section-title syne fade-in">Lo que cambia cuando<br>usás el ecosistema completo</h2>
-  <div class="benefits-grid fade-in">
-    <div class="benefit-card"><div class="benefit-num" style="color:var(--red)">+35%</div><div class="benefit-label">Tasa de retención de clientes — el programa de sellos hace que vuelvan más seguido</div></div>
-    <div class="benefit-card"><div class="benefit-num" style="color:var(--blue)">+28%</div><div class="benefit-label">Ticket promedio en delivery — menú optimizado con IA</div></div>
-    <div class="benefit-card"><div class="benefit-num" style="color:var(--purple)">3x</div><div class="benefit-label">Más datos de clientes — nombre, email, historial, premios, preferencias</div></div>
-    <div class="benefit-card"><div class="benefit-num" style="color:var(--amber)">−60%</div><div class="benefit-label">Menos no-shows — las reservas confirmadas con perfil reducen cancelaciones</div></div>
-    <div class="benefit-card"><div class="benefit-num" style="color:var(--green)">$0</div><div class="benefit-label">Costo de implementación — las seis herramientas son gratuitas, sin letra chica</div></div>
-    <div class="benefit-card"><div class="benefit-num" style="color:var(--red)">24/7</div><div class="benefit-label">Tu restaurante activo — reservas, fidelización y delivery trabajando siempre</div></div>
   </div>
 </section>
-<footer>
-  <div class="footer-brand">Atomic <span>Lab</span></div>
-  <div class="footer-links">
-    <a href="https://atomickitchens.tech" target="_blank">Atomic Kitchens</a>
-    <a href="https://growthdeliveryapp.com" target="_blank">Growth Delivery</a>
-    <a href="https://mesalabreservas.com" target="_blank">MesaLab</a>
-    <a href="https://tribuwallet.com" target="_blank">TribuWallet</a>
-    <a href="menulab.html" target="_blank">MenuLab</a>
-    <a href="reviewlab.html" target="_blank">ReviewLab</a>
-    <a href="costolab.html" target="_blank">CostoLab</a>
+
+<section id="impacto">
+  <div class="container">
+    <span class="stag">Impacto real</span>
+    <h2 class="stitle">Lo que cambia cuando<br>usás el ecosistema completo</h2>
+    <div class="igrid">
+      <div class="icard"><div class="inum" style="color:var(--red)">+35%</div><div class="ilabel">Retención de clientes</div><div class="idesc">Con TribuWallet y MesaLab activos, los clientes vuelven en promedio un 35% más seguido.</div></div>
+      <div class="icard"><div class="inum" style="color:#a855f7">4.8★</div><div class="ilabel">Rating promedio</div><div class="idesc">Los restaurantes que responden reseñas con ReviewLab suben su rating en apps de delivery.</div></div>
+      <div class="icard"><div class="inum" style="color:#22c55e">-18%</div><div class="ilabel">Costo de comisiones</div><div class="idesc">Usando CostoLab para calcular precios con delivery, recupérás margen sin subir el precio.</div></div>
+      <div class="icard"><div class="inum" style="color:#3b82f6">0</div><div class="ilabel">Dependencia de apps</div><div class="idesc">Canal propio con MesaLab + fidelización con TribuWallet = clientes que son tuyos.</div></div>
+    </div>
   </div>
-  <div class="footer-copy">© 2025 Atomic Kitchens. Todos los derechos reservados.</div>
+</section>
+
+<section id="roadmap" class="bg2">
+  <div class="container">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(229,48,48,.08);border:1px solid rgba(229,48,48,.2);border-radius:20px;padding:6px 16px;margin-bottom:20px"><span class="dot"></span><span style="font-size:13px;color:var(--red);font-weight:500">Roadmap 2026</span></div>
+    <h2 class="stitle">Lo que viene</h2>
+    <p class="ssub">Diez herramientas en desarrollo para el ecosistema completo.</p>
+    <div class="rgrid">
+      <div class="rcard"><div class="ricon" style="background:rgba(239,68,68,.12)">🧠</div><div class="rname">DemandLab</div><div class="rtagline">Qué vender, cuándo y a qué precio — automáticamente</div><div class="rpoints">• Predicción de demanda por día/hora<br>• Ajustes de pricing dinámico<br>• "Subí este plato 12% viernes noche"</div><div class="rbadge" style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.3)">🔥 Clave</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(59,130,246,.12)">📲</div><div class="rname">ChannelLab</div><div class="rtagline">Tu canal propio de pedidos</div><div class="rpoints">• Web ordering sin comisiones<br>• WhatsApp ordering bot<br>• Link tipo pedir.tulocal.com</div><div class="rbadge" style="background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border)">2026</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(139,92,246,.12)">🤖</div><div class="rname">AgentLab</div><div class="rtagline">Integrá con agentes que venden por vos</div><div class="rpoints">• API para que agentes AI pidan comida<br>• Optimización para AI ordering<br>• El SEO del futuro — para comida</div><div class="rbadge" style="background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border)">2026</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(245,158,11,.12)">📦</div><div class="rname">SupplyLab</div><div class="rtagline">Comprá mejor, más barato y con financiamiento</div><div class="rpoints">• Comparador de precios de insumos<br>• "Estás pagando 18% de más en pollo"<br>• Integración con proveedores</div><div class="rbadge" style="background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border)">2026</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(239,68,68,.12)">🚨</div><div class="rname">OpsLab</div><div class="rtagline">Detectamos errores antes de que pierdas ventas</div><div class="rpoints">• Ítems apagados, tiempos altos<br>• Caídas de conversión en tiempo real<br>• "Perdiste $120k hoy por ítems offline"</div><div class="rbadge" style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.3)">🔥 Clave</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(16,185,129,.12)">🎯</div><div class="rname">PromoLab</div><div class="rtagline">Promos que se crean solas</div><div class="rpoints">• IA que arma combos óptimos<br>• IA que define descuentos ideales<br>• Test A/B automático</div><div class="rbadge" style="background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border)">2026</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(59,130,246,.12)">🧾</div><div class="rname">FinanceLab</div><div class="rtagline">Tu P&amp;L en tiempo real</div><div class="rpoints">• Ingresos por canal, margen por plato<br>• Cashflow simple y visual<br>• Integración con Mercado Pago</div><div class="rbadge" style="background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border)">2026</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(229,48,48,.12)">🧠</div><div class="rname">BrandLab</div><div class="rtagline">Creá marcas nuevas en minutos</div><div class="rpoints">• Naming, branding, menú sugerido<br>• Pricing por zona y target<br>• Posicionamiento en apps automático</div><div class="rbadge" style="background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border)">2026</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(16,185,129,.12)">📍</div><div class="rname">GeoLab</div><div class="rtagline">Dónde abrir o activar marcas</div><div class="rpoints">• Análisis por zona y saturación<br>• Oportunidades por barrio<br>• Escala perfecto con franquicias</div><div class="rbadge" style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.3)">🔥 Clave</div></div>
+      <div class="rcard"><div class="ricon" style="background:rgba(139,92,246,.12)">🎮</div><div class="rname">EngageLab</div><div class="rtagline">Gamificación para clientes</div><div class="rpoints">• Rankings, desafíos y premios automáticos<br>• Integración con TribuWallet<br>• Crecimiento orgánico viral</div><div class="rbadge" style="background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border)">2026</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">Atomic <em>Lab</em></div>
+  <div class="fsub">Por Atomic Kitchens · El sistema operativo de tu restaurante</div>
+  <div class="flinks"><a href="#herramientas">Herramientas</a><a href="#roadmap">Roadmap 2026</a><a href="https://atomickitchens.com" target="_blank">Atomic Kitchens</a></div>
 </footer>
-<script>
-const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
-document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
-const canvas=document.getElementById('ecosystem-canvas');
-const ctx=canvas.getContext('2d');
-const W=1100,H=620;canvas.width=W;canvas.height=H;
-const cx=W/2,cy=H/2-20;
-const nodes={
-  center:{x:cx,y:cy,r:56,label:'Tu\nRestaurante',color:'#E53030',glow:'rgba(229,48,48,0.3)',icon:'⚛'},
-  growth:{x:cx-370,y:cy-30,r:44,label:'Growth\nDelivery',color:'#E53030',glow:'rgba(229,48,48,0.25)',icon:'🚀'},
-  mesa:{x:cx+370,y:cy-80,r:44,label:'MesaLab',color:'#3b82f6',glow:'rgba(59,130,246,0.25)',icon:'🗓'},
-  tribu:{x:cx,y:cy-220,r:44,label:'Tribu\nWallet',color:'#a855f7',glow:'rgba(168,85,247,0.25)',icon:'💜'},
-  menu:{x:cx-200,y:cy+180,r:38,label:'MenuLab',color:'#f59e0b',glow:'rgba(245,158,11,0.25)',icon:'🍽'},
-  review:{x:cx+200,y:cy+180,r:38,label:'ReviewLab',color:'#a855f7',glow:'rgba(168,85,247,0.2)',icon:'⭐'},
-  costo:{x:cx,y:cy+240,r:38,label:'CostoLab',color:'#22c55e',glow:'rgba(34,197,94,0.25)',icon:'📊'},
-};
-const connections=[
-  {from:'growth',to:'center',label:'+28% ticket',color:'#E53030'},
-  {from:'mesa',to:'center',label:'+35% reservas',color:'#3b82f6'},
-  {from:'tribu',to:'center',label:'+35% retención',color:'#a855f7'},
-  {from:'menu',to:'center',label:'Menú digital',color:'#f59e0b',dashed:true},
-  {from:'review',to:'center',label:'Reputación',color:'#a855f7',dashed:true},
-  {from:'costo',to:'center',label:'Rentabilidad',color:'#22c55e',dashed:true},
-  {from:'growth',to:'tribu',label:'Menú→Premios',color:'#f59e0b',dashed:true},
-  {from:'mesa',to:'tribu',label:'Reserva→Sello',color:'#22c55e',dashed:true},
-];
-const particles=[];
-const cdefs=[
-  {from:nodes.growth,to:nodes.center,color:'#E53030'},{from:nodes.mesa,to:nodes.center,color:'#3b82f6'},
-  {from:nodes.tribu,to:nodes.center,color:'#a855f7'},{from:nodes.growth,to:nodes.tribu,color:'#f59e0b'},
-  {from:nodes.mesa,to:nodes.tribu,color:'#22c55e'},{from:nodes.menu,to:nodes.center,color:'#f59e0b'},
-];
-cdefs.forEach(c=>{for(let i=0;i<2;i++)particles.push({from:c.from,to:c.to,color:c.color,t:Math.random(),speed:0.002+Math.random()*0.003});});
-let t=0;
-function lerp(a,b,t){return a+(b-a)*t;}
-function drawNode(n){
-  const g=ctx.createRadialGradient(n.x,n.y,n.r*0.5,n.x,n.y,n.r*2);
-  g.addColorStop(0,n.glow);g.addColorStop(1,'transparent');
-  ctx.fillStyle=g;ctx.beginPath();ctx.arc(n.x,n.y,n.r*2,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-  ctx.fillStyle='rgba(10,10,10,0.9)';ctx.fill();
-  ctx.strokeStyle=n.color;ctx.lineWidth=1.5;ctx.stroke();
-  ctx.font=n===nodes.center?'26px sans-serif':'20px sans-serif';
-  ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText(n.icon,n.x,n.y-(n.label.includes('\n')?7:5));
-  ctx.font=n===nodes.center?'500 12px "DM Sans",sans-serif':'500 11px "DM Sans",sans-serif';
-  ctx.fillStyle='#F0F0F0';
-  const lines=n.label.split('\n'),lh=15;
-  const sy=n.y+(n===nodes.center?14:12)-(lines.length-1)*lh/2;
-  lines.forEach((l,i)=>ctx.fillText(l,n.x,sy+i*lh));
-}
-function drawConn(from,to,label,color,dashed=false){
-  ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1;ctx.globalAlpha=0.3;
-  if(dashed)ctx.setLineDash([5,6]);
-  ctx.beginPath();ctx.moveTo(from.x,from.y);ctx.lineTo(to.x,to.y);ctx.stroke();
-  ctx.setLineDash([]);ctx.globalAlpha=1;
-  const mx=(from.x+to.x)/2,my=(from.y+to.y)/2;
-  const angle=Math.atan2(to.y-from.y,to.x-from.x);
-  const px=mx+Math.sin(angle)*16,py=my-Math.cos(angle)*16;
-  ctx.font='10px "DM Sans",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-  const tw=ctx.measureText(label).width;
-  ctx.fillStyle='rgba(10,10,10,0.85)';ctx.beginPath();ctx.roundRect(px-tw/2-6,py-7,tw+12,14,3);ctx.fill();
-  ctx.fillStyle=color;ctx.globalAlpha=.85;ctx.fillText(label,px,py);ctx.globalAlpha=1;ctx.restore();
-}
-function drawP(p){const x=lerp(p.from.x,p.to.x,p.t),y=lerp(p.from.y,p.to.y,p.t);ctx.beginPath();ctx.arc(x,y,2.5,0,Math.PI*2);ctx.fillStyle=p.color;ctx.globalAlpha=0.7*(1-Math.abs(p.t-0.5)*1.5);ctx.fill();ctx.globalAlpha=1;}
-function draw(){
-  ctx.clearRect(0,0,W,H);
-  [100,180,260].forEach((r,i)=>{ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=`rgba(229,48,48,${0.04-i*0.01})`;ctx.lineWidth=1;ctx.stroke();});
-  connections.forEach(c=>drawConn(nodes[c.from],nodes[c.to],c.label,c.color,c.dashed));
-  particles.forEach(p=>{p.t+=p.speed;if(p.t>1)p.t=0;drawP(p);});
-  Object.values(nodes).forEach(n=>drawNode(n));
-  const pulse=0.7+Math.sin(t*0.05)*0.3;
-  ctx.beginPath();ctx.arc(cx,cy,nodes.center.r+8,0,Math.PI*2);ctx.strokeStyle=`rgba(229,48,48,${pulse*0.3})`;ctx.lineWidth=2;ctx.stroke();
-  t++;requestAnimationFrame(draw);
-}
-draw();
-
-
-</script></body></html>
+</body>
+</html>
