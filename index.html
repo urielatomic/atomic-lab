@@ -25,7 +25,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(12px);b
 .hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(229,48,48,0.08);border:1px solid rgba(229,48,48,0.2);border-radius:20px;padding:6px 16px;font-size:13px;color:#E53030;font-weight:500;margin-bottom:28px}
 .dot{width:7px;height:7px;background:var(--red);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.hero h1{font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.08;letter-spacing:-.03em;max-width:900px;margin:0 auto 24px}
+.hero h1{font-size:clamp(32px,4.5vw,58px);font-weight:800;line-height:1.12;letter-spacing:-.02em;max-width:860px;margin:0 auto 24px}
 .hero h1 em{color:var(--red);font-style:normal}
 .hero-sub{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:560px;margin:0 auto 40px;line-height:1.6}
 .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
@@ -140,17 +140,181 @@ footer{border-top:1px solid var(--border);padding:48px 24px;text-align:center}
 <section id="ecosistema" class="bg2">
   <div class="container">
     <span class="stag">Cómo funciona</span>
-    <h2 class="stitle">Todo conectado, todo tuyo</h2>
-    <p class="ssub">Cada herramienta resuelve un problema real. Juntas, forman el sistema operativo de tu negocio gastronómico.</p>
-    <div class="eco-box">
-      <div class="eco-hub">⚡ Atomic Lab — Tu centro de control</div>
-      <div class="eco-grid">
-        <div class="eco-card"><div class="eco-em">🍽️</div><div class="eco-name">MenuLab → presencia</div><div class="eco-desc">Tu menú digital que los clientes ven al escanear el QR en la mesa</div></div>
-        <div class="eco-card"><div class="eco-em">⭐</div><div class="eco-name">ReviewLab → reputación</div><div class="eco-desc">Respondés cada reseña bien, construís marca y subís en rankings</div></div>
-        <div class="eco-card"><div class="eco-em">📊</div><div class="eco-name">CostoLab → rentabilidad</div><div class="eco-desc">Sabés qué platos te dan margen real, incluyendo delivery</div></div>
-        <div class="eco-card"><div class="eco-em">📅</div><div class="eco-name">MesaLab → operación</div><div class="eco-desc">Reservas sin intermediarios, mesas optimizadas, cero comisiones</div></div>
-        <div class="eco-card"><div class="eco-em">💜</div><div class="eco-name">TribuWallet → fidelización</div><div class="eco-desc">Tus clientes vuelven solos, acumulan sellos y traen amigos</div></div>
-        <div class="eco-card"><div class="eco-em">🚀</div><div class="eco-name">Growth Delivery → ventas</div><div class="eco-desc">IA audita tu menú online y te dice qué cambiar para vender más</div></div>
+    <h2 class="stitle">La red del ecosistema</h2>
+    <p class="ssub">16 herramientas, un solo sistema. Así se conectan entre sí.</p>
+    <div style="margin-top:48px;border:1px solid var(--border);border-radius:20px;overflow:hidden;background:var(--card)">
+      <svg id="ecosystem-svg" viewBox="0 0 900 600" style="width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="#333"/>
+          </marker>
+          <marker id="arr-hot" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="#E53030"/>
+          </marker>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- CONNECTION LINES - Active tools (white) -->
+        <!-- MenuLab <-> CostoLab: precios del menu -->
+        <line x1="220" y1="180" x2="450" y2="300" stroke="#333" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <!-- ReviewLab <-> TribuWallet: reputacion + fidelizacion -->
+        <line x1="680" y1="180" x2="680" y2="420" stroke="#333" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <!-- CostoLab <-> Growth Delivery: costo de delivery -->
+        <line x1="450" y1="300" x2="680" y2="420" stroke="#333" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <!-- MesaLab <-> TribuWallet: reservas + fidelizacion -->
+        <line x1="220" y1="420" x2="680" y2="420" stroke="#333" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <!-- MenuLab <-> Growth Delivery -->
+        <line x1="220" y1="180" x2="680" y2="420" stroke="#222" stroke-width="1" stroke-dasharray="3,4"/>
+        <!-- ReviewLab <-> Growth Delivery -->
+        <line x1="680" y1="180" x2="680" y2="420" stroke="#222" stroke-width="1"/>
+
+        <!-- CENTER HUB to active nodes (red lines) -->
+        <line x1="450" y1="300" x2="220" y2="180" stroke="#E53030" stroke-width="1.5" opacity="0.5"/>
+        <line x1="450" y1="300" x2="680" y2="180" stroke="#E53030" stroke-width="1.5" opacity="0.5"/>
+        <line x1="450" y1="300" x2="220" y2="420" stroke="#E53030" stroke-width="1.5" opacity="0.5"/>
+        <line x1="450" y1="300" x2="680" y2="420" stroke="#E53030" stroke-width="1.5" opacity="0.5"/>
+        <line x1="450" y1="300" x2="450" y2="120" stroke="#E53030" stroke-width="1.5" opacity="0.5"/>
+        <line x1="450" y1="300" x2="450" y2="480" stroke="#E53030" stroke-width="1.5" opacity="0.5"/>
+
+        <!-- ROADMAP connections to hub (very subtle) -->
+        <line x1="450" y1="300" x2="110" y2="300" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="790" y2="300" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="170" y2="100" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="730" y2="100" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="170" y2="500" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="730" y2="500" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="310" y2="60" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="590" y2="60" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="310" y2="540" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+        <line x1="450" y1="300" x2="590" y2="540" stroke="#222" stroke-width="1" stroke-dasharray="2,5"/>
+
+        <!-- CENTER: Atomic Lab Hub -->
+        <circle cx="450" cy="300" r="46" fill="#E53030" opacity="0.12"/>
+        <circle cx="450" cy="300" r="36" fill="#E53030" opacity="0.2"/>
+        <circle cx="450" cy="300" r="26" fill="#E53030"/>
+        <text x="450" y="295" text-anchor="middle" fill="white" font-size="11" font-family="Syne,sans-serif" font-weight="700">⚡</text>
+        <text x="450" y="308" text-anchor="middle" fill="white" font-size="8" font-family="Inter,sans-serif" font-weight="600">ATOMIC</text>
+        <text x="450" y="318" text-anchor="middle" fill="white" font-size="8" font-family="Inter,sans-serif" font-weight="600">LAB</text>
+
+        <!-- ACTIVE TOOLS (solid, labeled) -->
+        <!-- MenuLab - top left -->
+        <circle cx="220" cy="180" r="30" fill="#1a0a0a" stroke="#E53030" stroke-width="2"/>
+        <text x="220" y="175" text-anchor="middle" font-size="14">🍽️</text>
+        <text x="220" y="188" text-anchor="middle" fill="#E53030" font-size="8" font-family="Syne,sans-serif" font-weight="700">MenuLab</text>
+        <rect x="200" y="195" width="40" height="11" rx="3" fill="rgba(34,197,94,0.15)"/>
+        <text x="220" y="203" text-anchor="middle" fill="#4ade80" font-size="7" font-family="Inter,sans-serif" font-weight="600">GRATIS</text>
+
+        <!-- ReviewLab - top right -->
+        <circle cx="680" cy="180" r="30" fill="#1a0a0a" stroke="#a855f7" stroke-width="2"/>
+        <text x="680" y="175" text-anchor="middle" font-size="14">⭐</text>
+        <text x="680" y="188" text-anchor="middle" fill="#a855f7" font-size="8" font-family="Syne,sans-serif" font-weight="700">ReviewLab</text>
+        <rect x="656" y="195" width="48" height="11" rx="3" fill="rgba(34,197,94,0.15)"/>
+        <text x="680" y="203" text-anchor="middle" fill="#4ade80" font-size="7" font-family="Inter,sans-serif" font-weight="600">GRATIS</text>
+
+        <!-- CostoLab - center top (connected to hub) -->
+        <circle cx="450" cy="120" r="30" fill="#1a0a0a" stroke="#22c55e" stroke-width="2"/>
+        <text x="450" y="115" text-anchor="middle" font-size="14">📊</text>
+        <text x="450" y="128" text-anchor="middle" fill="#22c55e" font-size="8" font-family="Syne,sans-serif" font-weight="700">CostoLab</text>
+        <rect x="430" y="135" width="40" height="11" rx="3" fill="rgba(34,197,94,0.15)"/>
+        <text x="450" y="143" text-anchor="middle" fill="#4ade80" font-size="7" font-family="Inter,sans-serif" font-weight="600">GRATIS</text>
+
+        <!-- MesaLab - bottom left -->
+        <circle cx="220" cy="420" r="30" fill="#1a0a0a" stroke="#3b82f6" stroke-width="2"/>
+        <text x="220" y="415" text-anchor="middle" font-size="14">📅</text>
+        <text x="220" y="428" text-anchor="middle" fill="#3b82f6" font-size="8" font-family="Syne,sans-serif" font-weight="700">MesaLab</text>
+        <rect x="200" y="435" width="40" height="11" rx="3" fill="rgba(34,197,94,0.15)"/>
+        <text x="220" y="443" text-anchor="middle" fill="#4ade80" font-size="7" font-family="Inter,sans-serif" font-weight="600">GRATIS</text>
+
+        <!-- TribuWallet - bottom right -->
+        <circle cx="680" cy="420" r="30" fill="#1a0a0a" stroke="#f43f5e" stroke-width="2"/>
+        <text x="680" y="415" text-anchor="middle" font-size="14">💜</text>
+        <text x="680" y="428" text-anchor="middle" fill="#f43f5e" font-size="8" font-family="Syne,sans-serif" font-weight="700">TribuWallet</text>
+        <rect x="656" y="435" width="48" height="11" rx="3" fill="rgba(34,197,94,0.15)"/>
+        <text x="680" y="443" text-anchor="middle" fill="#4ade80" font-size="7" font-family="Inter,sans-serif" font-weight="600">GRATIS</text>
+
+        <!-- Growth Delivery - center bottom -->
+        <circle cx="450" cy="480" r="30" fill="#1a0a0a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="450" y="475" text-anchor="middle" font-size="14">🚀</text>
+        <text x="450" y="488" text-anchor="middle" fill="#f59e0b" font-size="8" font-family="Syne,sans-serif" font-weight="700">Growth</text>
+        <rect x="425" y="494" width="50" height="11" rx="3" fill="rgba(168,85,247,0.15)"/>
+        <text x="450" y="502" text-anchor="middle" fill="#c084fc" font-size="7" font-family="Inter,sans-serif" font-weight="600">IA</text>
+
+        <!-- ROADMAP TOOLS (dim, smaller) -->
+        <!-- DemandLab - far left -->
+        <circle cx="110" cy="300" r="22" fill="#111" stroke="#E53030" stroke-width="1" opacity="0.6"/>
+        <text x="110" y="296" text-anchor="middle" font-size="11" opacity="0.6">🧠</text>
+        <text x="110" y="308" text-anchor="middle" fill="#f87171" font-size="7" font-family="Syne,sans-serif" opacity="0.7">DemandLab</text>
+        <text x="110" y="318" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- OpsLab - far right -->
+        <circle cx="790" cy="300" r="22" fill="#111" stroke="#E53030" stroke-width="1" opacity="0.6"/>
+        <text x="790" y="296" text-anchor="middle" font-size="11" opacity="0.6">🚨</text>
+        <text x="790" y="308" text-anchor="middle" fill="#f87171" font-size="7" font-family="Syne,sans-serif" opacity="0.7">OpsLab</text>
+        <text x="790" y="318" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- ChannelLab - top far left -->
+        <circle cx="170" cy="100" r="20" fill="#111" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
+        <text x="170" y="96" text-anchor="middle" font-size="10" opacity="0.5">📲</text>
+        <text x="170" y="107" text-anchor="middle" fill="#60a5fa" font-size="7" font-family="Syne,sans-serif" opacity="0.6">ChannelLab</text>
+        <text x="170" y="117" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- AgentLab - top far right -->
+        <circle cx="730" cy="100" r="20" fill="#111" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+        <text x="730" y="96" text-anchor="middle" font-size="10" opacity="0.5">🤖</text>
+        <text x="730" y="107" text-anchor="middle" fill="#a78bfa" font-size="7" font-family="Syne,sans-serif" opacity="0.6">AgentLab</text>
+        <text x="730" y="117" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- PromoLab - bottom far left -->
+        <circle cx="170" cy="500" r="20" fill="#111" stroke="#10b981" stroke-width="1" opacity="0.5"/>
+        <text x="170" y="496" text-anchor="middle" font-size="10" opacity="0.5">🎯</text>
+        <text x="170" y="507" text-anchor="middle" fill="#34d399" font-size="7" font-family="Syne,sans-serif" opacity="0.6">PromoLab</text>
+        <text x="170" y="517" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- EngageLab - bottom far right -->
+        <circle cx="730" cy="500" r="20" fill="#111" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+        <text x="730" y="496" text-anchor="middle" font-size="10" opacity="0.5">🎮</text>
+        <text x="730" y="507" text-anchor="middle" fill="#a78bfa" font-size="7" font-family="Syne,sans-serif" opacity="0.6">EngageLab</text>
+        <text x="730" y="517" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- SupplyLab - top center left -->
+        <circle cx="310" cy="60" r="20" fill="#111" stroke="#f59e0b" stroke-width="1" opacity="0.5"/>
+        <text x="310" y="56" text-anchor="middle" font-size="10" opacity="0.5">📦</text>
+        <text x="310" y="67" text-anchor="middle" fill="#fbbf24" font-size="7" font-family="Syne,sans-serif" opacity="0.6">SupplyLab</text>
+        <text x="310" y="77" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- FinanceLab - top center right -->
+        <circle cx="590" cy="60" r="20" fill="#111" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
+        <text x="590" y="56" text-anchor="middle" font-size="10" opacity="0.5">🧾</text>
+        <text x="590" y="67" text-anchor="middle" fill="#60a5fa" font-size="7" font-family="Syne,sans-serif" opacity="0.6">FinanceLab</text>
+        <text x="590" y="77" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- BrandLab - bottom center left -->
+        <circle cx="310" cy="540" r="20" fill="#111" stroke="#E53030" stroke-width="1" opacity="0.5"/>
+        <text x="310" y="536" text-anchor="middle" font-size="10" opacity="0.5">🎨</text>
+        <text x="310" y="547" text-anchor="middle" fill="#f87171" font-size="7" font-family="Syne,sans-serif" opacity="0.6">BrandLab</text>
+        <text x="310" y="557" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- GeoLab - bottom center right -->
+        <circle cx="590" cy="540" r="20" fill="#111" stroke="#10b981" stroke-width="1" opacity="0.5"/>
+        <text x="590" y="536" text-anchor="middle" font-size="10" opacity="0.5">📍</text>
+        <text x="590" y="547" text-anchor="middle" fill="#34d399" font-size="7" font-family="Syne,sans-serif" opacity="0.6">GeoLab</text>
+        <text x="590" y="557" text-anchor="middle" fill="#666" font-size="6" font-family="Inter,sans-serif">2026</text>
+
+        <!-- LEGEND -->
+        <rect x="20" y="558" width="10" height="10" rx="2" fill="#E53030" opacity="0.8"/>
+        <text x="35" y="567" fill="#888" font-size="9" font-family="Inter,sans-serif">Activas hoy</text>
+        <rect x="110" y="558" width="10" height="10" rx="2" fill="#333" stroke="#555" stroke-width="1"/>
+        <text x="125" y="567" fill="#888" font-size="9" font-family="Inter,sans-serif">Roadmap 2026</text>
+        <line x1="205" y1="563" x2="230" y2="563" stroke="#E53030" stroke-width="1.5" opacity="0.5"/>
+        <text x="235" y="567" fill="#888" font-size="9" font-family="Inter,sans-serif">Conectadas al hub</text>
+      </svg>
+      <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:24px;flex-wrap:wrap">
+        <span style="font-size:12px;color:var(--muted)">Nódos sólidos = herramientas activas</span>
+        <span style="font-size:12px;color:var(--muted)">• Nódos tenues = roadmap 2026</span>
+        <span style="font-size:12px;color:var(--muted)">• Líneas rojas = conexión directa con el hub</span>
       </div>
     </div>
   </div>
