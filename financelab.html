@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinanceLab — Tu P&L en tiempo real</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#E53030;--bg:#0a0a0a;--bg2:#111;--card:#161616;--border:#222;--text:#f0f0f0;--muted:#888;--green:#22c55e;--blue:#3b82f6;--yellow:#f59e0b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;line-height:1.6;min-height:100vh}
+.syne{font-family:Syne,sans-serif}
+input,select,button{font-family:Inter,sans-serif}
+nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;color:var(--text);text-decoration:none}
+.logo-icon{width:28px;height:28px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.logo em{color:#3b82f6;font-style:normal}
+.nav-right{display:flex;align-items:center;gap:12px}
+#nav-user-info{display:none;align-items:center;gap:8px}
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .2s}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:#2563eb}
+.btn-outline{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-outline:hover{color:var(--text);border-color:var(--muted)}
+#btn-logout{display:none}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:420px;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.modal-logo{text-align:center;margin-bottom:24px}
+.modal-logo-icon{width:52px;height:52px;background:#3b82f6;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px}
+.modal-title{font-size:20px;font-weight:700;font-family:Syne,sans-serif}
+.modal-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.tab-row{display:flex;background:var(--bg2);border-radius:10px;padding:4px;margin-bottom:20px}
+.tab-btn{flex:1;padding:8px;border:none;background:none;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;border-radius:7px;transition:all .2s}
+.tab-btn.active{background:var(--card);color:var(--text)}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.form-group input{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:8px;font-size:14px}
+.form-group input:focus{outline:none;border-color:var(--blue)}
+.error-msg{color:#f87171;font-size:12px;margin-top:8px;display:none}.error-msg.show{display:block}
+.forgot-link{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline;margin-top:8px;display:block}
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 56px);padding:24px}
+.login-hero{text-align:center;max-width:480px}
+.login-hero h1{font-size:36px;font-weight:800;line-height:1.15;margin-bottom:16px;font-family:Syne,sans-serif}
+.login-hero p{color:var(--muted);font-size:17px;margin-bottom:32px}
+.feature-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+.chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:13px;color:var(--muted)}
+#app-screen{display:none}
+.app-header{padding:24px 24px 0;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.app-badge{font-size:11px;font-weight:700;color:#3b82f6;text-transform:uppercase;letter-spacing:.08em}
+.app-title{font-size:26px;font-weight:800;font-family:Syne,sans-serif}
+.period-bar{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;margin-top:16px}
+.period-label{font-size:13px;font-weight:600;color:var(--muted)}
+.period-tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.period-tab{padding:6px 14px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border:none;background:none;transition:all .2s}
+.period-tab.active{background:var(--blue);color:#fff}
+.period-inputs{display:flex;gap:8px;align-items:center}
+.period-inputs select,.period-inputs input{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:7px;font-size:13px}
+.main-content{display:grid;grid-template-columns:1fr 340px;gap:0;min-height:calc(100vh - 210px)}
+@media(max-width:900px){.main-content{grid-template-columns:1fr}}
+.left-panel{padding:24px;border-right:1px solid var(--border)}
+.right-panel{padding:24px;background:var(--bg2)}
+.section{margin-bottom:32px}
+.section-header{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.channel-table{width:100%;border-collapse:collapse}
+.channel-table th{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.channel-table td{padding:8px 10px;border-bottom:1px solid #1a1a1a;vertical-align:middle}
+.channel-name{font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.num-input{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;width:130px;text-align:right}
+.num-input:focus{outline:none;border-color:var(--blue)}
+.pct-cell{font-size:12px;color:var(--muted);text-align:right}
+.total-row td{border-top:2px solid var(--border)!important;border-bottom:none;font-weight:700;font-size:14px}
+.cost-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid #1a1a1a}
+.cost-row:last-child{border-bottom:none}
+.cost-name{font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+.pct-badge{font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 6px}
+.result-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px}
+.result-card.profit{border-color:var(--green);background:rgba(34,197,94,.05)}
+.result-card.loss{border-color:#ef4444;background:rgba(239,68,68,.05)}
+.result-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.result-value{font-size:28px;font-weight:800;font-family:Syne,sans-serif;line-height:1}
+.result-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
+.chart-title{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}
+.bar-chart{display:flex;align-items:flex-end;gap:4px;height:90px}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar-wrap{flex:1;display:flex;align-items:flex-end;justify-content:center;width:100%}
+.bar{width:100%;border-radius:3px 3px 0 0;min-height:2px;transition:height .3s}
+.bar-lbl{font-size:9px;color:var(--muted);text-align:center;line-height:1.3}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #1a1a1a;font-size:13px}
+.breakdown-row:last-child{border-bottom:none}
+.breakdown-name{color:var(--muted);display:flex;align-items:center;gap:6px}
+.breakdown-val{font-weight:600}
+.breakdown-pct{font-size:11px;color:var(--muted);margin-left:6px}
+.verdict{border-radius:10px;padding:12px 16px;font-size:13px;font-weight:500;line-height:1.5;margin-bottom:12px}
+.verdict.good{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80}
+.verdict.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fbbf24}
+.verdict.bad{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#f87171}
+.add-row{display:flex;gap:8px;margin-top:12px}
+.add-row input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:7px;font-size:13px}
+.add-row input:focus{outline:none;border-color:var(--blue)}
+.demo-badge{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fbbf24;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<nav>
+<a href="/" class="logo"><div class="logo-icon">🧾</div>Finance<em>Lab</em></a>
+<div class="nav-right"><div id="nav-user-info"><span class="demo-badge" id="demo-badge" style="display:none">DEMO</span><span style="font-size:13px;color:var(--muted)">Hola,</span><span id="nav-username" style="font-size:14px;font-weight:600"></span><button class="btn btn-sm btn-outline" id="btn-logout" onclick="doLogout()">Cerrar sesión</button></div><button class="btn btn-sm btn-primary" id="btn-entrar" onclick="showLoginModal()">Entrar</button></div>
+</nav>
+<div class="modal-overlay" id="login-modal"><div class="modal"><button class="modal-close" onclick="closeLoginModal()">✕</button><div class="modal-logo"><div class="modal-logo-icon">🧾</div><div class="modal-title syne">FinanceLab</div><div class="modal-sub">Tu P&amp;L en tiempo real</div></div><div class="tab-row"><button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Iniciar sesión</button><button class="tab-btn" id="tab-register" onclick="switchTab('register')">Crear cuenta</button></div><div id="pane-login"><div class="form-group"><label>Email</label><input type="email" id="l-email" placeholder="vos@restaurante.com"></div><div class="form-group"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••"></div><div class="error-msg" id="login-error"></div><button class="btn btn-primary" style="width:100%;padding:12px;font-size:14px;margin-top:8px" onclick="doLogin()">Entrar →</button><button class="forgot-link" onclick="resetAccount()">Olvidé mi contraseña / Resetear cuenta</button></div><div id="pane-register" style="display:none"><div class="form-group"><label>Nombre del restaurante</label><input type="text" id="r-name" placeholder="La Parrilla de Juan"></div><div class="form-group"><label>Email</label><input type="email" id="r-email" placeholder="vos@restaurante.com"></div><div class="form-group"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres"></div><div class="error-msg" id="register-error"></div><button class="btn btn-primary" style="width:100%;padding:12px;font-size:14px;margin-top:8px" onclick="doRegister()">Crear cuenta →</button></div></div></div>
+<div id="login-screen"><div class="login-hero"><h1>🧾 Tu <span style="color:#3b82f6">P&amp;L</span><br>en tiempo real</h1><p>Ingresá tus ingresos por canal y costos operativos. FinanceLab calcula tu resultado y margen al instante.</p><div class="feature-chips"><div class="chip">📊 Ingresos por canal</div><div class="chip">💸 Costos operativos</div><div class="chip">📈 Margen y resultado</div><div class="chip">📋 Exportar CSV</div></div><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="btn btn-primary" style="padding:12px 28px;font-size:15px" onclick="showLoginModal()">Empezar gratis →</button><button class="btn btn-outline" style="padding:12px 28px;font-size:15px" onclick="startDemoMode()">Ver demo</button></div></div></div>
+<div id="app-screen">
+<div class="app-header"><div><div class="app-badge">FinanceLab</div><div class="app-title">P&amp;L del período</div></div><button class="btn btn-outline btn-sm" onclick="exportCSV()">⬇ Exportar CSV</button></div>
+<div class="period-bar"><span class="period-label">Período:</span><div class="period-tabs"><button class="period-tab active" onclick="setPeriodType('mensual',this)">Mensual</button><button class="period-tab" onclick="setPeriodType('semanal',this)">Semanal</button></div><div class="period-inputs"><select id="sel-mes" onchange="loadPeriod()"><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select><input type="number" id="sel-anio" value="2026" min="2020" max="2030" onchange="loadPeriod()" style="width:72px"></div></div>
+<div class="main-content">
+<div class="left-panel"><div class="section"><div class="section-header"><span>💰</span> Ingresos por canal</div><table class="channel-table"><thead><tr><th>Canal</th><th style="text-align:right">Ingresos ($)</th><th style="text-align:right">% del total</th></tr></thead><tbody id="income-rows"></tbody><tfoot><tr class="total-row"><td><span style="font-size:13px">TOTAL INGRESOS</span></td><td style="text-align:right;color:var(--green)" id="total-income-cell">$0</td><td style="text-align:right;color:var(--muted);font-size:12px">100%</td></tr></tfoot></table><div class="add-row"><input type="text" id="new-channel-name" placeholder="+ Agregar canal (ej: Uber Eats)"><button class="btn btn-sm btn-outline" onclick="addChannel()">Agregar</button></div></div><div class="section"><div class="section-header"><span>💸</span> Costos operativos</div><div id="cost-rows"></div><div class="add-row"><input type="text" id="new-cost-name" placeholder="+ Agregar costo (ej: Marketing)"><button class="btn btn-sm btn-outline" onclick="addCost()">Agregar</button></div></div></div>
+<div class="right-panel"><div class="result-card" style="border-color:#3b82f6;background:rgba(59,130,246,.05)"><div class="result-label">Total ingresos</div><div class="result-value" id="r-ingresos" style="color:#3b82f6">$0</div></div><div class="result-card"><div class="result-label">Total costos</div><div class="result-value" id="r-costos" style="color:#ef4444">$0</div><div class="result-sub" id="r-costos-pct">0% de los ingresos</div></div><div class="result-card" id="result-main"><div class="result-label">Resultado neto</div><div class="result-value" id="r-resultado">$0</div><div class="result-sub" id="r-margen">Margen: 0%</div></div><div id="verdict-box"></div><div class="chart-box"><div class="chart-title">Distribución de costos</div><div id="cost-chart"></div></div><div class="chart-box"><div class="chart-title">Ingresos por canal</div><div id="income-breakdown"></div></div></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const DB_KEY="financelab_db",USERS_KEY="financelab_users",SESSION_KEY="financelab_session";
+let currentUser=null,currentPeriod=null,periodType="mensual";
+const DC=[{id:"salon",name:"Salón",color:"#3b82f6"},{id:"rappi",name:"Rappi",color:"#f59e0b"},{id:"pedidosya",name:"PedidosYa",color:"#22c55e"},{id:"mostrador",name:"Mostrador/Take Away",color:"#a855f7"}];
+const DCO=[{id:"food",name:"Food cost (ingredientes)",color:"#ef4444"},{id:"personal",name:"Personal y sueldos",color:"#f97316"},{id:"alquiler",name:"Alquiler",color:"#eab308"},{id:"servicios",name:"Servicios (luz, gas, internet)",color:"#06b6d4"},{id:"otros",name:"Otros gastos",color:"#8b5cf6"}];
+function getDB(){try{return JSON.parse(localStorage.getItem(DB_KEY)||'{"data":{}}');}catch(e){return{data:{}}}}
+function saveDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
+function getUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY)||'{}')}catch(e){return{}}}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u))}
+function hashPass(p){let h=0;for(let i=0;i<p.length;i++)h=((h<<5)-h)+p.charCodeAt(i),h|=0;return"h_"+Math.abs(h).toString(36)}
+function switchTab(t){["login","register"].forEach(x=>{document.getElementById("tab-"+x).classList.toggle("active",t===x);document.getElementById("pane-"+x).style.display=t===x?"block":"none"})}
+function showLoginModal(){document.getElementById("login-modal").classList.add("open")}
+function closeLoginModal(){document.getElementById("login-modal").classList.remove("open")}
+function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.classList.add("show")}
+function doRegister(){const name=document.getElementById("r-name").value.trim(),email=document.getElementById("r-email").value.trim().toLowerCase(),pass=document.getElementById("r-pass").value;if(!name)return showErr("register-error","Nombre requerido");if(!email||!email.includes("@"))return showErr("register-error","Email inválido");if(pass.length<6)return showErr("register-error","Contraseña mínimo 6 caracteres");const users=getUsers();if(users[email])return showErr("register-error","Ya existe esa cuenta. Iniciá sesión.");users[email]={name,hash:hashPass(pass)};saveUsers(users);localStorage.setItem(SESSION_KEY,email);loadApp(email)}
+function doLogin(){const email=document.getElementById("l-email").value.trim().toLowerCase(),pass=document.getElementById("l-pass").value;if(!email||!pass)return showErr("login-error","Completá todos los campos");const user=getUsers()[email];if(!user)return showErr("login-error","No existe cuenta con ese email");if(user.hash!==hashPass(pass))return showErr("login-error","Contraseña incorrecta");localStorage.setItem(SESSION_KEY,email);loadApp(email)}
+function doLogout(){localStorage.removeItem(SESSION_KEY);currentUser=null;document.getElementById("btn-entrar").style.display="block";document.getElementById("btn-logout").style.display="none";document.getElementById("nav-user-info").style.display="none";document.getElementById("app-screen").style.display="none";document.getElementById("login-screen").style.display="flex"}
+function loadApp(email){closeLoginModal();currentUser=email;const u=getUsers()[email];document.getElementById("nav-username").textContent=(u&&u.name)||email;document.getElementById("nav-user-info").style.display="flex";document.getElementById("btn-entrar").style.display="none";document.getElementById("btn-logout").style.display="block";document.getElementById("demo-badge").style.display="none";document.getElementById("login-screen").style.display="none";document.getElementById("app-screen").style.display="block";initPeriod()}
+function startDemoMode(){currentUser="__demo__";document.getElementById("nav-username").textContent="La Parrilla Demo";document.getElementById("nav-user-info").style.display="flex";document.getElementById("btn-entrar").style.display="none";document.getElementById("btn-logout").style.display="block";document.getElementById("demo-badge").style.display="block";document.getElementById("login-screen").style.display="none";document.getElementById("app-screen").style.display="block";initPeriod();loadDemoData()}
+function resetAccount(){const email=document.getElementById("l-email").value.trim().toLowerCase();if(!email)return showErr("login-error","Ingresá tu email primero");if(!confirm("Esto borrará tu cuenta. ¿Confirmás?"))return;const u=getUsers();delete u[email];saveUsers(u);localStorage.removeItem(SESSION_KEY);showErr("login-error","Cuenta eliminada. Podés registrarte de nuevo.")}
+function getPK(){return currentPeriod||"2026-01"}
+function getData(){if(currentUser==="__demo__")return window._demoData||getEmptyData();const db=getDB(),key=getPK();if(!db.data[currentUser])db.data[currentUser]={};if(!db.data[currentUser][key])db.data[currentUser][key]=getEmptyData();return db.data[currentUser][key]}
+function saveData(d){if(currentUser==="__demo__"){window._demoData=d;return}const db=getDB(),key=getPK();if(!db.data[currentUser])db.data[currentUser]={};db.data[currentUser][key]=d;saveDB(db)}
+function getEmptyData(){return{channels:DC.map(c=>({...c,amount:0})),costs:DCO.map(c=>({...c,amount:0}))}}
+function initPeriod(){const now=new Date(),mes=now.getMonth()+1,anio=now.getFullYear();document.getElementById("sel-mes").value=mes;document.getElementById("sel-anio").value=anio;currentPeriod=anio+"-"+String(mes).padStart(2,"0");renderAll()}
+function loadPeriod(){const mes=document.getElementById("sel-mes").value,anio=document.getElementById("sel-anio").value;currentPeriod=anio+"-"+String(mes).padStart(2,"0");renderAll()}
+function setPeriodType(type,btn){periodType=type;document.querySelectorAll(".period-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active")}
+function renderAll(){const data=getData();renderIncomeRows(data);renderCostRows(data);recalc(data)}
+function renderIncomeRows(data){const total=data.channels.reduce((s,c)=>s+Number(c.amount),0);document.getElementById("income-rows").innerHTML=data.channels.map((ch,i)=>"<tr><td><div class=\"channel-name\"><div class=\"dot\" style=\"background:"+ch.color+"\"></div>"+ch.name+"</div></td><td style=\"text-align:right\"><input class=\"num-input\" type=\"number\" min=\"0\" step=\"100\" value=\""+( ch.amount||0)+"\" oninput=\"updateChannel("+i+",this.value)\"></td><td class=\"pct-cell\">"+(total>0?Math.round(Number(ch.amount)/total*100):0)+"%" +(data.channels.length>3?" <button onclick=\"removeChannel("+i+")\" style=\"background:none;border:none;color:#555;cursor:pointer;font-size:11px\">✕</button>":"")+"</td></tr>").join("");document.getElementById("total-income-cell").textContent=fmt(total)}
+function renderCostRows(data){const total=data.channels.reduce((s,c)=>s+Number(c.amount),0);document.getElementById("cost-rows").innerHTML=data.costs.map((co,i)=>"<div class=\"cost-row\"><div class=\"cost-name\"><div class=\"dot\" style=\"background:"+co.color+"\"></div>"+co.name+"</div><input class=\"num-input\" type=\"number\" min=\"0\" step=\"100\" value=\""+( co.amount||0)+"\" oninput=\"updateCost("+i+",this.value)\" style=\"width:130px;text-align:right\"><div style=\"display:flex;align-items:center;gap:6px\"><span class=\"pct-badge\">"+(total>0?Math.round(Number(co.amount)/total*100):0)+"%</span>"+(data.costs.length>2?" <button onclick=\"removeCost("+i+")\" style=\"background:none;border:none;color:#555;cursor:pointer;font-size:11px\">✕</button>":"")+"</div></div>").join("")}
+function recalc(data){const ingresos=data.channels.reduce((s,c)=>s+Number(c.amount),0),costos=data.costs.reduce((s,c)=>s+Number(c.amount),0),resultado=ingresos-costos,margen=ingresos>0?Math.round(resultado/ingresos*100):0,costosPct=ingresos>0?Math.round(costos/ingresos*100):0;document.getElementById("r-ingresos").textContent=fmt(ingresos);document.getElementById("r-costos").textContent=fmt(costos);document.getElementById("r-costos-pct").textContent=costosPct+"% de los ingresos";document.getElementById("r-resultado").textContent=fmt(resultado);document.getElementById("r-resultado").style.color=resultado>=0?"var(--green)":"#ef4444";document.getElementById("r-margen").textContent="Margen: "+margen+"%";const card=document.getElementById("result-main");card.className="result-card"+(margen>=15?" profit":resultado<0?" loss":"");const vbox=document.getElementById("verdict-box");if(ingresos===0){vbox.innerHTML="";renderChart(data,0);renderBreakdown(data,0);return}let cls,msg;if(margen>=25){cls="good";msg="✓ Excelente margen — el negocio es muy rentable"}else if(margen>=15){cls="good";msg="✓ Buen margen — por encima del promedio gastronómico"}else if(margen>=5){cls="warn";msg="⚡ Margen ajustado — revisá los costos más altos"}else if(margen>=0){cls="warn";msg="⚠ Margen muy bajo — el negocio apenas cubre costos"}else{cls="bad";msg="✗ Resultado negativo — los costos superan los ingresos"}vbox.innerHTML="<div class=\"verdict "+cls+"\">"+msg+"</div>";renderChart(data,ingresos);renderBreakdown(data,ingresos)}
+function renderChart(data,ti){const el=document.getElementById("cost-chart");if(!data.costs.length||ti===0){el.innerHTML="<div style=\"color:var(--muted);font-size:13px;text-align:center;padding:20px\">Sin datos</div>";return}const mx=Math.max(...data.costs.map(c=>Number(c.amount)),1);el.innerHTML="<div class=\"bar-chart\">"+data.costs.map(co=>{const h=Math.round(Number(co.amount)/mx*80),pct=ti>0?Math.round(Number(co.amount)/ti*100):0,sn=co.name.split(" ")[0];return"<div class=\"bar-group\"><div class=\"bar-wrap\"><div class=\"bar\" style=\"background:"+co.color+";height:"+h+"px\"></div></div><div class=\"bar-lbl\">"+sn+"<br>"+pct+"%</div></div>"}).join("")+"</div>"}
+function renderBreakdown(data,total){const el=document.getElementById("income-breakdown");const rows=data.channels.filter(c=>Number(c.amount)>0);if(!rows.length||total===0){el.innerHTML="<div style=\"color:var(--muted);font-size:13px;text-align:center;padding:20px\">Sin ingresos registrados</div>";return}el.innerHTML=rows.map(ch=>{const pct=Math.round(Number(ch.amount)/total*100);return"<div class=\"breakdown-row\"><div class=\"breakdown-name\"><div class=\"dot\" style=\"background:"+ch.color+"\"></div>"+ch.name+"</div><div><span class=\"breakdown-val\">"+fmt(Number(ch.amount))+"</span><span class=\"breakdown-pct\">"+pct+"%</span></div></div>"}).join("")}
+function updateChannel(i,val){const data=getData();data.channels[i].amount=Number(val)||0;saveData(data);recalc(data);renderIncomeRows(data)}
+function updateCost(i,val){const data=getData();data.costs[i].amount=Number(val)||0;saveData(data);recalc(data);renderCostRows(data)}
+function addChannel(){const name=document.getElementById("new-channel-name").value.trim();if(!name)return;const colors=["#06b6d4","#84cc16","#f43f5e","#fb923c"];const data=getData();data.channels.push({id:"c"+Date.now(),name,color:colors[data.channels.length%colors.length],amount:0});saveData(data);document.getElementById("new-channel-name").value="";renderAll();showToast("Canal agregado")}
+function removeChannel(i){const data=getData();if(data.channels.length<=1)return;data.channels.splice(i,1);saveData(data);renderAll()}
+function addCost(){const name=document.getElementById("new-cost-name").value.trim();if(!name)return;const colors=["#0ea5e9","#d946ef","#64748b"];const data=getData();data.costs.push({id:"co"+Date.now(),name,color:colors[data.costs.length%colors.length],amount:0});saveData(data);document.getElementById("new-cost-name").value="";renderAll();showToast("Costo agregado")}
+function removeCost(i){const data=getData();if(data.costs.length<=1)return;data.costs.splice(i,1);saveData(data);renderAll()}
+function loadDemoData(){window._demoData={channels:[{id:"salon",name:"Salón",color:"#3b82f6",amount:850000},{id:"rappi",name:"Rappi",color:"#f59e0b",amount:320000},{id:"pedidosya",name:"PedidosYa",color:"#22c55e",amount:210000},{id:"mostrador",name:"Mostrador/Take Away",color:"#a855f7",amount:95000}],costs:[{id:"food",name:"Food cost (ingredientes)",color:"#ef4444",amount:420000},{id:"personal",name:"Personal y sueldos",color:"#f97316",amount:310000},{id:"alquiler",name:"Alquiler",color:"#eab308",amount:120000},{id:"servicios",name:"Servicios",color:"#06b6d4",amount:45000},{id:"otros",name:"Otros gastos",color:"#8b5cf6",amount:35000}]};renderAll()}
+function exportCSV(){const data=getData(),mes=document.getElementById("sel-mes").options[document.getElementById("sel-mes").selectedIndex].text,anio=document.getElementById("sel-anio").value,ing=data.channels.reduce((s,c)=>s+Number(c.amount),0),cos=data.costs.reduce((s,c)=>s+Number(c.amount),0),res=ing-cos,mrg=ing>0?(res/ing*100).toFixed(1):0;let csv="FinanceLab - P&L "+mes+" "+anio+"
+
+INGRESOS POR CANAL
+Canal,Monto
+";data.channels.forEach(c=>csv+="\""+c.name+"\","+c.amount+"
+");csv+="TOTAL INGRESOS,"+ing+"
+
+COSTOS OPERATIVOS
+Concepto,Monto
+";data.costs.forEach(c=>csv+="\""+c.name+"\","+c.amount+"
+");csv+="TOTAL COSTOS,"+cos+"
+RESULTADO NETO,"+res+"
+MARGEN,%"+mrg+"
+";const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="financelab-"+currentPeriod+".csv";a.click();showToast("CSV exportado")}
+function fmt(n){if(Math.abs(n)>=1000000)return(n<0?"-$":"$")+(Math.abs(n)/1000000).toFixed(1)+"M";if(Math.abs(n)>=1000)return(n<0?"-$":"$")+Math.round(Math.abs(n)).toLocaleString("es-AR");return(n<0?"-$":"$")+Math.round(Math.abs(n))}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2000)}
+(function(){const s=localStorage.getItem(SESSION_KEY);if(s){const u=getUsers();if(u[s])loadApp(s);else localStorage.removeItem(SESSION_KEY)}})();
+</script>
+</body>
+</html>
