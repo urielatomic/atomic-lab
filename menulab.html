@@ -562,8 +562,15 @@ function updatePreview() {
 // ============================================================
 function getMenuUrl() {
   const base = window.location.origin + '/menu-view.html';
-  const id = btoa(currentUser).replace(/=/g,'');
-  return `${base}?u=${encodeURIComponent(id)}`;
+  try {
+    const menu = getMenu();
+    const data = JSON.stringify(menu);
+    const encoded = btoa(unescape(encodeURIComponent(data))).replace(/=/g,'');
+    return `${base}?d=${encoded}`;
+  } catch(e) {
+    const id = btoa(currentUser||'').replace(/=/g,'');
+    return `${base}?u=${encodeURIComponent(id)}`;
+  }
 }
 
 function updatePublicLink() {
