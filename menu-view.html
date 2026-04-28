@@ -65,7 +65,7 @@ if (_dParam) {
 
 function renderMenu() {
   const content = document.getElementById('menu-content');
-  if (!uid) {
+  if (!uid && !window._urlMenu) {
     content.innerHTML = `<div class="not-found"><h2>Menú no encontrado</h2><p>El link es inválido o el menú no existe.</p><a href="/atomic-lab/menulab.html">Crear mi menú gratis →</a></div>`;
     return;
   }
