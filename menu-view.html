@@ -57,6 +57,11 @@ function getDB() {
 
 const params = new URLSearchParams(window.location.search);
 const uid = params.get('u');
+const _dParam = params.get('d');
+if (_dParam) {
+  try { window._urlMenu = JSON.parse(decodeURIComponent(escape(atob(_dParam)))); }
+  catch(e) { window._urlMenu = null; }
+}
 
 function renderMenu() {
   const content = document.getElementById('menu-content');
@@ -70,7 +75,7 @@ function renderMenu() {
   catch(e) { email = null; }
 
   const db = getDB();
-  const menu = email ? db.menus[email] : null;
+  const menu = window._urlMenu || (email ? db.menus[email] : null);
 
   if (!menu || !menu.items || !menu.items.length) {
     content.innerHTML = `
