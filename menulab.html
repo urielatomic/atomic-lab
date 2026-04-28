@@ -249,6 +249,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
             <div class="f"><label>Precio *</label><input type="text" id="new-price" placeholder="$0" onkeydown="if(event.key==='Enter')addItem()"></div>
           </div>
           <div class="f" style="margin-bottom:10px"><label>Descripción (opcional)</label><input type="text" id="new-desc" placeholder="Ej: Con papas fritas y ensalada mixta" onkeydown="if(event.key==='Enter')addItem()"></div>
+          <div class="f"><label>Foto del plato<span style="font-size:11px;color:var(--muted);font-weight:400"> (opcional)</span></label>
+            <div id="photo-upload-area" style="border:1.5px dashed var(--border);border-radius:8px;padding:12px;text-align:center;cursor:pointer;margin-top:4px" onclick="document.getElementById('new-photo-file').click()">
+              <img id="new-photo-preview" src="" style="max-width:100%;max-height:120px;border-radius:6px;display:none;margin-bottom:6px">
+              <div id="photo-placeholder" style="color:var(--muted);font-size:13px">📷 Tocá para agregar foto</div>
+            </div>
+            <input type="file" id="new-photo-file" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
+          </div>
           <button class="btn btn-red btn-sm" onclick="addItem()">+ Agregar plato</button>
         </div>
 
@@ -453,6 +460,35 @@ function selectCat(el, cat) {
 // ============================================================
 // ITEMS
 // ============================================================
+
+function handlePhotoUpload(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    // Compress image using canvas
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      const MAX = 400;
+      let w = img.width, ht = img.height;
+      if(w > MAX || ht > MAX){
+        if(w > ht){ ht = Math.round(ht * MAX/w); w = MAX; }
+        else { w = Math.round(w * MAX/ht); ht = MAX; }
+      }
+      canvas.width = w; canvas.height = ht;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, ht);
+      const compressed = canvas.toDataURL('image/jpeg', 0.55);
+      window._newPhotoData = compressed;
+      document.getElementById('new-photo-preview').src = compressed;
+      document.getElementById('new-photo-preview').style.display = 'block';
+      document.getElementById('photo-placeholder').textContent = '✓ Foto lista - tocá para cambiar';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function addItem() {
   const name = document.getElementById('new-name').value.trim();
   const price = document.getElementById('new-price').value.trim();
@@ -465,11 +501,16 @@ function addItem() {
     emoji: document.getElementById('new-emoji').value.trim() || '🍽️',
     name,
     price,
-    desc: document.getElementById('new-desc').value.trim()
+    desc: document.getElementById('new-desc').value.trim(),
+    photo: window._newPhotoData||''
   });
   saveMenu(menu);
   // Clear fields
   document.getElementById('new-name').value = '';
+    window._newPhotoData = '';
+    document.getElementById('new-photo-preview').src = '';
+    document.getElementById('new-photo-preview').style.display = 'none';
+    document.getElementById('photo-placeholder').textContent = '📷 Tocá para agregar foto';
   document.getElementById('new-price').value = '';
   document.getElementById('new-desc').value = '';
   document.getElementById('new-emoji').value = '';
@@ -502,7 +543,7 @@ function renderItems() {
       ${menu.items.filter(i => i.cat === cat).map(item => `
         <div class="item-row">
           <span class="drag-handle">⠿</span>
-          <span class="item-emoji">${item.emoji}</span>
+          ${item.photo ? '<img src="'+item.photo+'" style="width:36px;height:36px;object-fit:cover;border-radius:6px;margin-right:6px;flex-shrink:0">' : '<span class="item-emoji">'+item.emoji+'</span>'}
           <div class="item-info">
             <div class="item-name">${item.name}</div>
             ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
@@ -545,7 +586,7 @@ function updatePreview() {
       ${menu.items.filter(i => i.cat === cat).map(item => `
         <div class="menu-item">
           <div class="menu-item-left">
-            <div class="menu-item-name">${item.emoji} ${item.name}</div>
+            ${item.photo ? '<img src="'+item.photo+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px;margin-right:8px;float:left">' : ''}<div class="menu-item-name">${item.emoji} ${item.name}</div>
             ${item.desc ? `<div class="menu-item-desc">${item.desc}</div>` : ''}
           </div>
           <div class="menu-item-price" style="color:${color}">${item.price}</div>
