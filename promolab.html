@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromoLab — Promos que se crean solas</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--or:#f59e0b;--or2:#d97706;--bg:#0a0a0a;--b2:#111;--ca:#161616;--bo:#222;--te:#f0f0f0;--mu:#777;--gr:#22c55e;--pu:#a855f7}
+*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--te);font-family:Inter,sans-serif;line-height:1.5;min-height:100vh}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;border-bottom:1px solid var(--bo);background:rgba(10,10,10,.9);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:8px;font-family:Syne,sans-serif;font-weight:700;font-size:16px;text-decoration:none;color:var(--te)}
+.li{width:28px;height:28px;background:var(--or);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}.logo span{color:var(--or)}
+.nr{display:flex;align-items:center;gap:12px}
+.btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .18s;font-family:Inter,sans-serif}
+.bo-btn{background:transparent;border:1px solid var(--bo);color:var(--mu)}.bo-btn:hover{border-color:var(--mu);color:var(--te)}
+.or-btn{background:var(--or);color:#000}.or-btn:hover{background:var(--or2)}
+.sm{padding:5px 12px;font-size:12px}
+.mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center}.mb.open{display:flex}
+.md{background:var(--ca);border:1px solid var(--bo);border-radius:16px;padding:32px;width:100%;max-width:400px;position:relative}
+.md p{font-size:13px;color:var(--mu);margin-bottom:24px}
+.tr{display:flex;gap:2px;background:var(--b2);border-radius:8px;padding:3px;margin-bottom:20px}
+.tb{flex:1;padding:6px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--mu);font-family:Inter,sans-serif}
+.tb.active{background:var(--ca);color:var(--te)}
+.fi{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.fi label{font-size:12px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
+.fi input{background:var(--b2);border:1px solid var(--bo);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--te);font-family:Inter,sans-serif;width:100%;outline:none}
+.fi input:focus{border-color:#444}.me{font-size:12px;color:#f87171;min-height:16px;margin-bottom:10px}
+.mc{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--mu);cursor:pointer;font-size:18px}
+.bf{width:100%;padding:12px;font-size:14px}
+.lb{background:none;border:none;color:var(--mu);font-size:12px;cursor:pointer;text-decoration:underline;margin-top:8px;display:block;text-align:center;font-family:Inter,sans-serif}
+#ls{display:flex;align-items:center;justify-content:center;min-height:80vh;padding:40px 24px;flex-direction:column;gap:32px;text-align:center}
+#ls h1{font-family:Syne,sans-serif;font-size:32px;font-weight:800;margin-bottom:12px}
+#ls h1 em{color:var(--or);font-style:normal}
+#ls p{font-size:16px;color:var(--mu);max-width:480px}
+.lfc{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:560px}
+.lf{background:var(--ca);border:1px solid var(--bo);border-radius:10px;padding:14px 18px;font-size:13px;display:flex;align-items:center;gap:8px}
+#app{display:none}.al{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px)}
+.sb{background:var(--b2);border-right:1px solid var(--bo);padding:20px 0}.sb-s{padding:0 12px}
+.sl{font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;padding:0 8px;margin-bottom:8px;margin-top:16px;display:block}
+.si{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:var(--mu);border:none;background:none;width:100%;font-family:Inter,sans-serif;text-align:left;transition:all .15s}
+.si:hover{background:rgba(255,255,255,.05);color:var(--te)}.si.active{background:rgba(245,158,11,.12);color:var(--or)}
+.sii{font-size:15px;width:20px;text-align:center}.mn{padding:28px 32px;overflow-y:auto}
+.page{display:none}.page.active{display:block}.ph{margin-bottom:28px}
+.ph h1{font-family:Syne,sans-serif;font-size:24px;font-weight:700;margin-bottom:4px}.ph p{font-size:14px;color:var(--mu)}
+.sc{background:var(--ca);border:1px solid var(--bo);border-radius:12px;padding:20px;margin-bottom:16px}
+.sc h3{font-family:Syne,sans-serif;font-size:15px;font-weight:700;margin-bottom:16px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:12px}
+.fg2{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-bottom:12px}
+.fg22{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.fi2{display:flex;flex-direction:column;gap:5px}
+.fi2 label{font-size:11px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}
+.fi2 input,.fi2 select,.fi2 textarea{background:var(--b2);border:1px solid var(--bo);border-radius:7px;padding:9px 10px;font-size:13px;color:var(--te);font-family:Inter,sans-serif;outline:none;width:100%}
+.fi2 textarea{resize:vertical;min-height:80px;line-height:1.5}.fi2 input:focus,.fi2 select:focus,.fi2 textarea:focus{border-color:#444}
+.ir{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(34,34,34,.5);cursor:pointer}.ir:last-child{border-bottom:none}
+.ir-name{font-size:13px;font-weight:600}.ir-sub{font-size:12px;color:var(--mu)}
+.db{background:none;border:none;color:#444;cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px}.db:hover{color:#f87171}
+.empty{text-align:center;padding:40px 20px;color:var(--mu)}.empty p{font-size:14px}
+.rc{background:var(--b2);border:1px solid var(--bo);border-radius:12px;padding:20px;margin-bottom:12px;position:relative}
+.rc h4{font-family:Syne,sans-serif;font-size:16px;font-weight:700;margin-bottom:10px;color:var(--or)}
+.rc pre{font-size:13px;color:#ccc;line-height:1.7;white-space:pre-wrap;font-family:Inter,sans-serif}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.04em;margin-right:6px;margin-top:8px}
+.t-or{background:rgba(245,158,11,.12);color:var(--or);border:1px solid rgba(245,158,11,.3)}
+.t-gr{background:rgba(34,197,94,.12);color:var(--gr);border:1px solid rgba(34,197,94,.3)}
+.t-pu{background:rgba(168,85,247,.12);color:var(--pu);border:1px solid rgba(168,85,247,.3)}
+.cb{position:absolute;top:14px;right:14px;background:var(--bo);border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:4px 10px;border-radius:6px;font-family:Inter,sans-serif}.cb:hover{color:var(--te)}
+.gb{background:var(--or);color:#000;padding:11px 22px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:Syne,sans-serif;display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+.gb:hover{background:var(--or2)}.gb:disabled{opacity:.5;cursor:not-allowed}
+.sp{width:15px;height:15px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .8s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hc{background:var(--ca);border:1px solid var(--bo);border-radius:10px;padding:16px;margin-bottom:10px}
+.ht{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--or);margin-bottom:6px}
+.hx{font-size:13px;color:var(--mu);line-height:1.6;white-space:pre-wrap}.hd{font-size:11px;color:#444;margin-top:8px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid var(--bo);border-radius:10px;padding:12px 16px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:900px){.al{grid-template-columns:1fr}.sb{display:none}.fg3,.fg2,.fg22{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="logo"><div class="li">&#127919;</div>Promo<span>Lab</span></a>
+  <div class="nr" id="nr"><button class="btn bo-btn" onclick="showLoginModal()">Entrar</button><button class="btn or-btn" onclick="showLoginModal('register')">Crear cuenta</button></div>
+  <div class="nr" id="ni" style="display:none"><span style="font-size:13px;color:var(--mu)">Hola, <strong id="nu" style="color:var(--te)"></strong></span><button class="btn bo-btn sm" onclick="doLogout()">Cerrar sesi&#243;n</button></div>
+</nav>
+<div id="ls">
+  <div><h1 style="font-family:Syne,sans-serif">Promos que se <em>crean solas</em></h1><p>Carg&#225; tu men&#250; y la IA arma combos, descuentos &#243;ptimos y copy listo para publicar.</p></div>
+  <div class="lfc"><div class="lf">&#129303; Combos</div><div class="lf">&#127991; Descuentos</div><div class="lf">&#129514; Test A/B</div><div class="lf">&#128203; Copy</div></div>
+  <button class="btn or-btn" style="padding:14px 32px;font-size:15px" onclick="showLoginModal('register')">Empezar gratis &#8594;</button>
+</div>
+<div id="app">
+  <div class="al">
+    <aside class="sb"><div class="sb-s">
+      <button class="si active" onclick="showPage('menu',this)"><span class="sii">&#127829;</span>Mi men&#250;</button>
+      <span class="sl">Generar con IA</span>
+      <button class="si" onclick="showPage('combos',this)"><span class="sii">&#129303;</span>Combos</button>
+      <button class="si" onclick="showPage('descuentos',this)"><span class="sii">&#127991;</span>Descuentos</button>
+      <button class="si" onclick="showPage('abtesting',this)"><span class="sii">&#129514;</span>Test A/B</button>
+      <button class="si" onclick="showPage('copy',this)"><span class="sii">&#128203;</span>Copy de promo</button>
+      <span class="sl">Historial</span>
+      <button class="si" onclick="showPage('historial',this)"><span class="sii">&#128218;</span>Historial</button>
+    </div></aside>
+    <main class="mn">
+      <div id="p-menu" class="page active">
+        <div class="ph"><h1>Mi men&#250;</h1><p>Carg&#225; tus platos. La IA los usa para generar promos.</p></div>
+        <div class="sc"><h3>&#43; Agregar plato</h3>
+          <div class="fg3"><div class="fi2"><label>Nombre</label><input type="text" id="mn-name" placeholder="Ej: Milanesa napolitana"></div><div class="fi2"><label>Precio ($)</label><input type="number" id="mn-price" placeholder="0" min="0"></div><div class="fi2"><label>Costo ($) opcional</label><input type="number" id="mn-cost" placeholder="0" min="0"></div><button class="btn or-btn" onclick="addItem()" style="align-self:flex-end">+</button></div>
+          <div class="fi2" style="margin-bottom:12px"><label>Categor&#237;a</label><select id="mn-cat"><option>Principal</option><option>Entrada</option><option>Postre</option><option>Bebida</option><option>Extra / Adicional</option><option>Men&#250; del d&#237;a</option></select></div>
+        </div>
+        <div class="sc"><h3>&#127829; Platos</h3><div id="mt"></div></div>
+      </div>
+      <div id="p-combos" class="page">
+        <div class="ph"><h1>Combos</h1><p>Seleccion&#225; platos y la IA arma combos con precio y argumento de venta.</p></div>
+        <div class="sc"><h3>&#9989; Elegir platos</h3><div id="ci"></div>
+          <div style="margin-top:16px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end">
+            <div class="fi2" style="flex:1;min-width:180px"><label>Objetivo</label><select id="co"><option value="ticket">Subir ticket promedio</option><option value="rotacion">Rotar platos con menos salida</option><option value="almuerzo">Men&#250; almuerzo r&#225;pido</option><option value="familia">Men&#250; familiar</option><option value="delivery">Optimizar delivery</option></select></div>
+            <div class="fi2" style="width:140px"><label>Descuento m&#225;x (%)</label><input type="number" id="cd" value="15" min="0" max="50"></div>
+            <button class="gb" id="btn-combo" onclick="genCombos()"><span id="sp-combo" class="sp"></span><span>&#129303; Generar</span></button>
+          </div>
+        </div><div id="combos-result"></div>
+      </div>
+      <div id="p-descuentos" class="page">
+        <div class="ph"><h1>Descuentos</h1><p>La IA sugiere qu&#233; descontar, cu&#225;nto y cu&#225;ndo.</p></div>
+        <div class="sc"><h3>&#9881; Configurar</h3>
+          <div class="fg2">
+            <div class="fi2"><label>Momento</label><select id="dm"><option value="mediodia">Mediod&#237;a</option><option value="noche">Noche</option><option value="finde">Fin de semana</option><option value="semana">Lunes a mi&#233;rcoles</option><option value="liquidacion">Liquidar stock</option><option value="lanzamiento">Lanzar plato nuevo</option></select></div>
+            <div class="fi2"><label>Margen m&#237;n (%)</label><input type="number" id="dmar" value="30" min="0" max="80"></div>
+            <button class="gb" id="btn-desc" onclick="genDescuentos()" style="align-self:flex-end"><span id="sp-desc" class="sp"></span><span>&#127991; Generar</span></button>
+          </div>
+        </div><div id="desc-result"></div>
+      </div>
+      <div id="p-abtesting" class="page">
+        <div class="ph"><h1>Test A/B</h1><p>Dos versiones de una promo para testear cu&#225;l funciona mejor.</p></div>
+        <div class="sc"><h3>&#9881; Configurar</h3>
+          <div class="fg22"><div class="fi2"><label>&#191;Qu&#233; testear?</label><select id="ab-tipo"><option value="nombre">Nombre del combo</option><option value="precio">Estrategia de precio</option><option value="descripcion">Descripci&#243;n</option><option value="descuento">Formato del descuento</option><option value="urgencia">Mensaje de urgencia</option></select></div><div class="fi2"><label>Canal</label><select id="ab-canal"><option value="instagram">Instagram</option><option value="whatsapp">WhatsApp</option><option value="rappi">Rappi / PedidosYa</option><option value="mesa">Carta en mesa</option></select></div></div>
+          <div class="fi2" style="margin-bottom:16px"><label>Describ&#237; la promo a testear</label><textarea id="ab-item" placeholder="Ej: Milanesa $8500, testear descuento vs combo"></textarea></div>
+          <button class="gb" id="btn-ab" onclick="genAB()"><span id="sp-ab" class="sp"></span><span>&#129514; Generar A/B</span></button>
+        </div><div id="ab-result"></div>
+      </div>
+      <div id="p-copy" class="page">
+        <div class="ph"><h1>Copy de promo</h1><p>Describ&#237; tu promo y la IA escribe el texto listo para publicar.</p></div>
+        <div class="sc"><h3>&#9881; Configurar</h3>
+          <div class="fi2" style="margin-bottom:12px"><label>Describ&#237; la promo</label><textarea id="copy-desc" placeholder="Ej: Combo 2 hamburguesas + papas + gaseosas $18000. Viernes y s&#225;bados 19-23hs."></textarea></div>
+          <div class="fg22"><div class="fi2"><label>Tono</label><select id="copy-tono"><option value="energico">Energ&#233;tico</option><option value="premium">Premium</option><option value="cercano">Cercano y familiar</option><option value="urgente">Urgente</option></select></div><div class="fi2"><label>Canal</label><select id="copy-canal"><option value="todos">Todos</option><option value="instagram">Instagram</option><option value="whatsapp">WhatsApp</option><option value="rappi">Apps delivery</option></select></div></div>
+          <button class="gb" id="btn-copy" onclick="genCopy()" style="margin-top:12px"><span id="sp-copy" class="sp"></span><span>&#128203; Generar copy</span></button>
+        </div><div id="copy-result"></div>
+      </div>
+      <div id="p-historial" class="page">
+        <div class="ph"><h1>Historial</h1><p>Todas las promos generadas.</p></div>
+        <div id="hl"></div>
+      </div>
+    </main>
+  </div>
+</div>
+<div class="mb" id="lm"><div class="md">
+  <button class="mc" onclick="closeLoginModal()">&#10005;</button>
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div class="li">&#127919;</div><span style="font-family:Syne,sans-serif;font-size:16px;font-weight:700">PromoLab</span></div>
+  <p>Guardá tu menú y el historial de promos</p>
+  <div class="tr"><button class="tb active" id="tab-login" onclick="swTab('login')">Iniciar sesión</button><button class="tb" id="tab-register" onclick="swTab('register')">Crear cuenta</button></div>
+  <div id="lf"><div class="fi"><label>Email</label><input type="email" id="le2" placeholder="tu@email.com"></div><div class="fi"><label>Contraseña</label><input type="password" id="lp" placeholder="••••••"></div><div class="me" id="le"></div><button class="btn or-btn bf" onclick="doLogin()">Entrar →</button><button class="lb" onclick="resetAccount()">Olvidé mi contraseña</button></div>
+  <div id="rf" style="display:none"><div class="fi"><label>Nombre / Restaurante</label><input type="text" id="rn" placeholder="La Parrilla de Juan"></div><div class="fi"><label>Email</label><input type="email" id="re2" placeholder="tu@email.com"></div><div class="fi"><label>Contraseña</label><input type="password" id="rp" placeholder="Mínimo 6 caracteres"></div><div class="me" id="re"></div><button class="btn or-btn bf" onclick="doRegister()">Crear cuenta →</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+const DB='promolab_db',UK='promolab_users',SK='promolab_session';let cu=null;
+function hp(p){let h=0;for(let i=0;i<p.length;i++)h=((h<<5)-h)+p.charCodeAt(i),h|=0;return 'h_'+Math.abs(h).toString(36);}
+function gdb(){try{return JSON.parse(localStorage.getItem(DB)||'{"users":{},"data":{}}');}catch(e){return{users:{},data:{}};}}
+function sdb(d){try{localStorage.setItem(DB,JSON.stringify(d));}catch(e){}}
+function gus(){try{const u=JSON.parse(localStorage.getItem(UK)||'{}');const db=gdb();return Object.assign({},db.users||{},u);}catch(e){return{};}}
+function sus(u){try{localStorage.setItem(UK,JSON.stringify(u));}catch(e){}}
+function gd(){if(cu){try{const db=gdb();if(!db.data[cu]){db.data[cu]={items:[],historial:[]};sdb(db);}return db.data[cu];}catch(e){return{items:[],historial:[]};}}return{items:[],historial:[]};}
+function sd(d){if(!cu)return;const db=gdb();db.data[cu]=d;sdb(db);}
+function swTab(t){document.getElementById('tab-login').classList.toggle('active',t==='login');document.getElementById('tab-register').classList.toggle('active',t==='register');document.getElementById('lf').style.display=t==='login'?'block':'none';document.getElementById('rf').style.display=t==='register'?'block':'none';document.getElementById('le').textContent='';document.getElementById('re').textContent='';}
+function se(id,m){document.getElementById(id).textContent=m;}
+function showLoginModal(tab){document.getElementById('lm').classList.add('open');if(tab==='register')swTab('register');}
+function closeLoginModal(){document.getElementById('lm').classList.remove('open');}
+function doRegister(){const name=document.getElementById('rn').value.trim(),email=document.getElementById('re2').value.trim().toLowerCase(),pass=document.getElementById('rp').value;if(!name)return se('re','Nombre requerido');if(!email||!email.includes('@'))return se('re','Email inválido');if(pass.length<6)return se('re','Mínimo 6 caracteres');const us=gus();if(us[email])return se('re','Ya existe. Iniciá sesión.');const hash=hp(pass);us[email]={name,hash};sus(us);const db=gdb();db.users[email]={name,hash};if(!db.data[email])db.data[email]={items:[],historial:[]};sdb(db);localStorage.setItem(SK,email);loadApp(email);}
+function doLogin(){const email=document.getElementById('le2').value.trim().toLowerCase(),pass=document.getElementById('lp').value;if(!email||!pass)return se('le','Completá todo');const us=gus(),u=us[email];if(!u)return se('le','No existe cuenta');if(u.hash!==hp(pass))return se('le','Contraseña incorrecta');localStorage.setItem(SK,email);loadApp(email);}
+function doLogout(){localStorage.removeItem(SK);cu=null;document.getElementById('nr').style.display='flex';document.getElementById('ni').style.display='none';document.getElementById('app').style.display='none';document.getElementById('ls').style.display='flex';}
+function loadApp(email){closeLoginModal();cu=email;const us=gus();document.getElementById('nu').textContent=(us[email]||{}).name||email;document.getElementById('nr').style.display='none';document.getElementById('ni').style.display='flex';document.getElementById('ls').style.display='none';document.getElementById('app').style.display='block';renderMenu();renderCI();renderHistorial();}
+function resetAccount(){const email=document.getElementById('le2').value.trim().toLowerCase();if(!email)return se('le','Ingresá tu email');if(!confirm('Eliminar '+email+'?'))return;const u=JSON.parse(localStorage.getItem(UK)||'{}'),db=JSON.parse(localStorage.getItem(DB)||'{"users":{},"data":{}}');delete u[email];delete db.users[email];delete db.data[email];localStorage.setItem(UK,JSON.stringify(u));localStorage.setItem(DB,JSON.stringify(db));localStorage.removeItem(SK);se('le','Cuenta eliminada.');}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});document.querySelectorAll('.si').forEach(function(b){b.classList.remove('active');});document.getElementById('p-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='combos')renderCI();if(id==='historial')renderHistorial();}
+function addItem(){const name=document.getElementById('mn-name').value.trim(),price=parseFloat(document.getElementById('mn-price').value)||0,cost=parseFloat(document.getElementById('mn-cost').value)||0,cat=document.getElementById('mn-cat').value;if(!name||!price)return toast('Ingresá nombre y precio');const d=gd();d.items.push({id:Date.now(),name,price,cost,cat});sd(d);document.getElementById('mn-name').value='';document.getElementById('mn-price').value='';document.getElementById('mn-cost').value='';renderMenu();renderCI();toast('Plato agregado');}
+function delItem(id){const d=gd();d.items=d.items.filter(function(x){return x.id!==id;});sd(d);renderMenu();renderCI();}
+function fmtP(n){return '$'+n.toLocaleString('es-AR');}
+function renderMenu(){const d=gd(),el=document.getElementById('mt');if(!d.items.length){el.innerHTML='<div class="empty"><p>Añadí platos para que la IA genere promos</p></div>';return;}const cats={};d.items.forEach(function(x){if(!cats[x.cat])cats[x.cat]=[];cats[x.cat].push(x);});el.innerHTML=Object.entries(cats).map(function(e){return '<div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;margin-bottom:8px">'+e[0]+'</div>'+e[1].map(function(r){return '<div class="ir"><div style="flex:1"><div class="ir-name">'+r.name+'</div><div class="ir-sub">'+fmtP(r.price)+(r.cost?' | Costo: '+fmtP(r.cost)+' | Margen: '+((1-r.cost/r.price)*100).toFixed(0)+'%':'')+'</div></div><button class="db" onclick="delItem('+r.id+')">&times;</button></div>';}).join('')+'</div>';}).join('');}
+function renderCI(){const d=gd(),el=document.getElementById('ci');if(!d.items.length){el.innerHTML='<p style="font-size:13px;color:var(--mu)">Primero cargá platos en Mi menú.</p>';return;}el.innerHTML=d.items.map(function(r){return '<label class="ir"><input type="checkbox" class="cc" value="'+r.id+'" data-name="'+r.name+'" data-price="'+r.price+'" data-cost="'+(r.cost||0)+'" data-cat="'+r.cat+'"><div><div class="ir-name">'+r.name+'</div><div class="ir-sub">'+r.cat+' &bull; '+fmtP(r.price)+'</div></div></label>';}).join('');}
+function menuStr(){return gd().items.map(function(x){return '- '+x.name+' ('+x.cat+'): $'+x.price+(x.cost?' / costo $'+x.cost:'');}).join('\n');}
+function setL(b,s,on){const btn=document.getElementById(b),sp=document.getElementById(s);btn.disabled=on;sp.style.display=on?'block':'none';}
+function saveH(tipo,texto){const d=gd();if(!d.historial)d.historial=[];d.historial.unshift({id:Date.now(),tipo,texto,fecha:new Date().toLocaleDateString('es-AR')});if(d.historial.length>50)d.historial=d.historial.slice(0,50);sd(d);}
+async function callAI(prompt){const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});const data=await res.json();return data.content&&data.content[0]&&data.content[0].text||'Error al generar.';}
+function mkCard(title,text,tags){return '<div class="rc"><button class="cb" onclick="copyTxt(this)">Copiar</button><h4>'+title+'</h4><pre>'+text+'</pre><div>'+tags.map(function(x){return '<span class="tag '+x[1]+'">'+x[0]+'</span>';}).join('')+'</div></div>';}
+function copyTxt(btn){const pre=btn.closest('.rc').querySelector('pre');navigator.clipboard.writeText(pre.textContent).then(function(){btn.textContent='Copiado!';setTimeout(function(){btn.textContent='Copiar';},2000);});}
+async function genCombos(){const checks=[...document.querySelectorAll('.cc:checked')];const obj=document.getElementById('co').value,maxD=document.getElementById('cd').value;if(checks.length<2)return toast('Seleccioná al menos 2 platos');setL('btn-combo','sp-combo',true);const sel=checks.map(function(c){return{name:c.dataset.name,price:parseFloat(c.dataset.price),cost:parseFloat(c.dataset.cost)||0,cat:c.dataset.cat};});const total=sel.reduce(function(s,x){return s+x.price;},0);const p='Sos experto en marketing gastronómico en Argentina.\n\nPlatos:\n'+sel.map(function(x){return '- '+x.name+' ('+x.cat+'): $'+x.price+(x.cost?' / costo $'+x.cost:'');}).join('\n')+'\n\nPrecio total sin combo: $'+total+'\nObjetivo: '+obj+'\nDesc max: '+maxD+'%\n\nCrea 3 combos. Para cada uno:\n1. Nombre creativo\n2. Platos incluidos\n3. Precio del combo\n4. Ahorro del cliente\n5. Margen estimado\n6. Frase de venta\n7. Mejor momento\n\nEspañol, claro y listo para usar.';try{const r=await callAI(p);document.getElementById('combos-result').innerHTML=mkCard('🤃 Combos generados',r,[['IA','t-or'],['Listo','t-gr']]);saveH('Combo',r);}catch(e){document.getElementById('combos-result').innerHTML='<div class="rc"><pre>Error. Reintentá.</pre></div>';}setL('btn-combo','sp-combo',false);}
+async function genDescuentos(){const d=gd();if(!d.items.length)return toast('Cargá platos primero');const m=document.getElementById('dm').value,mar=document.getElementById('dmar').value;setL('btn-desc','sp-desc',true);const p='Sos experto en pricing gastronómico en Argentina.\n\nMenú:\n'+menuStr()+'\n\nMomento: '+m+'\nMargen mínimo: '+mar+'%\n\nSugierí estrategia de descuentos:\n1. Top 3 platos para descontar (con justificación)\n2. Descuento sugerido para cada uno\n3. Cómo comunicarlo\n4. Platos que NO descontar y por qué\n5. Estrategia general\n\nConcreto y accionable.';try{const r=await callAI(p);document.getElementById('desc-result').innerHTML=mkCard('🏷️ Descuentos',r,[['IA','t-or'],[''+m,'t-pu']]);saveH('Descuento',r);}catch(e){document.getElementById('desc-result').innerHTML='<div class="rc"><pre>Error.</pre></div>';}setL('btn-desc','sp-desc',false);}
+async function genAB(){const tipo=document.getElementById('ab-tipo').value,canal=document.getElementById('ab-canal').value,item=document.getElementById('ab-item').value.trim();if(!item)return toast('Describí la promo');setL('btn-ab','sp-ab',true);const p='Sos experto en marketing gastronómico en Argentina.\n\nPromo: '+item+'\nTestear: '+tipo+'\nCanal: '+canal+'\n\nCrea 2 versiones (A y B) diferentes.\nPara cada una: texto completo listo para '+canal+', hipótesis, métrica.\nDespués: cómo medir y cuándo declarar ganador.\n\nEspañol rioplatense.';try{const r=await callAI(p);document.getElementById('ab-result').innerHTML=mkCard('🧪 Test A/B',r,[['IA','t-or'],[''+canal,'t-pu']]);saveH('A/B',r);}catch(e){document.getElementById('ab-result').innerHTML='<div class="rc"><pre>Error.</pre></div>';}setL('btn-ab','sp-ab',false);}
+async function genCopy(){const desc=document.getElementById('copy-desc').value.trim(),tono=document.getElementById('copy-tono').value,canal=document.getElementById('copy-canal').value;if(!desc)return toast('Describí la promo');setL('btn-copy','sp-copy',true);const cm={todos:'Instagram, WhatsApp, Rappi/PedidosYa y carta en mesa',instagram:'Instagram Stories',whatsapp:'WhatsApp',rappi:'apps delivery'};const p='Sos experto en copywriting gastronómico en Argentina.\n\nPromo: '+desc+'\nTono: '+tono+'\nCanales: '+(cm[canal]||canal)+'\n\nCopy completo para cada canal: texto listo, hashtags (Instagram), mejor horario.\nEspañol rioplatense.';try{const r=await callAI(p);document.getElementById('copy-result').innerHTML=mkCard('📋 Copy listo',r,[['IA','t-or'],[''+tono,'t-gr']]);saveH('Copy',r);}catch(e){document.getElementById('copy-result').innerHTML='<div class="rc"><pre>Error.</pre></div>';}setL('btn-copy','sp-copy',false);}
+function renderHistorial(){const d=gd(),h=d.historial||[],el=document.getElementById('hl');if(!h.length){el.innerHTML='<div class="empty"><p>Las promos generadas aparecerán acá</p></div>';return;}el.innerHTML=h.map(function(x){return '<div class="hc"><div class="ht">'+x.tipo+'</div><div class="hx">'+x.texto.slice(0,300)+(x.texto.length>300?'...':'')+'</div><div class="hd">'+x.fecha+'</div></div>';}).join('');}
+let _tt=null;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},2500);}
+(function(){const s=localStorage.getItem(SK);if(s){const u=gus();if(u[s])loadApp(s);else localStorage.removeItem(SK);}})();
+</script>
+</body>
+</html>
