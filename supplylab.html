@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SupplyLab — Comprá mejor, pagá menos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--gr:#22c55e;--gr2:#16a34a;--bg:#0a0a0a;--b2:#111;--ca:#161616;--bo:#222;--te:#f0f0f0;--mu:#777;--re:#E53030;--or:#f59e0b;--bl:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--te);font-family:Inter,sans-serif;line-height:1.5;min-height:100vh}
+.sy{font-family:Syne,sans-serif}.nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;border-bottom:1px solid var(--bo);background:rgba(10,10,10,.9);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:8px;font-family:Syne,sans-serif;font-weight:700;font-size:16px;text-decoration:none;color:var(--te)}.li{width:28px;height:28px;background:var(--gr);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}.logo span{color:var(--gr)}
+.nr{display:flex;align-items:center;gap:12px}.btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .18s;font-family:Inter,sans-serif}
+.bo-btn{background:transparent;border:1px solid var(--bo);color:var(--mu)}.bo-btn:hover{border-color:var(--mu);color:var(--te)}.gr-btn{background:var(--gr);color:#fff}.gr-btn:hover{background:var(--gr2)}.sm{padding:5px 12px;font-size:12px}
+.mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center}.mb.open{display:flex}
+.md{background:var(--ca);border:1px solid var(--bo);border-radius:16px;padding:32px;width:100%;max-width:400px;position:relative}.md p{font-size:13px;color:var(--mu);margin-bottom:24px}
+.tr{display:flex;gap:2px;background:var(--b2);border-radius:8px;padding:3px;margin-bottom:20px}.tb{flex:1;padding:6px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--mu);font-family:Inter,sans-serif}.tb.active{background:var(--ca);color:var(--te)}
+.fi{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}.fi label{font-size:12px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}.fi input{background:var(--b2);border:1px solid var(--bo);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--te);font-family:Inter,sans-serif;width:100%;outline:none}
+.me{font-size:12px;color:#f87171;min-height:16px;margin-bottom:10px}.mc{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--mu);cursor:pointer;font-size:18px}.bf{width:100%;padding:12px;font-size:14px}.lb{background:none;border:none;color:var(--mu);font-size:12px;cursor:pointer;text-decoration:underline;margin-top:8px;display:block;text-align:center;font-family:Inter,sans-serif}
+#ls{display:flex;align-items:center;justify-content:center;min-height:80vh;padding:40px 24px;flex-direction:column;gap:32px;text-align:center}#ls h1{font-family:Syne,sans-serif;font-size:32px;font-weight:800;margin-bottom:12px}#ls h1 em{color:var(--gr);font-style:normal}#ls p{font-size:16px;color:var(--mu);max-width:480px}
+.lfc{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:560px}.lf{background:var(--ca);border:1px solid var(--bo);border-radius:10px;padding:14px 18px;font-size:13px;display:flex;align-items:center;gap:8px}
+#app{display:none}.al{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px)}.sb{background:var(--b2);border-right:1px solid var(--bo);padding:20px 0}.sb-s{padding:0 12px}
+.sl{font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;padding:0 8px;margin-bottom:8px;margin-top:16px;display:block}
+.si{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:var(--mu);border:none;background:none;width:100%;font-family:Inter,sans-serif;text-align:left;transition:all .15s}.si:hover{background:rgba(255,255,255,.05);color:var(--te)}.si.active{background:rgba(34,197,94,.1);color:var(--gr)}.sii{font-size:15px;width:20px;text-align:center}
+.mn{padding:28px 32px;overflow-y:auto}.page{display:none}.page.active{display:block}.ph{margin-bottom:28px}.ph h1{font-family:Syne,sans-serif;font-size:24px;font-weight:700;margin-bottom:4px}.ph p{font-size:14px;color:var(--mu)}
+.sc{background:var(--ca);border:1px solid var(--bo);border-radius:12px;padding:20px;margin-bottom:16px}.sc h3{font-family:Syne,sans-serif;font-size:15px;font-weight:700;margin-bottom:16px}
+.fi2{display:flex;flex-direction:column;gap:5px}.fi2 label{font-size:11px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}.fi2 input,.fi2 select{background:var(--b2);border:1px solid var(--bo);border-radius:7px;padding:9px 10px;font-size:13px;color:var(--te);font-family:Inter,sans-serif;outline:none;width:100%}
+.fg{display:grid;gap:10px;align-items:end;margin-bottom:12px}.fg3{grid-template-columns:1fr 1fr 1fr auto}.fg4{grid-template-columns:1fr 1fr 1fr 1fr auto}
+.dt{width:100%;border-collapse:collapse;font-size:13px}.dt th{text-align:left;font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;border-bottom:1px solid var(--bo)}.dt td{padding:10px;border-bottom:1px solid rgba(34,34,34,.5)}.dt tr:last-child td{border-bottom:none}.dt tr:hover td{background:rgba(255,255,255,.02)}
+.db{background:none;border:none;color:#444;cursor:pointer;font-size:14px;padding:2px 6px}.db:hover{color:#f87171}
+.alert-card{background:var(--ca);border:1px solid rgba(245,158,11,.3);border-left:3px solid var(--or);border-radius:10px;padding:16px;margin-bottom:10px}
+.alert-card.savings{border-color:rgba(34,197,94,.3);border-left-color:var(--gr)}
+.alert-title{font-size:14px;font-weight:700;margin-bottom:6px}.alert-desc{font-size:13px;color:var(--mu)}
+.best{color:var(--gr);font-weight:700}.worst{color:#f87171}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.04em}
+.t-gr{background:rgba(34,197,94,.12);color:var(--gr);border:1px solid rgba(34,197,94,.3)}.t-re{background:rgba(229,48,48,.12);color:var(--re);border:1px solid rgba(229,48,48,.3)}.t-or{background:rgba(245,158,11,.12);color:var(--or);border:1px solid rgba(245,158,11,.3)}
+.kgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}.kc{background:var(--ca);border:1px solid var(--bo);border-radius:12px;padding:16px}.kl{font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}.kv{font-size:24px;font-weight:800;font-family:Syne,sans-serif}
+.empty{text-align:center;padding:40px 20px;color:var(--mu)}.empty p{font-size:14px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid var(--bo);border-radius:10px;padding:12px 16px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none}.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:900px){.al{grid-template-columns:1fr}.sb{display:none}.kgrid{grid-template-columns:1fr}.fg3,.fg4{grid-template-columns:1fr}}</style></head><body>
+<nav class="nav">
+  <a href="/" class="logo"><div class="li">&#128230;</div>Supply<span>Lab</span></a>
+  <div class="nr" id="nr"><button class="btn bo-btn" onclick="showLoginModal()">Entrar</button><button class="btn gr-btn" onclick="showLoginModal('register')">Crear cuenta</button></div>
+  <div class="nr" id="ni" style="display:none"><span style="font-size:13px;color:var(--mu)">Hola, <strong id="nu" style="color:var(--te)"></strong></span><button class="btn bo-btn sm" onclick="doLogout()">Cerrar sesi&#243;n</button></div>
+</nav>
+<div id="ls">
+  <div><h1 class="sy">Comprá mejor, <em>pagá menos</em></h1><p>Cargá tus proveedores e insumos, compará precios y detectá dónde estás pagando de más.</p></div>
+  <div class="lfc"><div class="lf">&#128230; Registro de proveedores</div><div class="lf">&#128184; Precios por insumo</div><div class="lf">&#128202; Comparador automático</div><div class="lf">&#9888;&#65039; Alertas de sobreprecios</div></div>
+  <button class="btn gr-btn" style="padding:14px 32px;font-size:15px" onclick="showLoginModal('register')">Empezar gratis &#8594;</button>
+</div>
+<div id="app"><div class="al">
+  <aside class="sb"><div class="sb-s">
+    <button class="si active" onclick="showPage('dash',this)"><span class="sii">&#128200;</span>Dashboard</button>
+    <span class="sl">Datos</span>
+    <button class="si" onclick="showPage('proveedores',this)"><span class="sii">&#128106;</span>Proveedores</button>
+    <button class="si" onclick="showPage('insumos',this)"><span class="sii">&#127859;</span>Insumos</button>
+    <span class="sl">Análisis</span>
+    <button class="si" onclick="showPage('comparador',this)"><span class="sii">&#128202;</span>Comparador</button>
+  </div></aside>
+  <main class="mn">
+
+    <div id="p-dash" class="page active">
+      <div class="ph"><h1>Dashboard</h1><p>Resumen de tu base de proveedores e insumos</p></div>
+      <div class="kgrid">
+        <div class="kc"><div class="kl">Proveedores</div><div class="kv" id="d-prov" style="color:var(--bl)">0</div></div>
+        <div class="kc"><div class="kl">Insumos registrados</div><div class="kv" id="d-ins" style="color:var(--gr)">0</div></div>
+        <div class="kc"><div class="kl">Alertas de sobreprecio</div><div class="kv positive" id="d-alert">0</div></div>
+      </div>
+      <div class="sc"><h3>&#128202; Ahorro potencial total</h3>
+        <div style="font-size:32px;font-weight:800;font-family:Syne,sans-serif;color:var(--gr)" id="comp-ahorro">$0</div>
+        <div style="font-size:13px;color:var(--mu);margin-top:6px">Si compras todo al proveedor más barato por insumo</div>
+      </div>
+      <div class="sc"><h3>&#9889; Cómo empezar</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><span style="width:24px;height:24px;background:var(--gr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000;flex-shrink:0">1</span>Cargá tus proveedores en "Proveedores"</div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><span style="width:24px;height:24px;background:var(--gr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000;flex-shrink:0">2</span>Creá tus insumos en "Insumos"</div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><span style="width:24px;height:24px;background:var(--gr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000;flex-shrink:0">3</span>Cargá el precio de cada proveedor por insumo</div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><span style="width:24px;height:24px;background:var(--gr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000;flex-shrink:0">4</span>El comparador te muestra dónde estás pagando de más</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-proveedores" class="page">
+      <div class="ph"><h1>Proveedores</h1><p>Registrá tus proveedores de insumos</p></div>
+      <div class="sc"><h3>&#43; Agregar proveedor</h3>
+        <div class="fg fg3">
+          <div class="fi2"><label>Nombre</label><input type="text" id="pn" placeholder="Ej: Distribuidora García"></div>
+          <div class="fi2"><label>Rubro</label><select id="pr"><option>Cárnicos</option><option>Verdulería / Frutas</option><option>Lácteos</option><option>Secos / Almacén</option><option>Bebidas</option><option>Packaging</option><option>Limpieza</option><option>Varios</option></select></div>
+          <div class="fi2"><label>Contacto (opcional)</label><input type="text" id="pc" placeholder="Teléfono o email"></div>
+          <button class="btn gr-btn" onclick="addProv()" style="align-self:flex-end">+</button>
+        </div>
+      </div>
+      <div class="sc"><h3>&#128106; Tus proveedores</h3><div id="prov-list"></div></div>
+    </div>
+
+    <div id="p-insumos" class="page">
+      <div class="ph"><h1>Insumos</h1><p>Cargá el precio de cada insumo por proveedor para comparar</p></div>
+      <div class="sc"><h3>&#43; Agregar insumo</h3>
+        <div class="fg fg3">
+          <div class="fi2"><label>Nombre del insumo</label><input type="text" id="in" placeholder="Ej: Nalga de res"></div>
+          <div class="fi2"><label>Unidad</label><select id="iu"><option>kg</option><option>unidad</option><option>litro</option><option>docena</option><option>caja</option><option>bolsa</option><option>fardo</option></select></div>
+          <div class="fi2"><label>Categoría</label><select id="ic"><option>Cárnicos</option><option>Verduras / Frutas</option><option>Lácteos</option><option>Secos</option><option>Bebidas</option><option>Packaging</option><option>Limpieza</option><option>Otro</option></select></div>
+          <button class="btn gr-btn" onclick="addIns()" style="align-self:flex-end">+</button>
+        </div>
+      </div>
+      <div id="ins-list"></div>
+    </div>
+
+    <div id="p-comparador" class="page">
+      <div class="ph"><h1>Comparador de precios</h1><p>Automático — se actualiza al cargar precios</p></div>
+      <div class="sc"><h3>&#9888; Alertas de sobreprecio (10%+)</h3><div id="comp-list"></div></div>
+    </div>
+
+  </main>
+</div></div>
+<div class="mb" id="lm"><div class="md">
+  <button class="mc" onclick="closeLoginModal()">&#10005;</button>
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div class="li">&#128230;</div><span style="font-family:Syne,sans-serif;font-size:16px;font-weight:700">SupplyLab</span></div>
+  <p>Guardá tus proveedores y precios de forma segura</p>
+  <div class="tr"><button class="tb active" id="tab-login" onclick="swTab('login')">Iniciar sesión</button><button class="tb" id="tab-register" onclick="swTab('register')">Crear cuenta</button></div>
+  <div id="lf"><div class="fi"><label>Email</label><input type="email" id="le2" placeholder="tu@email.com"></div><div class="fi"><label>Contraseña</label><input type="password" id="lp" placeholder="••••••"></div><div class="me" id="le"></div><button class="btn gr-btn bf" onclick="doLogin()">Entrar →</button><button class="lb" onclick="resetAccount()">Olvidé mi contraseña</button></div>
+  <div id="rf" style="display:none"><div class="fi"><label>Nombre / Restaurante</label><input type="text" id="rn" placeholder="La Parrilla de Juan"></div><div class="fi"><label>Email</label><input type="email" id="re2" placeholder="tu@email.com"></div><div class="fi"><label>Contraseña</label><input type="password" id="rp" placeholder="Mínimo 6 caracteres"></div><div class="me" id="re"></div><button class="btn gr-btn bf" onclick="doRegister()">Crear cuenta →</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>const DB='supplylab_db',UK='supplylab_users',SK='supplylab_session';
+let cu=null;
+function hp(p){let h=0;for(let i=0;i<p.length;i++)h=((h<<5)-h)+p.charCodeAt(i),h|=0;return 'h_'+Math.abs(h).toString(36);}
+function gdb(){try{return JSON.parse(localStorage.getItem(DB)||'{"users":{},"data":{}}');}catch(e){return{users:{},data:{}};}}
+function sdb(d){try{localStorage.setItem(DB,JSON.stringify(d));}catch(e){}}
+function gus(){try{const u=JSON.parse(localStorage.getItem(UK)||'{}');const db=gdb();return Object.assign({},db.users||{},u);}catch(e){return{};}}
+function sus(u){try{localStorage.setItem(UK,JSON.stringify(u));}catch(e){}}
+function gd(){if(cu){try{const db=gdb();if(!db.data[cu]){db.data[cu]={proveedores:[],insumos:[]};sdb(db);}return db.data[cu];}catch(e){return{proveedores:[],insumos:[]};}}return{proveedores:[],insumos:[]};}
+function sd(d){if(!cu)return;const db=gdb();db.data[cu]=d;sdb(db);}
+function swTab(t){document.getElementById('tab-login').classList.toggle('active',t==='login');document.getElementById('tab-register').classList.toggle('active',t==='register');document.getElementById('lf').style.display=t==='login'?'block':'none';document.getElementById('rf').style.display=t==='register'?'block':'none';document.getElementById('le').textContent='';document.getElementById('re').textContent='';}
+function se(id,m){document.getElementById(id).textContent=m;}
+function showLoginModal(tab){document.getElementById('lm').classList.add('open');if(tab==='register')swTab('register');}
+function closeLoginModal(){document.getElementById('lm').classList.remove('open');}
+function doRegister(){const name=document.getElementById('rn').value.trim(),email=document.getElementById('re2').value.trim().toLowerCase(),pass=document.getElementById('rp').value;if(!name)return se('re','Nombre requerido');if(!email||!email.includes('@'))return se('re','Email inv\u00e1lido');if(pass.length<6)return se('re','M\u00ednimo 6 caracteres');const us=gus();if(us[email])return se('re','Ya existe.');const hash=hp(pass);us[email]={name,hash};sus(us);const db=gdb();db.users[email]={name,hash};if(!db.data[email])db.data[email]={proveedores:[],insumos:[]};sdb(db);localStorage.setItem(SK,email);loadApp(email);}
+function doLogin(){const email=document.getElementById('le2').value.trim().toLowerCase(),pass=document.getElementById('lp').value;if(!email||!pass)return se('le','Complet\u00e1 todos los campos');const us=gus(),u=us[email];if(!u)return se('le','No existe cuenta con ese email');if(u.hash!==hp(pass))return se('le','Contrase\u00f1a incorrecta');localStorage.setItem(SK,email);loadApp(email);}
+function doLogout(){localStorage.removeItem(SK);cu=null;document.getElementById('nr').style.display='flex';document.getElementById('ni').style.display='none';document.getElementById('app').style.display='none';document.getElementById('ls').style.display='flex';}
+function loadApp(email){closeLoginModal();cu=email;const us=gus();document.getElementById('nu').textContent=(us[email]||{}).name||email;document.getElementById('nr').style.display='none';document.getElementById('ni').style.display='flex';document.getElementById('ls').style.display='none';document.getElementById('app').style.display='block';renderDash();renderProv();renderIns();}
+function resetAccount(){const email=document.getElementById('le2').value.trim().toLowerCase();if(!email)return se('le','Ingres\u00e1 tu email primero');if(!confirm('Eliminar '+email+'?'))return;const u=JSON.parse(localStorage.getItem(UK)||'{}'),db=JSON.parse(localStorage.getItem(DB)||'{"users":{},"data":{}}');delete u[email];delete db.users[email];delete db.data[email];localStorage.setItem(UK,JSON.stringify(u));localStorage.setItem(DB,JSON.stringify(db));localStorage.removeItem(SK);se('le','Cuenta eliminada.');}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.si').forEach(b=>b.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='dash')renderDash();if(id==='comparador')renderComparador();if(id==='proveedores')renderProv();if(id==='insumos')renderIns();}
+function addProv(){const name=document.getElementById('pn').value.trim(),rubro=document.getElementById('pr').value,contacto=document.getElementById('pc').value.trim();if(!name)return toast('Ingres\u00e1 el nombre');const d=gd();d.proveedores.push({id:Date.now(),name,rubro,contacto});sd(d);document.getElementById('pn').value='';document.getElementById('pc').value='';renderProv();renderIns();toast('Proveedor agregado');}
+function delProv(id){const d=gd();d.proveedores=d.proveedores.filter(x=>x.id!==id);d.insumos=d.insumos.map(x=>{x.precios=(x.precios||[]).filter(p=>p.provId!==id);return x;});sd(d);renderProv();renderIns();renderDash();}
+function renderProv(){const d=gd(),el=document.getElementById('prov-list');if(!d.proveedores.length){el.innerHTML='<div class="empty"><p>A\u00f1ad\u00ed proveedores primero</p></div>';return;}el.innerHTML='<table class="dt"><thead><tr><th>Proveedor</th><th>Rubro</th><th>Contacto</th><th></th></tr></thead><tbody>'+d.proveedores.map(r=>'<tr><td><b>'+r.name+'</b></td><td style="color:var(--mu)">'+r.rubro+'</td><td style="color:var(--mu)">'+( r.contacto||'\u2014')+'</td><td><button class="db" onclick="delProv('+r.id+')">x</button></td></tr>').join('')+'</tbody></table>';}
+function addIns(){const name=document.getElementById('in').value.trim(),unidad=document.getElementById('iu').value,cat=document.getElementById('ic').value;if(!name)return toast('Ingres\u00e1 el nombre del insumo');const d=gd();if(d.insumos.find(x=>x.name.toLowerCase()===name.toLowerCase()))return toast('Ya existe ese insumo');d.insumos.push({id:Date.now(),name,unidad,cat,precios:[]});sd(d);document.getElementById('in').value='';renderIns();toast('Insumo agregado');}
+function delIns(id){const d=gd();d.insumos=d.insumos.filter(x=>x.id!==id);sd(d);renderIns();renderDash();}
+function addPrecio(insId){const d=gd();const ins=d.insumos.find(x=>x.id===insId);if(!ins)return;const sel=document.getElementById('pp-prov-'+insId),price=parseFloat(document.getElementById('pp-price-'+insId).value)||0;if(!sel.value||!price)return toast('Complet\u00e1 proveedor y precio');const provId=parseInt(sel.value);if(ins.precios.find(p=>p.provId===provId)){ins.precios=ins.precios.map(p=>p.provId===provId?Object.assign({},p,{price,fecha:new Date().toLocaleDateString('es-AR')}):p);}else{ins.precios.push({provId,price,fecha:new Date().toLocaleDateString('es-AR')});}sd(d);document.getElementById('pp-price-'+insId).value='';renderIns();renderDash();renderComparador();toast('Precio guardado');}
+function fmt(n){return '$'+n.toLocaleString('es-AR');}
+function renderIns(){const d=gd(),el=document.getElementById('ins-list');if(!d.insumos.length){el.innerHTML='<div class="empty"><p>A\u00f1ad\u00ed insumos para comparar precios</p></div>';return;}el.innerHTML=d.insumos.map(r=>{const prvOpts=d.proveedores.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join('');const precios=r.precios.map(p=>{const prov=d.proveedores.find(x=>x.id===p.provId);return prov?'<span style="font-size:12px;background:var(--b2);border:1px solid var(--bo);border-radius:5px;padding:2px 8px;margin-right:4px">'+prov.name+': '+fmt(p.price)+'</span>':'';}).join('');return '<div class="sc" style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div><div style="font-size:15px;font-weight:700">'+r.name+'</div><div style="font-size:12px;color:var(--mu)">'+r.cat+' &bull; por '+r.unidad+'</div></div><button class="db" onclick="delIns('+r.id+')">x</button></div>'+(precios?'<div style="margin-bottom:10px">'+precios+'</div>':'<div style="font-size:12px;color:var(--mu);margin-bottom:10px">Sin precios cargados</div>')+'<div style="display:grid;grid-template-columns:1fr 120px auto;gap:8px;align-items:end"><div class="fi2"><label>Proveedor</label><select id="pp-prov-'+r.id+'"><option value="">Elegir...</option>'+prvOpts+'</select></div><div class="fi2"><label>Precio ($)</label><input type="number" id="pp-price-'+r.id+'" placeholder="0.00" min="0"></div><button class="btn gr-btn" onclick="addPrecio('+r.id+')" style="align-self:flex-end">OK</button></div></div>';}).join('');}
+function renderComparador(){const d=gd(),el=document.getElementById('comp-list');const insConP=d.insumos.filter(x=>x.precios&&x.precios.length>1);if(!insConP.length){el.innerHTML='<div class="empty"><p>Carg\u00e1 al menos 2 proveedores por insumo para comparar</p></div>';return;}let totalAhorro=0;el.innerHTML=insConP.map(ins=>{const precios=ins.precios.map(p=>{const prov=d.proveedores.find(x=>x.id===p.provId);return{prov:prov?prov.name:'?',price:p.price};}).sort((a,b)=>a.price-b.price);const min=precios[0].price,max=precios[precios.length-1].price;const diffPct=min?((max-min)/min*100).toFixed(0):0;totalAhorro+=max-min;return '<div class="alert-card"><div class="alert-title">'+ins.name+' <span style="font-size:12px;font-weight:400;color:var(--mu)">por '+ins.unidad+'</span></div><div style="display:flex;flex-direction:column;gap:6px;margin:10px 0">'+precios.map((p,i)=>'<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;'+(i===0?'font-weight:700':'color:var(--mu)')+'">'+p.prov+'</span><span style="font-size:14px;font-weight:700;color:'+(i===0?'var(--gr)':'#f87171')+'">'+fmt(p.price)+'</span></div>').join('')+'</div>'+(parseFloat(diffPct)>0?'<div style="font-size:12px;color:var(--or);margin-top:6px">&#9888; Est\u00e1s pagando hasta '+diffPct+'% m\u00e1s caro con '+precios[precios.length-1].prov+'</div>':'')+'</div>';}).join('');document.getElementById('comp-ahorro').textContent=fmt(totalAhorro);}
+function renderDash(){const d=gd();document.getElementById('d-prov').textContent=d.proveedores.length;document.getElementById('d-ins').textContent=d.insumos.length;const insConP=d.insumos.filter(x=>x.precios&&x.precios.length>1);let alertas=0;insConP.forEach(ins=>{const pr=ins.precios.map(p=>p.price).sort((a,b)=>a-b);if(pr.length>1&&((pr[pr.length-1]-pr[0])/pr[0]*100)>10)alertas++;});const el=document.getElementById('d-alert');el.textContent=alertas;el.className='kv '+(alertas>0?'negative':'positive');}
+let _tt=null;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},2500);}
+const negative='negative';const positive='positive';
+(function(){const s=localStorage.getItem(SK);if(s){const u=gus();if(u[s])loadApp(s);else localStorage.removeItem(SK);}})();</script>
+</body></html>
