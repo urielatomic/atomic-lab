@@ -304,7 +304,14 @@ function loadApp(email){
 }
 function resetAccount(){const email=document.getElementById('le2').value.trim().toLowerCase();if(!email)return se('le','Ingres\u00e1 tu email primero');if(!confirm('Eliminar '+email+'?'))return;const u=JSON.parse(localStorage.getItem(UK)||'{}'),db=JSON.parse(localStorage.getItem(DB)||'{"users":{},"data":{}}');delete u[email];delete db.users[email];delete db.data[email];localStorage.setItem(UK,JSON.stringify(u));localStorage.setItem(DB,JSON.stringify(db));localStorage.removeItem(SK);se('le','Cuenta eliminada.');}
 function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.si').forEach(b=>b.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='dash')rd();if(id==='pl')rpl();if(id==='cf')rca();if(id==='ing')ri();if(id==='cv')rcv();if(id==='fix')rcf();}
-function initM(){const m=l12(),c=cmk();['dm','im','ifm','vm','vfm','pm'].forEach(id=>{const s=document.getElementById(id);if(!s)return;s.innerHTML=m.map(x=>'<option value="'+x+'"'+(x===c?' selected':'')+'>'+gml(x)+'</option>').join('');});}
+function initM(){
+  const m=l12(),c=cmk();
+  // Find most recent month with ingreso data
+  const d2=gd();
+  const mesesConDatos=new Set((d2.ingresos||[]).map(x=>x.mes).concat((d2.costosVariables||[]).map(x=>x.mes)));
+  const def=m.find(x=>mesesConDatos.has(x))||c;
+  ['dm','im','ifm','vm','vfm','pm'].forEach(id=>{const s=document.getElementById(id);if(!s)return;s.innerHTML=m.map(x=>'<option value="'+x+'"'+(x===def?' selected':'')+'>'+gml(x)+'</option>').join('');});
+}
 function fmt(n){return '$'+Math.round(n).toLocaleString('es-AR');}
 function fp(n){return n.toFixed(1)+'%';}
 function addIngreso(){const c=document.getElementById('ic').value,m=parseFloat(document.getElementById('im2').value)||0,mes=document.getElementById('im').value,n=document.getElementById('in2').value.trim();if(!m)return toast('Ingres\u00e1 un monto');const d=gd();d.ingresos.push({id:Date.now(),canal:c,monto:m,mes,nota:n});sd(d);document.getElementById('im2').value='';document.getElementById('in2').value='';ri();toast('Ingreso agregado');}
