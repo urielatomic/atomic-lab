@@ -384,6 +384,33 @@ function resetAccount(){
 }
 
 (function(){const s=localStorage.getItem(SESSION_KEY);if(s){const u=getUsers();if(u[s])loadApp(s);else{localStorage.removeItem(SESSION_KEY);startDemoMode();}}else{startDemoMode();}})();
+
+function saveToHistory(recipe) {
+  if(!recipe||!recipe.name)return;
+  const hist = JSON.parse(localStorage.getItem('costolab_hist')||'[]');
+  hist.unshift({...recipe, savedAt: new Date().toLocaleDateString('es-AR')+' '+new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})});
+  if(hist.length>50)hist.splice(50);
+  localStorage.setItem('costolab_hist', JSON.stringify(hist));
+}
+function renderHistorial() {
+  const el = document.getElementById('historial-lista');
+  if(!el)return;
+  const hist = JSON.parse(localStorage.getItem('costolab_hist')||'[]');
+  if(!hist.length){el.innerHTML='<div style="text-align:center;padding:40px;color:#777"><p>Aún no calculaste ninguna receta</p></div>';return;}
+  el.innerHTML = hist.map(r=>'<div style="background:#161616;border:1px solid #222;border-radius:12px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:15px;font-weight:700">'+r.name+'</div><div style="font-size:12px;color:#777;margin-top:4px">Costo: $'+Math.round(r.totalCost||0).toLocaleString('es-AR')+' • Precio sugerido: $'+Math.round(r.suggestedPrice||0).toLocaleString('es-AR')+' • '+r.savedAt+'</div></div><span style="background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.25);border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700">'+Math.round(r.foodCostPct||0)+'% food cost</span></div>').join('');
+}
+function exportCSV() {
+  const hist = JSON.parse(localStorage.getItem('costolab_hist')||'[]');
+  if(!hist.length)return alert('Sin recetas para exportar');
+  let csv = 'Nombre,Costo Total,Precio Sugerido,Food Cost %,Porciones,Fecha\n';
+  hist.forEach(r=>{csv+='"'+r.name+'",'+Math.round(r.totalCost||0)+','+Math.round(r.suggestedPrice||0)+','+Math.round(r.foodCostPct||0)+'%,'+( r.portions||1)+','+r.savedAt+'\n';});
+  const b=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='costolab.csv';a.click();
+}
+function clearHistory() {
+  if(!confirm('Limpiar todo el historial?'))return;
+  localStorage.removeItem('costolab_hist');
+  renderHistorial();
+}
 </script>
 
 <div id="login-modal">
@@ -410,3 +437,15 @@ function resetAccount(){
 </div>
 </body>
 </html>
+      <!-- HISTORIAL -->
+      <div id="tab-historial" class="tab-content" style="display:none">
+        <div class="tab-header">
+          <h2>Historial de recetas</h2>
+          <p>Todas las recetas calculadas en esta sesión</p>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:16px">
+          <button onclick="exportCSV()" class="btn btn-outline" style="font-size:13px">📤 Exportar CSV</button>
+          <button onclick="clearHistory()" class="btn btn-outline" style="font-size:13px;color:#f87171;border-color:#f87171">Limpiar historial</button>
+        </div>
+        <div id="historial-lista"></div>
+      </div>
