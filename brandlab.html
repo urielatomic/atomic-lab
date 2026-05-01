@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BrandLab — Creá tu marca</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--pu:#a855f7;--pu2:#9333ea;--bg:#0a0a0a;--b2:#111;--ca:#161616;--bo:#222;--te:#f0f0f0;--mu:#777;--gr:#22c55e;--re:#E53030;--or:#f59e0b}
+*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--te);font-family:Inter,sans-serif;line-height:1.5;min-height:100vh}
+.sy{font-family:Syne,sans-serif}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;border-bottom:1px solid var(--bo);background:rgba(10,10,10,.9);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:8px;font-family:Syne,sans-serif;font-weight:700;font-size:16px;text-decoration:none;color:var(--te)}.li{width:28px;height:28px;background:var(--pu);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}.logo span{color:var(--pu)}
+.nr{display:flex;align-items:center;gap:12px}.btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .18s;font-family:Inter,sans-serif}
+.bo-btn{background:transparent;border:1px solid var(--bo);color:var(--mu)}.bo-btn:hover{border-color:var(--mu);color:var(--te)}.pu-btn{background:var(--pu);color:#fff}.pu-btn:hover{background:var(--pu2)}.sm{padding:5px 12px;font-size:12px}
+.mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center}.mb.open{display:flex}
+.md{background:var(--ca);border:1px solid var(--bo);border-radius:16px;padding:32px;width:100%;max-width:400px;position:relative}.md p{font-size:13px;color:var(--mu);margin-bottom:24px}
+.tr{display:flex;gap:2px;background:var(--b2);border-radius:8px;padding:3px;margin-bottom:20px}.tb{flex:1;padding:6px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--mu);font-family:Inter,sans-serif}.tb.active{background:var(--ca);color:var(--te)}
+.fi{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}.fi label{font-size:12px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}.fi input{background:var(--b2);border:1px solid var(--bo);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--te);font-family:Inter,sans-serif;width:100%;outline:none}.fi input:focus{border-color:#444}
+.me{font-size:12px;color:#f87171;min-height:16px;margin-bottom:10px}.mc{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--mu);cursor:pointer;font-size:18px}.bf{width:100%;padding:12px;font-size:14px}.lb{background:none;border:none;color:var(--mu);font-size:12px;cursor:pointer;text-decoration:underline;margin-top:8px;display:block;text-align:center;font-family:Inter,sans-serif}
+#ls{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;flex-direction:column;gap:32px;text-align:center}
+#ls h1{font-family:Syne,sans-serif;font-size:clamp(32px,5vw,56px);font-weight:800;margin-bottom:16px;line-height:1.1}#ls h1 em{color:var(--pu);font-style:normal}
+#ls p{font-size:17px;color:var(--mu);max-width:520px;line-height:1.6}
+.lfc{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:600px}.lf{background:var(--ca);border:1px solid var(--bo);border-radius:10px;padding:14px 18px;font-size:13px;display:flex;align-items:center;gap:8px}
+#app{display:none}.al{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 56px)}
+.sb{background:var(--b2);border-right:1px solid var(--bo);padding:20px 0}.sb-s{padding:0 12px}
+.sl{font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;padding:0 8px;margin-bottom:8px;margin-top:16px;display:block}
+.si{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:var(--mu);border:none;background:none;width:100%;font-family:Inter,sans-serif;text-align:left;transition:all .15s}.si:hover{background:rgba(255,255,255,.05);color:var(--te)}.si.active{background:rgba(168,85,247,.1);color:var(--pu)}.sii{font-size:15px;width:20px;text-align:center}
+.mn{padding:32px;overflow-y:auto;max-width:900px}.page{display:none}.page.active{display:block}
+.ph{margin-bottom:32px}.ph h1{font-family:Syne,sans-serif;font-size:26px;font-weight:700;margin-bottom:4px}.ph p{font-size:14px;color:var(--mu)}
+.sc{background:var(--ca);border:1px solid var(--bo);border-radius:14px;padding:24px;margin-bottom:16px}
+.sc h3{font-family:Syne,sans-serif;font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.fi2{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.fi2 label{font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}
+.fi2 input,.fi2 select,.fi2 textarea{background:var(--b2);border:1px solid var(--bo);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--te);font-family:Inter,sans-serif;outline:none;width:100%;transition:border .15s}
+.fi2 input:focus,.fi2 select:focus,.fi2 textarea:focus{border-color:#555}
+.fi2 textarea{resize:vertical;min-height:80px;line-height:1.5}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.gb{background:var(--pu);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:Syne,sans-serif;display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+.gb:hover{background:var(--pu2);transform:translateY(-1px)}.gb:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.sp{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;display:none}@keyframes spin{to{transform:rotate(360deg)}}
+.brand-result{background:linear-gradient(135deg,rgba(168,85,247,.06) 0%,var(--ca) 100%);border:1px solid rgba(168,85,247,.2);border-radius:16px;padding:28px;margin-bottom:16px;position:relative}
+.brand-name{font-family:Syne,sans-serif;font-size:32px;font-weight:800;color:var(--pu);margin-bottom:8px}
+.brand-tagline{font-size:16px;color:var(--mu);margin-bottom:20px;font-style:italic}
+.brand-section{margin-bottom:16px}
+.brand-section h4{font-size:12px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.brand-section p,.brand-section ul{font-size:14px;line-height:1.7;color:var(--te)}
+.brand-section ul{padding-left:16px}
+.brand-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.brand-chip{display:inline-block;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);border-radius:6px;padding:4px 12px;font-size:13px;color:var(--pu);margin:3px}
+.cb{position:absolute;top:16px;right:16px;background:var(--bo);border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:4px 10px;border-radius:6px;font-family:Inter,sans-serif}.cb:hover{color:var(--te)}
+.hist-card{background:var(--ca);border:1px solid var(--bo);border-radius:10px;padding:16px;margin-bottom:10px;cursor:pointer}.hist-card:hover{border-color:rgba(168,85,247,.3)}
+.hist-name{font-family:Syne,sans-serif;font-size:16px;font-weight:700;color:var(--pu);margin-bottom:4px}
+.hist-meta{font-size:12px;color:var(--mu)}
+.seg{display:flex;gap:2px;background:var(--b2);border-radius:10px;padding:3px;margin-bottom:24px;width:fit-content}
+.seg-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--mu);font-family:Inter,sans-serif;transition:all .15s}.seg-btn.active{background:var(--ca);color:var(--te)}
+.empty{text-align:center;padding:48px 20px;color:var(--mu)}.empty p{font-size:14px;margin-top:8px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid var(--bo);border-radius:10px;padding:12px 16px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none}.toast.show{opacity:1;transform:translateY(0)}
+.step-num{width:28px;height:28px;background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--pu);flex-shrink:0}
+@media(max-width:900px){.al{grid-template-columns:1fr}.sb{display:none}.fg2,.fg3{grid-template-columns:1fr}.brand-grid{grid-template-columns:1fr}}</style></head><body>
+<nav class="nav"><a href="/" class="logo"><div class="li">&#9889;</div>Brand<span>Lab</span></a>
+<div class="nr" id="nr"><button class="btn bo-btn" onclick="showLoginModal()">Entrar</button><button class="btn pu-btn" onclick="showLoginModal('register')">Crear cuenta</button></div>
+<div class="nr" id="ni" style="display:none"><span style="font-size:13px;color:var(--mu)">Hola, <strong id="nu" style="color:var(--te)"></strong></span><button class="btn bo-btn sm" onclick="doLogout()">Cerrar sesión</button></div></nav>
+<div id="ls"><div><h1 class="sy">Creá tu marca<br><em>en minutos</em></h1><p>Describí tu concepto y la IA genera nombre, tagline, menú, pricing, target e identidad visual.</p></div>
+<div class="lfc"><div class="lf">&#128204; 3 opciones de nombre</div><div class="lf">&#127829; Menú con precios</div><div class="lf">&#128101; Target de cliente</div><div class="lf">&#127912; Identidad visual</div><div class="lf">&#128640; Plan 30 días</div></div>
+<button class="btn pu-btn" style="padding:14px 32px;font-size:15px" onclick="showLoginModal('register')">Empezar gratis &#8594;</button></div>
+<div id="app"><div class="al">
+<aside class="sb"><div class="sb-s">
+<button class="si active" onclick="showPage('generar',this)"><span class="sii">&#9889;</span>Generador</button>
+<span class="sl">Historial</span>
+<button class="si" onclick="showPage('marcas',this)"><span class="sii">&#128218;</span>Mis marcas</button>
+</div></aside>
+<main class="mn">
+<div id="p-generar" class="page active">
+<div class="ph"><h1>Generador de marca</h1><p>Completá los campos y la IA crea tu propuesta completa.</p></div>
+<div class="sc"><h3>&#9881; Configurar el concepto</h3>
+<div class="fg3">
+<div class="fi2"><label>Tipo de negocio</label><select id="br-tipo"><option>Restaurante</option><option>Dark kitchen / Virtual</option><option>Café &amp; Bakery</option><option>Hamburguesaría</option><option>Pizzería</option><option>Parrilla</option><option>Bar de tapas</option><option>Food truck</option><option>Heladaría</option><option>Saludable / Juguería</option><option>Sushi</option><option>Otro</option></select></div>
+<div class="fi2"><label>Tipo de cocina</label><input type="text" id="br-cocina" placeholder="Ej: Peruana, Thai, Italiana fusión..."></div>
+<div class="fi2"><label>Zona / Barrio</label><input type="text" id="br-zona" placeholder="Ej: Palermo, San Isidro, Córdoba..."></div>
+</div>
+<div class="fg3">
+<div class="fi2"><label>Canal principal</label><select id="br-canal"><option>Salón + delivery</option><option>Solo delivery (dark kitchen)</option><option>Solo salón</option><option>Takeaway / mostrador</option><option>Food truck / eventos</option></select></div>
+<div class="fi2"><label>Presupuesto inicial</label><select id="br-presupuesto"><option>Bajo (menos de $5M)</option><option>Medio ($5M - $20M)</option><option>Alto (más de $20M)</option></select></div>
+<div class="fi2"><label>Estilo de marca</label><select id="br-estilo"><option>Moderno y urbano</option><option>Premium / sofisticado</option><option>Familiar y cálido</option><option>Fresco y saludable</option><option>Industrial / rústico</option><option>Colorido y divertido</option><option>Minimalista</option></select></div>
+</div>
+<div class="fi2"><label>Diferenciador clave (opcional)</label><input type="text" id="br-diferenciador" placeholder="Ej: insumos orgánicos, servicio 24hs, precio accesible..."></div>
+<div style="margin-top:8px"><button class="gb" id="btn-gen" onclick="genMarca()"><span id="sp-gen" class="sp"></span><span>&#9889; Generar marca con IA</span></button></div></div>
+<div id="gen-result"></div></div>
+<div id="p-marcas" class="page"><div class="ph"><h1>Mis marcas</h1><p>Hacé click para ver el detalle completo.</p></div><div id="marcas-list"></div></div>
+</main></div></div>
+<div class="mb" id="lm"><div class="md">
+<button class="mc" onclick="closeLoginModal()">&#10005;</button>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div class="li">&#9889;</div><span style="font-family:Syne,sans-serif;font-size:16px;font-weight:700">BrandLab</span></div>
+<p>Guardá tus marcas generadas</p>
+<div class="tr"><button class="tb active" id="tab-login" onclick="swTab('login')">Iniciar sesión</button><button class="tb" id="tab-register" onclick="swTab('register')">Crear cuenta</button></div>
+<div id="lf"><div class="fi"><label>Email</label><input type="email" id="le2" placeholder="tu@email.com"></div><div class="fi"><label>Contraseña</label><input type="password" id="lp"></div><div class="me" id="le"></div><button class="btn pu-btn bf" onclick="doLogin()">Entrar →</button><button class="lb" onclick="resetAccount()">Olvidé mi contraseña</button></div>
+<div id="rf" style="display:none"><div class="fi"><label>Nombre</label><input type="text" id="rn" placeholder="Tu nombre"></div><div class="fi"><label>Email</label><input type="email" id="re2" placeholder="tu@email.com"></div><div class="fi"><label>Contraseña</label><input type="password" id="rp"></div><div class="me" id="re"></div><button class="btn pu-btn bf" onclick="doRegister()">Crear cuenta →</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>const DB='brandlab_db',UK='brandlab_users',SK='brandlab_session';
+let cu=null;
+function hp(p){let h=0;for(let i=0;i<p.length;i++)h=((h<<5)-h)+p.charCodeAt(i),h|=0;return 'h_'+Math.abs(h).toString(36);}
+function gdb(){try{return JSON.parse(localStorage.getItem(DB)||'{"users":{},"data":{}}');}catch(e){return{users:{},data:{}};}}
+function sdb(d){try{localStorage.setItem(DB,JSON.stringify(d));}catch(e){}}
+function gus(){try{const u=JSON.parse(localStorage.getItem(UK)||'{}');const db=gdb();return Object.assign({},db.users||{},u);}catch(e){return{};}}
+function sus(u){try{localStorage.setItem(UK,JSON.stringify(u));}catch(e){}}
+function gd(){if(cu){try{const db=gdb();if(!db.data[cu]){db.data[cu]={marcas:[]};sdb(db);}return db.data[cu];}catch(e){return{marcas:[]};}}return{marcas:[]};}
+function sd(d){if(!cu)return;const db=gdb();db.data[cu]=d;sdb(db);}
+function swTab(t){document.getElementById('tab-login').classList.toggle('active',t==='login');document.getElementById('tab-register').classList.toggle('active',t==='register');document.getElementById('lf').style.display=t==='login'?'block':'none';document.getElementById('rf').style.display=t==='register'?'block':'none';document.getElementById('le').textContent='';document.getElementById('re').textContent='';}
+function se(id,m){document.getElementById(id).textContent=m;}
+function showLoginModal(tab){document.getElementById('lm').classList.add('open');if(tab==='register')swTab('register');}
+function closeLoginModal(){document.getElementById('lm').classList.remove('open');}
+function doRegister(){const name=document.getElementById('rn').value.trim(),email=document.getElementById('re2').value.trim().toLowerCase(),pass=document.getElementById('rp').value;if(!name)return se('re','Nombre requerido');if(!email||!email.includes('@'))return se('re','Email inv\u00e1lido');if(pass.length<6)return se('re','M\u00ednimo 6 caracteres');const us=gus();if(us[email])return se('re','Ya existe.');const hash=hp(pass);us[email]={name,hash};sus(us);const db=gdb();db.users[email]={name,hash};if(!db.data[email])db.data[email]={marcas:[]};sdb(db);localStorage.setItem(SK,email);loadApp(email);}
+function doLogin(){const email=document.getElementById('le2').value.trim().toLowerCase(),pass=document.getElementById('lp').value;if(!email||!pass)return se('le','Complet\u00e1 todos los campos');const us=gus(),u=us[email];if(!u)return se('le','No existe cuenta con ese email');if(u.hash!==hp(pass))return se('le','Contrase\u00f1a incorrecta');localStorage.setItem(SK,email);loadApp(email);}
+function doLogout(){localStorage.removeItem(SK);cu=null;document.getElementById('nr').style.display='flex';document.getElementById('ni').style.display='none';document.getElementById('app').style.display='none';document.getElementById('ls').style.display='flex';}
+function loadApp(email){closeLoginModal();cu=email;const us=gus();document.getElementById('nu').textContent=(us[email]||{}).name||email;document.getElementById('nr').style.display='none';document.getElementById('ni').style.display='flex';document.getElementById('ls').style.display='none';document.getElementById('app').style.display='block';renderMarcas();}
+function resetAccount(){const email=document.getElementById('le2').value.trim().toLowerCase();if(!email)return se('le','Ingres\u00e1 tu email primero');if(!confirm('Eliminar '+email+'?'))return;const u=JSON.parse(localStorage.getItem(UK)||'{}'),db=JSON.parse(localStorage.getItem(DB)||'{"users":{},"data":{}}');delete u[email];delete db.users[email];delete db.data[email];localStorage.setItem(UK,JSON.stringify(u));localStorage.setItem(DB,JSON.stringify(db));localStorage.removeItem(SK);se('le','Cuenta eliminada.');}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.si').forEach(b=>b.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='marcas')renderMarcas();}
+async function callAI(prompt){const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:prompt}]})});const data=await res.json();return data.content?.[0]?.text||'Error al generar.';}
+function setL(on){const btn=document.getElementById('btn-gen'),sp=document.getElementById('sp-gen');btn.disabled=on;sp.style.display=on?'block':'none';}
+async function genMarca(){
+  const tipo=document.getElementById('br-tipo').value;
+  const cocina=document.getElementById('br-cocina').value;
+  const zona=document.getElementById('br-zona').value.trim();
+  const canal=document.getElementById('br-canal').value;
+  const presupuesto=document.getElementById('br-presupuesto').value;
+  const diferenciador=document.getElementById('br-diferenciador').value.trim();
+  const estilo=document.getElementById('br-estilo').value;
+  if(!cocina)return toast('Ingres\u00e1 el tipo de cocina');
+  setL(true);
+  const prompt='Sos un experto en branding gastron\u00f3mico y marketing en Argentina.\n\nNecesito crear una marca gastron\u00f3mica nueva con estas caracter\u00edsticas:\n- Tipo de negocio: '+tipo+'\n- Tipo de cocina: '+cocina+'\n- Zona/barrio objetivo: '+(zona||'Ciudad de Buenos Aires')+'\n- Canal principal: '+canal+'\n- Presupuesto inicial estimado: '+presupuesto+'\n- Diferenciador clave: '+(diferenciador||'a definir')+'\n- Estilo de marca deseado: '+estilo+'\n\nCre\u00e1 una propuesta completa de marca. Respond\u00e9 en formato estructurado con estas secciones exactas:\n\n**NOMBRE:** [3 opciones de nombre con justificaci\u00f3n breve de cada uno]\n\n**TAGLINE:** [Una frase corta memorable]\n\n**PROPUESTA DE VALOR:** [2-3 oraciones que expliquen por qu\u00e9 este concepto va a funcionar]\n\n**MEN\u00da SUGERIDO:** [8-10 platos con nombre y precio sugerido en pesos argentinos actuales]\n\n**PRICING:** [Ticket promedio, rango de precios, estrategia de precios]\n\n**TARGET:** [Descripci\u00f3n detallada del cliente ideal: edad, h\u00e1bitos, motivaciones]\n\n**CANALES:** [C\u00f3mo vender: delivery, sal\u00f3n, apps, etc con estrategia]\n\n**IDENTIDAD VISUAL:** [Paleta de colores sugerida, estilo, referencias]\n\n**PRIMEROS PASOS:** [5 acciones concretas para lanzar en los pr\u00f3ximos 30 d\u00edas]\n\nUs\u00e1 espa\u00f1ol rioplatense. S\u00e9 espec\u00edfico, creativo y accionable.';
+  try{
+    const resp=await callAI(prompt);
+    const d=gd();
+    const marca={id:Date.now(),tipo,cocina,zona,canal,presupuesto,estilo,diferenciador,respuesta:resp,fecha:new Date().toLocaleDateString('es-AR')};
+    d.marcas.unshift(marca);
+    if(d.marcas.length>20)d.marcas=d.marcas.slice(0,20);
+    sd(d);
+    renderResultado(marca);
+    renderMarcas();
+    toast('\u00a1Marca generada!');
+  }catch(e){
+    document.getElementById('gen-result').innerHTML='<div class="sc"><p style="color:#f87171">Error al conectar con la IA. Reintent\u00e1 en un momento.</p></div>';
+  }
+  setL(false);
+}
+function renderResultado(marca){
+  const el=document.getElementById('gen-result');
+  const txt=marca.respuesta;
+  // Parse sections
+  function getSection(key){const rx=new RegExp('\\*\\*'+key+':\\*\\*([^\\*]+)','i');const m=txt.match(rx);return m?m[1].trim():'';}
+  const nombre=getSection('NOMBRE');
+  const tagline=getSection('TAGLINE');
+  const propuesta=getSection('PROPUESTA DE VALOR')||getSection('PROPUESTA');
+  const menu=getSection('MEN\u00dA SUGERIDO')||getSection('MEN\u00da');
+  const pricing=getSection('PRICING');
+  const target=getSection('TARGET');
+  const canales=getSection('CANALES');
+  const visual=getSection('IDENTIDAD VISUAL')||getSection('IDENTIDAD');
+  const pasos=getSection('PRIMEROS PASOS')||getSection('PASOS');
+  el.innerHTML='<div class="brand-result"><button class="cb" onclick="copyBrand()">Copiar todo</button>'+
+    '<div class="brand-name">'+marca.cocina+' &bull; '+marca.tipo+'</div>'+
+    (tagline?'<div class="brand-tagline">'+tagline+'</div>':'')+
+    '<div class="brand-grid">'+
+    (nombre?'<div class="brand-section"><h4>&#128204; Opciones de nombre</h4><p style="white-space:pre-wrap">'+nombre+'</p></div>':'')+
+    (propuesta?'<div class="brand-section"><h4>&#127919; Propuesta de valor</h4><p>'+propuesta+'</p></div>':'')+
+    '</div>'+
+    (menu?'<div class="brand-section" style="margin-top:16px"><h4>&#127829; Men\u00fa sugerido</h4><p style="white-space:pre-wrap">'+menu+'</p></div>':'')+
+    '<div class="brand-grid" style="margin-top:16px">'+
+    (pricing?'<div class="brand-section"><h4>&#128184; Pricing</h4><p style="white-space:pre-wrap">'+pricing+'</p></div>':'')+
+    (target?'<div class="brand-section"><h4>&#128101; Target</h4><p style="white-space:pre-wrap">'+target+'</p></div>':'')+
+    (canales?'<div class="brand-section"><h4>&#128241; Canales</h4><p style="white-space:pre-wrap">'+canales+'</p></div>':'')+
+    (visual?'<div class="brand-section"><h4>&#127912; Identidad visual</h4><p style="white-space:pre-wrap">'+visual+'</p></div>':'')+
+    '</div>'+
+    (pasos?'<div class="brand-section" style="margin-top:16px"><h4>&#128640; Primeros 30 d\u00edas</h4><p style="white-space:pre-wrap">'+pasos+'</p></div>':'')+
+    '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bo);font-size:12px;color:var(--mu)">Generado el '+marca.fecha+' &bull; Editar los campos de arriba y generar de nuevo para variaciones</div>'+
+    '</div>';
+}
+function copyBrand(){const el=document.querySelector('.brand-result');if(!el)return;const txt=el.innerText;navigator.clipboard.writeText(txt).then(function(){toast('Copiado al portapapeles');});}
+function verMarca(id){const d=gd();const m=d.marcas.find(x=>x.id===id);if(!m)return;renderResultado(m);showPage('generar',document.querySelector('.si[onclick*=generar]'));}
+function delMarca(id){if(!confirm('Eliminar esta marca?'))return;const d=gd();d.marcas=d.marcas.filter(x=>x.id!==id);sd(d);renderMarcas();toast('Marca eliminada');}
+function renderMarcas(){const d=gd(),el=document.getElementById('marcas-list');if(!d.marcas.length){el.innerHTML='<div class="empty"><div style="font-size:40px">&#9889;</div><p>Todav\u00eda no generaste ninguna marca. Ir a Generador para empezar.</p></div>';return;}el.innerHTML=d.marcas.map(m=>'<div class="hist-card" onclick="verMarca('+m.id+')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hist-name">'+m.cocina+' &bull; '+m.tipo+'</div><div class="hist-meta">'+m.canal+' &bull; '+m.zona+' &bull; '+m.fecha+'</div></div><button class="btn bo-btn sm" onclick="event.stopPropagation();delMarca('+m.id+')">Eliminar</button></div></div>').join('');}
+let _tt=null;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},2500);}
+(function(){const s=localStorage.getItem(SK);if(s){const u=gus();if(u[s])loadApp(s);else localStorage.removeItem(SK);}})();</script></body></html>
