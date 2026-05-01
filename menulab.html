@@ -172,6 +172,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
   <nav>
     <a class="nav-brand" href="/atomic-lab/">
       <div class="nav-dot">⚛</div>
+          <div class="f"><label>Instagram (opcional)</label><input type="text" id="resto-ig" placeholder="@turestaurante" oninput="saveMenu()"></div>
+          <div class="f"><label>Horarios (opcional)</label><input type="text" id="resto-hours" placeholder="Lun-Vie 12-15hs y 20-24hs" oninput="saveMenu()"></div>
+          <div class="f"><label>Dirección (opcional)</label><input type="text" id="resto-address" placeholder="Av. Corrientes 1234, CABA" oninput="saveMenu()"></div>
       Atomic <span style="color:var(--red);margin-left:3px">Lab</span>
     </a>
     <div class="nav-right">
@@ -189,6 +192,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(
         <div class="save-status"><span class="save-dot"></span> Guardado automáticamente</div>
       </div>
       <div class="header-actions">
+        <div style="display:flex;align-items:center;gap:8px;margin-right:12px">
+          <select id="menu-selector" style="background:#161616;border:1px solid #333;border-radius:8px;padding:6px 10px;font-size:13px;color:#f0f0f0;font-family:Inter,sans-serif;outline:none" onchange="switchMenu(this.value)"></select>
+          <button onclick="newMenu()" style="background:transparent;border:1px solid #333;border-radius:8px;padding:6px 12px;font-size:12px;color:#777;cursor:pointer;font-family:Inter,sans-serif" onmouseover="this.style.color='#f0f0f0'" onmouseout="this.style.color='#777'">+ Nuevo</button>
+        </div>
         <a id="preview-link" href="http://atomiclab.atomickitchens.tech/atomic-lab/menu-view.html?u=dGVzdEB0ZXN0LmNvbQ" target="_blank" class="btn btn-outline btn-sm">👁 Ver menú público</a>
         <button onclick="shareMenu()" class="btn btn-outline btn-sm">🔗 Compartir link</button>
       </div>
@@ -402,7 +409,7 @@ function loadMenuData() {
   document.getElementById('resto-color').value = accentColor;
   updateColorSwatch();
   renderItems();
-  updatePreview();
+  updatePreview();renderMenuSelector();
   updatePublicLink();
 }
 
@@ -703,6 +710,33 @@ function startDemoMode(){
 // Enter key on login
 document.getElementById('l-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 document.getElementById('r-pass') && document.getElementById('r-pass').addEventListener('keydown', e => { if(e.key==='Enter') doRegister(); });
+
+// Multi-menu support
+function getMenuList(){return JSON.parse(localStorage.getItem('menulab_list')||'[]');}
+function saveMenuList(list){localStorage.setItem('menulab_list',JSON.stringify(list));}
+function getCurrentMenuId(){return localStorage.getItem('menulab_current')||'default';}
+function renderMenuSelector(){
+  const sel=document.getElementById('menu-selector');if(!sel)return;
+  const list=getMenuList();const cur=getCurrentMenuId();
+  if(!list.length){saveMenuList([{id:'default',name:'Mi Menú'}]);return renderMenuSelector();}
+  sel.innerHTML=list.map(m=>'<option value="'+m.id+'"'+(m.id===cur?' selected':'')+'>'+m.name+'</option>').join('');
+}
+function switchMenu(id){
+  localStorage.setItem('menulab_current',id);
+  loadMenuData();renderMenuSelector();showToast('Menú cambiado');
+}
+function newMenu(){
+  const name=prompt('Nombre del nuevo menú:','Menú 2');if(!name)return;
+  const id='menu_'+Date.now();
+  const list=getMenuList();list.push({id,name});saveMenuList(list);
+  localStorage.setItem('menulab_current',id);
+  // Save empty menu for this id
+  const emptyMenu={restoName:name,tagline:'',color:'#E53030',items:[],instagram:'',hours:'',address:''};
+  const db=JSON.parse(localStorage.getItem('menulab_db')||'{"menus":{}}');
+  db.menus[currentUser+'_'+id]=emptyMenu;
+  localStorage.setItem('menulab_db',JSON.stringify(db));
+  renderMenuSelector();loadMenuData();showToast('Menú creado');
+}
 </script>
 
 <div id="login-modal">
