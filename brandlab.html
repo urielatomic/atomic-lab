@@ -71,6 +71,15 @@
 <main class="mn">
 <div id="p-generar" class="page active">
 <div class="ph"><h1>Generador de marca</h1><p>Completá los campos y la IA crea tu propuesta completa.</p></div>
+<div class="sc" style="border-color:rgba(168,85,247,.3);background:rgba(168,85,247,.04)">
+<h3>&#128273; API Key de Anthropic</h3>
+<p style="font-size:13px;color:var(--mu);margin-bottom:12px">Necesitás una API key de <a href="https://console.anthropic.com" target="_blank" style="color:var(--pu)">console.anthropic.com</a> para usar la IA. Se guarda solo en tu navegador.</p>
+<div style="display:flex;gap:10px;align-items:flex-end">
+<div class="fi2" style="flex:1;margin:0"><label>API Key</label><input type="password" id="api-key-input" placeholder="sk-ant-..." style="font-family:monospace"></div>
+<button onclick="saveApiKey()" class="btn" style="background:var(--pu);color:#fff;padding:10px 16px;align-self:flex-end">Guardar</button>
+</div>
+<div id="api-key-status" style="font-size:12px;margin-top:8px;color:var(--mu)"></div>
+</div>
 <div class="sc"><h3>&#9881; Configurar el concepto</h3>
 <div class="fg3">
 <div class="fi2"><label>Tipo de negocio</label><select id="br-tipo"><option>Restaurante</option><option>Dark kitchen / Virtual</option><option>Café &amp; Bakery</option><option>Hamburguesaría</option><option>Pizzería</option><option>Parrilla</option><option>Bar de tapas</option><option>Food truck</option><option>Heladaría</option><option>Saludable / Juguería</option><option>Sushi</option><option>Otro</option></select></div>
@@ -112,10 +121,10 @@ function closeLoginModal(){document.getElementById('lm').classList.remove('open'
 function doRegister(){const name=document.getElementById('rn').value.trim(),email=document.getElementById('re2').value.trim().toLowerCase(),pass=document.getElementById('rp').value;if(!name)return se('re','Nombre requerido');if(!email||!email.includes('@'))return se('re','Email inv\u00e1lido');if(pass.length<6)return se('re','M\u00ednimo 6 caracteres');const us=gus();if(us[email])return se('re','Ya existe.');const hash=hp(pass);us[email]={name,hash};sus(us);const db=gdb();db.users[email]={name,hash};if(!db.data[email])db.data[email]={marcas:[]};sdb(db);localStorage.setItem(SK,email);loadApp(email);}
 function doLogin(){const email=document.getElementById('le2').value.trim().toLowerCase(),pass=document.getElementById('lp').value;if(!email||!pass)return se('le','Complet\u00e1 todos los campos');const us=gus(),u=us[email];if(!u)return se('le','No existe cuenta con ese email');if(u.hash!==hp(pass))return se('le','Contrase\u00f1a incorrecta');localStorage.setItem(SK,email);loadApp(email);}
 function doLogout(){localStorage.removeItem(SK);cu=null;document.getElementById('nr').style.display='flex';document.getElementById('ni').style.display='none';document.getElementById('app').style.display='none';document.getElementById('ls').style.display='flex';}
-function loadApp(email){closeLoginModal();cu=email;const us=gus();document.getElementById('nu').textContent=(us[email]||{}).name||email;document.getElementById('nr').style.display='none';document.getElementById('ni').style.display='flex';document.getElementById('ls').style.display='none';document.getElementById('app').style.display='block';renderMarcas();}
+function loadApp(email){closeLoginModal();cu=email;const us=gus();document.getElementById('nu').textContent=(us[email]||{}).name||email;document.getElementById('nr').style.display='none';document.getElementById('ni').style.display='flex';document.getElementById('ls').style.display='none';document.getElementById('app').style.display='block';renderMarcas();loadApiKeyUI();}
 function resetAccount(){const email=document.getElementById('le2').value.trim().toLowerCase();if(!email)return se('le','Ingres\u00e1 tu email primero');if(!confirm('Eliminar '+email+'?'))return;const u=JSON.parse(localStorage.getItem(UK)||'{}'),db=JSON.parse(localStorage.getItem(DB)||'{"users":{},"data":{}}');delete u[email];delete db.users[email];delete db.data[email];localStorage.setItem(UK,JSON.stringify(u));localStorage.setItem(DB,JSON.stringify(db));localStorage.removeItem(SK);se('le','Cuenta eliminada.');}
 function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.si').forEach(b=>b.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='marcas')renderMarcas();}
-async function callAI(prompt){const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:prompt}]})});const data=await res.json();return data.content?.[0]?.text||'Error al generar.';}
+async function callAI(prompt){const apiKey=localStorage.getItem('anthropic_key')||'';if(!apiKey)throw new Error('Configurá tu API key primero');const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:prompt}]})});const data=await res.json();return data.content?.[0]?.text||'Error al generar.';}
 function setL(on){const btn=document.getElementById('btn-gen'),sp=document.getElementById('sp-gen');btn.disabled=on;sp.style.display=on?'block':'none';}
 async function genMarca(){
   const tipo=document.getElementById('br-tipo').value;
@@ -180,4 +189,17 @@ function verMarca(id){const d=gd();const m=d.marcas.find(x=>x.id===id);if(!m)ret
 function delMarca(id){if(!confirm('Eliminar esta marca?'))return;const d=gd();d.marcas=d.marcas.filter(x=>x.id!==id);sd(d);renderMarcas();toast('Marca eliminada');}
 function renderMarcas(){const d=gd(),el=document.getElementById('marcas-list');if(!d.marcas.length){el.innerHTML='<div class="empty"><div style="font-size:40px">&#9889;</div><p>Todav\u00eda no generaste ninguna marca. Ir a Generador para empezar.</p></div>';return;}el.innerHTML=d.marcas.map(m=>'<div class="hist-card" onclick="verMarca('+m.id+')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hist-name">'+m.cocina+' &bull; '+m.tipo+'</div><div class="hist-meta">'+m.canal+' &bull; '+m.zona+' &bull; '+m.fecha+'</div></div><button class="btn bo-btn sm" onclick="event.stopPropagation();delMarca('+m.id+')">Eliminar</button></div></div>').join('');}
 let _tt=null;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},2500);}
-(function(){const s=localStorage.getItem(SK);if(s){const u=gus();if(u[s])loadApp(s);else localStorage.removeItem(SK);}})();</script></body></html>
+(function(){const s=localStorage.getItem(SK);if(s){const u=gus();if(u[s])loadApp(s);else localStorage.removeItem(SK);}})();
+function saveApiKey(){
+  const k=document.getElementById('api-key-input').value.trim();
+  if(!k.startsWith('sk-ant-'))return document.getElementById('api-key-status').textContent='La key debe empezar con sk-ant-';
+  localStorage.setItem('anthropic_key',k);
+  document.getElementById('api-key-status').textContent='✓ API key guardada';
+  document.getElementById('api-key-input').value='sk-ant-...(guardada)';
+}
+function loadApiKeyUI(){
+  const k=localStorage.getItem('anthropic_key');
+  const el=document.getElementById('api-key-status');
+  if(k&&el)el.textContent='✓ API key configurada';
+}
+</script></body></html>
